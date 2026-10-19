@@ -192,7 +192,7 @@ namespace Content.Server.Cloning
 
             // genetic damage checks
             if (TryComp<DamageableComponent>(bodyToClone, out var damageable) &&
-                damageable.Damage.DamageDict.TryGetValue("Cellular", out var cellularDmg))
+                damageable.Damage.DamageDict.TryGetValue("Clone", out var cellularDmg)) // VG: was Cellular
             {
                 var chance = Math.Clamp((float) (cellularDmg / 100), 0, 1);
                 chance *= failChanceModifier;

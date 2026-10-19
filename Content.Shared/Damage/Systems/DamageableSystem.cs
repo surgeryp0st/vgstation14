@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._VG.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
@@ -51,7 +52,7 @@ namespace Content.Shared.Damage
                 // container prototype
                 foreach (var type in damageContainerPrototype.SupportedTypes)
                 {
-                    component.Damage.DamageDict.TryAdd(type, FixedPoint2.Zero);
+                    component.Damage.DamageDict.TryAdd(VgDamageTranslation.TranslateId(type), FixedPoint2.Zero); // VG
                 }
 
                 foreach (var groupId in damageContainerPrototype.SupportedGroups)
@@ -59,7 +60,7 @@ namespace Content.Shared.Damage
                     var group = _prototypeManager.Index<DamageGroupPrototype>(groupId);
                     foreach (var type in group.DamageTypes)
                     {
-                        component.Damage.DamageDict.TryAdd(type, FixedPoint2.Zero);
+                        component.Damage.DamageDict.TryAdd(VgDamageTranslation.TranslateId(type), FixedPoint2.Zero); // VG
                     }
                 }
             }
@@ -68,7 +69,7 @@ namespace Content.Shared.Damage
                 // No DamageContainerPrototype was given. So we will allow the container to support all damage types
                 foreach (var type in _prototypeManager.EnumeratePrototypes<DamageTypePrototype>())
                 {
-                    component.Damage.DamageDict.TryAdd(type.ID, FixedPoint2.Zero);
+                    component.Damage.DamageDict.TryAdd(VgDamageTranslation.TranslateId(type.ID), FixedPoint2.Zero); // VG
                 }
             }
 
@@ -137,6 +138,8 @@ namespace Content.Shared.Damage
                 return damage;
             }
 
+            damage = VgDamageTranslation.Translate(damage); // VG: upstream damage types -> vg damage types
+
             var before = new BeforeDamageChangedEvent(damage, origin);
             RaiseLocalEvent(uid.Value, ref before);
 
@@ -167,7 +170,8 @@ namespace Content.Shared.Damage
             // TODO DAMAGE PERFORMANCE
             // Consider using a local private field instead of creating a new dictionary here.
             // Would need to check that nothing ever tries to cache the delta.
-            var delta = new DamageSpecifier();
+            var delta = new DamageSpecifier(); // VG
+            delta.CombineVgProperties(damage); // VG
             delta.DamageDict.EnsureCapacity(damage.DamageDict.Count);
 
             var dict = damageable.Damage.DamageDict;

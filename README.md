@@ -24,7 +24,9 @@ Our [wiki](http://ss13.moe/wiki/index.php?title=Main_Page) contains information 
 
 ## License
 
-All code for the content repository is licensed under [MIT](https://github.com/vgstation-coders/vgstation14/blob/master/LICENSE.TXT).
+Code inherited from upstream Space Station 14 is licensed under [MIT](https://github.com/vgstation-coders/vgstation14/blob/master/LICENSE.TXT).
+
+Code in `_VG` folders (anything ported from [vgstation13](https://github.com/vgstation-coders/vgstation13) or written for vgstation14) is licensed under the [GNU AGPL v3](https://github.com/vgstation-coders/vgstation14/blob/master/LICENSE-AGPLv3.txt), as is the project as a whole when distributed.
 
 Most assets are licensed under [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) unless stated otherwise. Assets have their license and the copyright in the metadata file. [Example](https://github.com/vgstation-coders/vgstation14/blob/master/Resources/Textures/Objects/Tools/crowbar.rsi/meta.json).
 

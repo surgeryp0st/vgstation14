@@ -95,9 +95,7 @@ namespace Content.Server.Forensics
 
         private void OnMeleeHit(EntityUid uid, ForensicsComponent component, MeleeHitEvent args)
         {
-            if ((args.BaseDamage.DamageDict.TryGetValue("Blunt", out var bluntDamage) && bluntDamage.Value > 0) ||
-                (args.BaseDamage.DamageDict.TryGetValue("Slash", out var slashDamage) && slashDamage.Value > 0) ||
-                (args.BaseDamage.DamageDict.TryGetValue("Piercing", out var pierceDamage) && pierceDamage.Value > 0))
+            if (args.BaseDamage.DamageDict.TryGetValue("Brute", out var bruteDamage) && bruteDamage.Value > 0) // VG: was Blunt/Slash/Piercing
             {
                 foreach (EntityUid hitEntity in args.HitEntities)
                 {

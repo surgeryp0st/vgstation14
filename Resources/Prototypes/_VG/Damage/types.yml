@@ -1,0 +1,36 @@
+# vgstation13 damage types. These are the only types mob health actually stores;
+# upstream SS14 types (Blunt, Heat, ...) are translated into these when loaded
+# (see Content.Shared/_VG/Damage/VgDamageTranslation.cs).
+#
+# Brain damage and halloss are deliberately not damage types: as in vg13 they live
+# on the brain organ and the pain system, and don't count towards health.
+
+- type: damageType
+  id: Brute
+  name: damage-type-brute
+  armorCoefficientPrice: 2
+  armorFlatPrice: 10
+
+- type: damageType
+  id: Burn
+  name: damage-type-burn
+  armorCoefficientPrice: 2
+  armorFlatPrice: 10
+
+- type: damageType
+  id: Toxin
+  name: damage-type-toxin
+  armorCoefficientPrice: 5
+  armorFlatPrice: 30
+
+- type: damageType
+  id: Oxygen
+  name: damage-type-oxygen
+  armorCoefficientPrice: 5
+  armorFlatPrice: 50
+
+- type: damageType
+  id: Clone
+  name: damage-type-clone
+  armorCoefficientPrice: 5
+  armorFlatPrice: 30

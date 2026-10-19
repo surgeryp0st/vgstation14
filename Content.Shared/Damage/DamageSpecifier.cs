@@ -89,6 +89,7 @@ namespace Content.Shared.Damage
         public DamageSpecifier(DamageSpecifier damageSpec)
         {
             DamageDict = new(damageSpec.DamageDict);
+            CombineVgProperties(damageSpec); // VG
         }
 
         /// <summary>
@@ -131,6 +132,7 @@ namespace Content.Shared.Damage
             // duller as you hit walls. Neat, but not FixedPoint2ended. And confusing, when you realize your fists don't work no
             // more cause they're just bloody stumps.
             DamageSpecifier newDamage = new();
+            newDamage.CombineVgProperties(damageSpec); // VG
             newDamage.DamageDict.EnsureCapacity(damageSpec.DamageDict.Count);
 
             foreach (var (key, value) in damageSpec.DamageDict)
@@ -312,6 +314,7 @@ namespace Content.Shared.Damage
         public static DamageSpecifier operator *(DamageSpecifier damageSpec, FixedPoint2 factor)
         {
             DamageSpecifier newDamage = new();
+            newDamage.CombineVgProperties(damageSpec); // VG
             foreach (var entry in damageSpec.DamageDict)
             {
                 newDamage.DamageDict.Add(entry.Key, entry.Value * factor);
@@ -322,6 +325,7 @@ namespace Content.Shared.Damage
         public static DamageSpecifier operator *(DamageSpecifier damageSpec, float factor)
         {
             DamageSpecifier newDamage = new();
+            newDamage.CombineVgProperties(damageSpec); // VG
             foreach (var entry in damageSpec.DamageDict)
             {
                 newDamage.DamageDict.Add(entry.Key, entry.Value * factor);
@@ -332,6 +336,7 @@ namespace Content.Shared.Damage
         public static DamageSpecifier operator /(DamageSpecifier damageSpec, FixedPoint2 factor)
         {
             DamageSpecifier newDamage = new();
+            newDamage.CombineVgProperties(damageSpec); // VG
             foreach (var entry in damageSpec.DamageDict)
             {
                 newDamage.DamageDict.Add(entry.Key, entry.Value / factor);
@@ -342,6 +347,7 @@ namespace Content.Shared.Damage
         public static DamageSpecifier operator /(DamageSpecifier damageSpec, float factor)
         {
             DamageSpecifier newDamage = new();
+            newDamage.CombineVgProperties(damageSpec); // VG
 
             foreach (var entry in damageSpec.DamageDict)
             {
@@ -354,6 +360,7 @@ namespace Content.Shared.Damage
         {
             // Copy existing dictionary from dataA
             DamageSpecifier newDamage = new(damageSpecA);
+            newDamage.CombineVgProperties(damageSpecB); // VG
 
             // Then just add types in B
             foreach (var entry in damageSpecB.DamageDict)
