@@ -1,0 +1,11 @@
+# Mobs with a vg body bleed from their wounds rather than from damage directly.
+- type: damageModifierSet
+  id: VgNoDamageBleed
+  coefficients:
+    Brute: 0
+    Burn: 0
+    Toxin: 0
+    Oxygen: 0
+    Clone: 0
+    Structural: 0
+    Holy: 0

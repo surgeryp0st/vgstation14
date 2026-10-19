@@ -1,0 +1,7 @@
+- type: soundCollection
+  id: VgFracture
+  files:
+  - /Audio/_VG/Effects/bonebreak1.ogg
+  - /Audio/_VG/Effects/bonebreak2.ogg
+  - /Audio/_VG/Effects/bonebreak3.ogg
+  - /Audio/_VG/Effects/bonebreak4.ogg

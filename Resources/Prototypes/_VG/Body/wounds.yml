@@ -1,0 +1,184 @@
+# vgstation13 wounds (code/modules/organs/wound.dm). Stages go from worst to best; the number is the
+# damage per wound at which the stage starts. New wounds pick a size by damage (see VgBodySystem).
+
+# Cuts
+
+- type: vgWound
+  id: CutSmall
+  damageType: Cut
+  maxBleedingStage: 2
+  stages:
+  - { desc: vg-wound-cut-small-1, damage: 20 }
+  - { desc: vg-wound-cut-small-2, damage: 10 }
+  - { desc: vg-wound-cut-small-3, damage: 5 }
+  - { desc: vg-wound-cut-small-4, damage: 2 }
+  - { desc: vg-wound-cut-small-5, damage: 0 }
+
+- type: vgWound
+  id: CutDeep
+  damageType: Cut
+  maxBleedingStage: 3
+  stages:
+  - { desc: vg-wound-cut-deep-1, damage: 25 }
+  - { desc: vg-wound-cut-deep-2, damage: 20 }
+  - { desc: vg-wound-cut-deep-3, damage: 15 }
+  - { desc: vg-wound-cut-deep-4, damage: 8 }
+  - { desc: vg-wound-cut-deep-5, damage: 2 }
+  - { desc: vg-wound-fresh-skin, damage: 0 }
+
+- type: vgWound
+  id: CutFlesh
+  damageType: Cut
+  maxBleedingStage: 3
+  stages:
+  - { desc: vg-wound-cut-flesh-1, damage: 35 }
+  - { desc: vg-wound-cut-flesh-2, damage: 30 }
+  - { desc: vg-wound-cut-flesh-3, damage: 25 }
+  - { desc: vg-wound-cut-flesh-4, damage: 15 }
+  - { desc: vg-wound-cut-flesh-5, damage: 5 }
+  - { desc: vg-wound-fresh-skin, damage: 0 }
+
+- type: vgWound
+  id: CutGaping
+  damageType: Cut
+  maxBleedingStage: 2
+  stages:
+  - { desc: vg-wound-cut-gaping-1, damage: 50 }
+  - { desc: vg-wound-cut-gaping-2, damage: 25 }
+  - { desc: vg-wound-cut-gaping-3, damage: 15 }
+  - { desc: vg-wound-cut-gaping-4, damage: 5 }
+  - { desc: vg-wound-cut-gaping-5, damage: 0 }
+
+- type: vgWound
+  id: CutGapingBig
+  damageType: Cut
+  maxBleedingStage: 2
+  needsTreatment: true
+  stages:
+  - { desc: vg-wound-cut-gaping-big-1, damage: 60 }
+  - { desc: vg-wound-cut-gaping-big-2, damage: 40 }
+  - { desc: vg-wound-cut-gaping-big-3, damage: 10 }
+  - { desc: vg-wound-cut-gaping-big-4, damage: 0 }
+
+- type: vgWound
+  id: CutMassive
+  damageType: Cut
+  maxBleedingStage: 2
+  needsTreatment: true
+  stages:
+  - { desc: vg-wound-cut-massive-1, damage: 70 }
+  - { desc: vg-wound-cut-massive-2, damage: 50 }
+  - { desc: vg-wound-cut-massive-3, damage: 10 }
+  - { desc: vg-wound-cut-massive-4, damage: 0 }
+
+# Bruises all share one stage list and start at different stages.
+
+- type: vgWound
+  abstract: true
+  id: BaseBruise
+  damageType: Bruise
+  needsTreatment: true
+  stages:
+  - { desc: vg-wound-bruise-1, damage: 80 }
+  - { desc: vg-wound-bruise-2, damage: 50 }
+  - { desc: vg-wound-bruise-3, damage: 30 }
+  - { desc: vg-wound-bruise-4, damage: 20 }
+  - { desc: vg-wound-bruise-5, damage: 10 }
+  - { desc: vg-wound-bruise-6, damage: 5 }
+
+- type: vgWound
+  parent: BaseBruise
+  id: BruiseTiny
+  startStage: 6
+  needsTreatment: false
+
+- type: vgWound
+  parent: BaseBruise
+  id: BruiseSmall
+  startStage: 5
+  needsTreatment: false
+
+- type: vgWound
+  parent: BaseBruise
+  id: BruiseModerate
+  startStage: 4
+  needsTreatment: false
+
+- type: vgWound
+  parent: BaseBruise
+  id: BruiseLarge
+  startStage: 3
+
+- type: vgWound
+  parent: BaseBruise
+  id: BruiseHuge
+  startStage: 2
+
+- type: vgWound
+  parent: BaseBruise
+  id: BruiseMonumental
+
+# Burns
+
+- type: vgWound
+  id: BurnModerate
+  damageType: Burn
+  needsTreatment: true
+  stages:
+  - { desc: vg-wound-burn-moderate-1, damage: 10 }
+  - { desc: vg-wound-burn-moderate-2, damage: 5 }
+  - { desc: vg-wound-burn-moderate-3, damage: 2 }
+  - { desc: vg-wound-fresh-skin, damage: 0 }
+
+- type: vgWound
+  id: BurnLarge
+  damageType: Burn
+  needsTreatment: true
+  stages:
+  - { desc: vg-wound-burn-large-1, damage: 20 }
+  - { desc: vg-wound-burn-large-2, damage: 15 }
+  - { desc: vg-wound-burn-large-3, damage: 5 }
+  - { desc: vg-wound-fresh-skin, damage: 0 }
+
+- type: vgWound
+  id: BurnSevere
+  damageType: Burn
+  needsTreatment: true
+  stages:
+  - { desc: vg-wound-burn-severe-1, damage: 35 }
+  - { desc: vg-wound-burn-severe-2, damage: 30 }
+  - { desc: vg-wound-burn-severe-3, damage: 10 }
+  - { desc: vg-wound-burn-severe-4, damage: 0 }
+
+- type: vgWound
+  id: BurnDeep
+  damageType: Burn
+  needsTreatment: true
+  stages:
+  - { desc: vg-wound-burn-deep-1, damage: 45 }
+  - { desc: vg-wound-burn-deep-2, damage: 40 }
+  - { desc: vg-wound-burn-deep-3, damage: 15 }
+  - { desc: vg-wound-burn-deep-4, damage: 0 }
+
+- type: vgWound
+  id: BurnCarbonised
+  damageType: Burn
+  needsTreatment: true
+  stages:
+  - { desc: vg-wound-burn-carbonised-1, damage: 50 }
+  - { desc: vg-wound-burn-carbonised-2, damage: 20 }
+  - { desc: vg-wound-burn-carbonised-3, damage: 0 }
+
+# Internal bleeding: doesn't count towards limb damage and only heals through surgery.
+
+- type: vgWound
+  id: InternalBleeding
+  damageType: Cut
+  internal: true
+  maxBleedingStage: 0
+  needsTreatment: true
+  stages:
+  - { desc: vg-wound-internal-1, damage: 30 }
+  - { desc: vg-wound-internal-2, damage: 20 }
+  - { desc: vg-wound-internal-3, damage: 10 }
+  - { desc: vg-wound-internal-4, damage: 5 }

@@ -1,0 +1,92 @@
+# Severed limbs (vg13 /obj/item/organ/external). Sprites are the plain human body parts for now;
+# vg13 tints them with the owner's skin tone, which comes with the appearance port.
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: VgBaseLimb
+  components:
+  - type: Sprite
+    sprite: _VG/mob/human_races/r_human.rsi
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: VgBaseLimb
+  id: VgLimbHead
+  name: head
+  components:
+  - type: Sprite
+    state: head_m
+
+- type: entity
+  parent: VgBaseLimb
+  id: VgLimbLeftArm
+  name: left arm
+  components:
+  - type: Sprite
+    state: l_arm
+
+- type: entity
+  parent: VgBaseLimb
+  id: VgLimbRightArm
+  name: right arm
+  components:
+  - type: Sprite
+    state: r_arm
+
+- type: entity
+  parent: VgBaseLimb
+  id: VgLimbLeftHand
+  name: left hand
+  components:
+  - type: Sprite
+    state: l_hand
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: VgBaseLimb
+  id: VgLimbRightHand
+  name: right hand
+  components:
+  - type: Sprite
+    state: r_hand
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: VgBaseLimb
+  id: VgLimbLeftLeg
+  name: left leg
+  components:
+  - type: Sprite
+    state: l_leg
+
+- type: entity
+  parent: VgBaseLimb
+  id: VgLimbRightLeg
+  name: right leg
+  components:
+  - type: Sprite
+    state: r_leg
+
+- type: entity
+  parent: VgBaseLimb
+  id: VgLimbLeftFoot
+  name: left foot
+  components:
+  - type: Sprite
+    state: l_foot
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: VgBaseLimb
+  id: VgLimbRightFoot
+  name: right foot
+  components:
+  - type: Sprite
+    state: r_foot
+  - type: Item
+    size: Small

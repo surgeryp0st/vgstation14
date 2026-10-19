@@ -1,0 +1,94 @@
+# vgstation13 humanoid limb setup (species.dm create_organs, organ_external.dm limb definitions).
+
+- type: vgBody
+  id: Human
+  limbs:
+  - id: chest
+    name: vg-limb-chest
+    bodyPart: UpperTorso
+    maxDamage: 150
+    minBrokenDamage: 75
+    vital: true
+    encased: vg-limb-encased-ribcage
+  - id: groin
+    name: vg-limb-groin
+    parent: chest
+    bodyPart: LowerTorso
+    maxDamage: 115
+    minBrokenDamage: 70
+    vital: true
+  - id: head
+    name: vg-limb-head
+    parent: chest
+    bodyPart: Head
+    maxDamage: 130
+    minBrokenDamage: 40
+    vital: true
+    encased: vg-limb-encased-skull
+    droppedPrototype: VgLimbHead
+  - id: l_arm
+    name: vg-limb-l-arm
+    parent: chest
+    bodyPart: ArmLeft
+    maxDamage: 75
+    minBrokenDamage: 30
+    grasp: Left
+    droppedPrototype: VgLimbLeftArm
+  - id: r_arm
+    name: vg-limb-r-arm
+    parent: chest
+    bodyPart: ArmRight
+    maxDamage: 75
+    minBrokenDamage: 30
+    grasp: Right
+    droppedPrototype: VgLimbRightArm
+  - id: l_hand
+    name: vg-limb-l-hand
+    parent: l_arm
+    bodyPart: HandLeft
+    maxDamage: 40
+    minBrokenDamage: 15
+    grasp: Left
+    canGrasp: true
+    droppedPrototype: VgLimbLeftHand
+  - id: r_hand
+    name: vg-limb-r-hand
+    parent: r_arm
+    bodyPart: HandRight
+    maxDamage: 40
+    minBrokenDamage: 15
+    grasp: Right
+    canGrasp: true
+    droppedPrototype: VgLimbRightHand
+  - id: l_leg
+    name: vg-limb-l-leg
+    parent: groin
+    bodyPart: LegLeft
+    maxDamage: 75
+    minBrokenDamage: 30
+    canStand: true
+    droppedPrototype: VgLimbLeftLeg
+  - id: r_leg
+    name: vg-limb-r-leg
+    parent: groin
+    bodyPart: LegRight
+    maxDamage: 75
+    minBrokenDamage: 30
+    canStand: true
+    droppedPrototype: VgLimbRightLeg
+  - id: l_foot
+    name: vg-limb-l-foot
+    parent: l_leg
+    bodyPart: FootLeft
+    maxDamage: 40
+    minBrokenDamage: 15
+    canStand: true
+    droppedPrototype: VgLimbLeftFoot
+  - id: r_foot
+    name: vg-limb-r-foot
+    parent: r_leg
+    bodyPart: FootRight
+    maxDamage: 40
+    minBrokenDamage: 15
+    canStand: true
+    droppedPrototype: VgLimbRightFoot
