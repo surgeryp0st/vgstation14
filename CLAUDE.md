@@ -59,6 +59,6 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 
 ## Working with the user on the port
 
-The user wants to be asked before any big design decision or large gameplay change. That includes every system that exists in both vg13 and SS14, and whether to keep SS14-only content. Decisions so far are in the auto-memory file `vg13-port-decisions.md`.
+The user wants to be asked before any big design decision or large gameplay change. That includes every system that exists in both vg13 and SS14, and whether to keep SS14-only content. Decisions so far, and what's done versus planned, are in `docs/_VG/port-decisions.md`. Update it whenever a new decision is made.
 
 Push to the user's fork (`fork` remote, https://github.com/surgeryp0st/vgstation14). `origin` (vgstation-coders) is read-only for this account.
