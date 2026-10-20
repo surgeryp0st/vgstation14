@@ -1,3 +1,4 @@
+using Content.Shared._VG.Armor;
 using Content.Shared._VG.Damage;
 using Robust.Shared.Serialization;
 
@@ -26,13 +27,42 @@ public sealed partial class DamageSpecifier : ISerializationHooks
     public string? VgZone;
 
     /// <summary>
-    ///     Copies sharpness, edge and zone from another specifier, keeping the sharper of the two.
+    ///     The vg13 armor category this attack checks (melee, bullet, ...). Null means armor doesn't apply.
+    /// </summary>
+    [DataField("vgArmor")]
+    public VgArmorType? VgArmor;
+
+    /// <summary>
+    ///     vg13 armor_penetration: armor points the attack ignores.
+    /// </summary>
+    [DataField("vgArmorPenetration")]
+    public float VgArmorPenetration;
+
+    /// <summary>
+    ///     Whether vg13 armor_absorb also applies (vg13 only runs it for projectiles and unarmed attacks).
+    /// </summary>
+    [DataField("vgArmorAbsorb")]
+    public bool VgArmorAbsorb;
+
+    /// <summary>
+    ///     Copies the vg13 properties from another specifier, keeping the sharper and more penetrating of the two.
     /// </summary>
     public void CombineVgProperties(DamageSpecifier other)
     {
         VgSharpness = MathF.Max(VgSharpness, other.VgSharpness);
         VgEdge |= other.VgEdge;
         VgZone ??= other.VgZone;
+        VgArmor ??= other.VgArmor;
+        VgArmorPenetration = MathF.Max(VgArmorPenetration, other.VgArmorPenetration);
+        VgArmorAbsorb |= other.VgArmorAbsorb;
+    }
+
+    /// <summary>
+    ///     Returns a copy of this damage as a vg13 attack of the given armor category, at a zone if given.
+    /// </summary>
+    public DamageSpecifier WithVgAttack(VgArmorType armor, string? zone, bool absorb = false)
+    {
+        return new DamageSpecifier(this) { VgArmor = armor, VgZone = zone ?? VgZone, VgArmorAbsorb = absorb || VgArmorAbsorb };
     }
 
     /// <summary>

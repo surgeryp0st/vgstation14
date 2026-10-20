@@ -26,6 +26,10 @@ public abstract class SharedArmorSystem : EntitySystem
 
     private void OnDamageModify(EntityUid uid, ArmorComponent component, InventoryRelayedEvent<DamageModifyEvent> args)
     {
+        // VG: vg13 mobs use vg13 armor (VgArmorSystem) instead.
+        if (HasComp<Content.Shared._VG.Body.VgBodyComponent>(Transform(uid).ParentUid))
+            return;
+
         args.Args.Damage = DamageSpecifier.ApplyModifierSet(args.Args.Damage, component.Modifiers);
     }
 

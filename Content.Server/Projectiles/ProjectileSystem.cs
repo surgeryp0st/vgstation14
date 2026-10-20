@@ -13,6 +13,7 @@ namespace Content.Server.Projectiles;
 public sealed class ProjectileSystem : SharedProjectileSystem
 {
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly Content.Shared._VG.Armor.VgArmorSystem _vgArmor = default!; // VG
     [Dependency] private readonly ColorFlashEffectSystem _color = default!;
     [Dependency] private readonly DamageableSystem _damageableSystem = default!;
     [Dependency] private readonly GunSystem _guns = default!;
@@ -45,7 +46,9 @@ public sealed class ProjectileSystem : SharedProjectileSystem
         RaiseLocalEvent(uid, ref ev);
 
         var otherName = ToPrettyString(target);
-        var modifiedDamage = _damageableSystem.TryChangeDamage(target, ev.Damage, component.IgnoreResistances, origin: component.Shooter);
+        // VG: vg13 shots hit the shooter's selected zone, can narrowly miss, and check bullet/laser armor.
+        var vgDamage = _vgArmor.AimShot(uid, target, component.Shooter, ev.Damage);
+        var modifiedDamage = vgDamage == null ? null : _damageableSystem.TryChangeDamage(target, vgDamage, component.IgnoreResistances, origin: component.Shooter);
         var deleted = Deleted(target);
 
         if (modifiedDamage is not null && EntityManager.EntityExists(component.Shooter))

@@ -130,7 +130,8 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     private void RelayedResistance(EntityUid uid, ExplosionResistanceComponent component,
         InventoryRelayedEvent<GetExplosionResistanceEvent> args)
     {
-        if (component.Worn)
+        // VG: vg13 mobs use vg13 bomb armor (VgArmorSystem) instead.
+        if (component.Worn && !HasComp<Content.Shared._VG.Body.VgBodyComponent>(Transform(uid).ParentUid))
             OnGetResistance(uid, component, ref args.Args);
     }
 

@@ -1,3 +1,4 @@
+using Content.Shared._VG.Armor;
 using Content.Shared._VG.Body;
 using Content.Shared._VG.Input;
 using Content.Shared._VG.Random;
@@ -296,7 +297,7 @@ public sealed class VgCombatSystem : EntitySystem
             zone = VgLimbs.Chest;
         }
 
-        damage = damage.WithVgZone(zone);
+        damage = damage.WithVgAttack(VgArmorType.Melee, zone);
 
         if (body.Limbs.TryGetValue(zone, out var limb))
         {
@@ -326,9 +327,9 @@ public sealed class VgCombatSystem : EntitySystem
             return false;
         }
 
-        damage = new DamageSpecifier(_proto.Index(PunchDamageType), amount);
-        if (HasComp<VgBodyComponent>(target))
-            damage = damage.WithVgZone(_body.RandomZone(target, comp.Zone));
+        // vg13 unarmed attacks check melee armor, absorb included.
+        damage = new DamageSpecifier(_proto.Index(PunchDamageType), amount)
+            .WithVgAttack(VgArmorType.Melee, HasComp<VgBodyComponent>(target) ? _body.RandomZone(target, comp.Zone) : null, absorb: true);
 
         Visible(user, target, Loc.GetString("vg-attack-punch", ("user", userIdentity), ("target", targetIdentity)));
 
@@ -400,7 +401,8 @@ public sealed class VgCombatSystem : EntitySystem
     ///     vg13 get_zone_with_miss_chance(): returns the zone hit, or null for a clean miss. People lying down or buckled
     ///     can't dodge.
     /// </summary>
-    private string? ZoneWithMissChance(string zone, EntityUid target, System.Random random)
+    /// <param name="modifier">vg13 miss_chance_mod: added to the zone's miss chance (projectiles use -30).</param>
+    public string? ZoneWithMissChance(string zone, EntityUid target, System.Random random, float modifier = 0)
     {
         zone = VgLimbs.CheckZone(zone);
         if (_standing.IsDown(target) || _buckle.IsBuckled(target))
@@ -414,7 +416,7 @@ public sealed class VgCombatSystem : EntitySystem
             _ => 10,
         };
 
-        if (!random.Prob(missChance))
+        if (!random.Prob(MathF.Max(0, missChance + modifier)))
             return zone;
 
         if (random.Prob(70))

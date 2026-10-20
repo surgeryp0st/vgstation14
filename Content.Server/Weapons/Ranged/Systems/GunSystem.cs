@@ -28,6 +28,7 @@ namespace Content.Server.Weapons.Ranged.Systems;
 public sealed partial class GunSystem : SharedGunSystem
 {
     [Dependency] private readonly IComponentFactory _factory = default!;
+    [Dependency] private readonly Content.Shared._VG.Armor.VgArmorSystem _vgArmor = default!; // VG
     [Dependency] private readonly BatterySystem _battery = default!;
     [Dependency] private readonly DamageExamineSystem _damageExamine = default!;
     [Dependency] private readonly PricingSystem _pricing = default!;
@@ -211,6 +212,10 @@ public sealed partial class GunSystem : SharedGunSystem
                         var dmg = hitscan.Damage;
 
                         var hitName = ToPrettyString(hitEntity);
+                        // VG: vg13 shots hit the shooter's selected zone, can narrowly miss, and check laser armor.
+                        if (dmg != null)
+                            dmg = _vgArmor.AimShot(gunUid, hitEntity, user, dmg);
+
                         if (dmg != null)
                             dmg = Damageable.TryChangeDamage(hitEntity, dmg, origin: user);
 
