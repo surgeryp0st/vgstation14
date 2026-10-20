@@ -47,8 +47,8 @@ Decided: the **full vg13 model**.
 
 | Area | Decision | Status |
 |---|---|---|
-| Chemistry | **Replace** SS14's reagents and recipes with vg13's, like the body system. Infection waits for it (spaceacillin). | Planned |
-| Chemistry engine | Keep SS14's solution/reaction engine (containers, machines, transfers, prediction); replace its data: reagents, recipes, effects and metabolism become vg13's. vg13-only engine mechanics (container-specific reactions, slime extracts, ...) are added as `_VG` extensions. | Planned |
+| Chemistry | **Replace** SS14's reagents and recipes with vg13's, like the body system. Infection waits for it (spaceacillin). | In progress: metabolism framework and first medicines (below) |
+| Chemistry engine | Keep SS14's solution/reaction engine (containers, machines, transfers, prediction); replace its data: reagents, recipes, effects and metabolism become vg13's. vg13-only engine mechanics (container-specific reactions, slime extracts, ...) are added as `_VG` extensions. | In progress: vg13 reagents are ordinary `reagent` prototypes with vg13's lowercase ids (no clash with SS14's CamelCase ids), plus a `vgReagent` prototype of the same id holding `on_mob_life` as data (metabolism rate, overdose, pain resistance, a list of effects). `VgMetabolismSystem` (server, since the bloodstream is) runs them on the Life() tick over the bloodstream's chemical solution, with vg13's tick counters, overdose and liver-rate removal. Effects so far: heal limb damage, adjust tox/oxy/clone, brain loss, losebreath, purge other reagents. Ported: dylovene, bicaridine, kelotane, dexalin, inaprovaline, tricordrazine. Next: the rest of vg13's medicines, reaction recipes, then the dispensers. |
 | SS14-only reagents | Food, drink and juice reagents **stay**, rewritten for vg13 metabolism. SS14-only medicines, toxins, narcotics and fun/misc chems are **disabled** (out of dispensers, recipes, vendors and starting contents; items needing one get the closest vg13 reagent; prototypes kept). Species bloods follow their species; gases (frezon, tritium, N2O) wait for atmos. | Planned |
 
 ## Species and movement

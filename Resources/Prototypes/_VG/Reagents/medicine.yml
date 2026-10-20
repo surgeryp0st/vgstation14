@@ -1,0 +1,126 @@
+# vgstation13 medicines (code/modules/reagents/reagents/reagents_medical.dm). The reagent is an ordinary SS14 reagent so
+# containers, reactions and machines work; its Life() behaviour is in the matching vgReagent. Ids are vg13's (lowercase),
+# which don't collide with SS14's CamelCase ones.
+# Not ported yet: drowsiness, hallucination and virus effects, which wait on those systems.
+
+- type: reagent
+  id: anti_toxin
+  name: reagent-name-vg-anti-toxin
+  group: Medicine
+  desc: reagent-desc-vg-anti-toxin
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: anti_toxin
+  overdoseAmount: 60
+  effects:
+  - !type:VgRemoveReagents
+    reagents: [toxin, plantbgone, insecticide, solanine, stoxin, cyanide, amatoxin, potassium_hydroxide]
+    amount: 2
+  - !type:VgRemoveReagents
+    reagents: [plasma, sacid, sux, carpotoxin]
+    amount: 1
+  - !type:VgRemoveReagents
+    reagents: [chloralhydrate]
+    amount: 5
+  - !type:VgRemoveReagents
+    reagents: [mindbreaker]
+    amount: 2
+  - !type:VgRemoveReagents
+    reagents: [zombiepowder]
+    amount: 0.5
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: -2
+
+- type: reagent
+  id: bicaridine
+  name: reagent-name-vg-bicaridine
+  group: Medicine
+  desc: reagent-desc-vg-bicaridine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#5962F8"
+
+- type: vgReagent
+  id: bicaridine
+  overdoseAmount: 30
+  effects:
+  - !type:VgHealOrgan
+    brute: 2
+  overdoseEffects:
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: 1
+    flat: true
+
+- type: reagent
+  id: kelotane
+  name: reagent-name-vg-kelotane
+  group: Medicine
+  desc: reagent-desc-vg-kelotane
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C2733F"
+
+- type: vgReagent
+  id: kelotane
+  effects:
+  - !type:VgHealOrgan
+    burn: 2
+
+- type: reagent
+  id: dexalin
+  name: reagent-name-vg-dexalin
+  group: Medicine
+  desc: reagent-desc-vg-dexalin
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#4CE9FF"
+
+- type: vgReagent
+  id: dexalin
+  effects:
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: -2
+
+- type: reagent
+  id: inaprovaline
+  name: reagent-name-vg-inaprovaline
+  group: Medicine
+  desc: reagent-desc-vg-inaprovaline
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: inaprovaline
+  metabolism: 0.2
+  painResistance: 25
+  effects:
+  - !type:VgEaseLoseBreath
+
+- type: reagent
+  id: tricordrazine
+  name: reagent-name-vg-tricordrazine
+  group: Medicine
+  desc: reagent-desc-vg-tricordrazine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: tricordrazine
+  effects:
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: -1
+  - !type:VgHealOrgan
+    brute: 1
+    burn: 1
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: -1

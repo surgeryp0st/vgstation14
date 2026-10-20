@@ -1,0 +1,12 @@
+reagent-name-vg-anti-toxin = dylovene
+reagent-desc-vg-anti-toxin = Dylovene is a broad-spectrum antitoxin.
+reagent-name-vg-bicaridine = bicaridine
+reagent-desc-vg-bicaridine = Bicaridine is an analgesic medication and can be used to treat blunt trauma.
+reagent-name-vg-kelotane = kelotane
+reagent-desc-vg-kelotane = Kelotane is a drug used to treat burns.
+reagent-name-vg-dexalin = dexalin
+reagent-desc-vg-dexalin = Dexalin is used in the treatment of oxygen deprivation.
+reagent-name-vg-inaprovaline = inaprovaline
+reagent-desc-vg-inaprovaline = Inaprovaline is a synaptic stimulant and cardiostimulant. Commonly used to stabilize patients.
+reagent-name-vg-tricordrazine = tricordrazine
+reagent-desc-vg-tricordrazine = Tricordrazine is a highly potent stimulant, originally derived from cordrazine. Can be used to treat a wide range of injuries.

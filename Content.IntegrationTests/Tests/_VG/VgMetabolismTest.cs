@@ -1,0 +1,92 @@
+using System.Collections.Generic;
+using Content.Server.Body.Components;
+using Content.Shared._VG.Breathing;
+using Content.Shared._VG.Chemistry;
+using Content.Shared._VG.Life;
+using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
+using Robust.Shared.GameObjects;
+
+namespace Content.IntegrationTests.Tests._VG;
+
+[TestFixture]
+public sealed class VgMetabolismTest
+{
+    private static void LifeTick(IEntityManager entMan, EntityUid uid)
+    {
+        var ev = new VgLifeTickEvent(1);
+        entMan.EventBus.RaiseLocalEvent(uid, ref ev);
+    }
+
+    private static float Damage(IEntityManager entMan, EntityUid uid, string type)
+    {
+        return entMan.GetComponent<DamageableComponent>(uid).Damage.DamageDict.GetValueOrDefault(type).Float();
+    }
+
+    private static float Amount(IEntityManager entMan, EntityUid uid, string reagent)
+    {
+        var comp = entMan.GetComponent<BloodstreamComponent>(uid);
+        entMan.System<SharedSolutionContainerSystem>()
+            .ResolveSolution(uid, comp.ChemicalSolutionName, ref comp.ChemicalSolution, out var solution);
+        return solution!.GetTotalPrototypeQuantity(reagent).Float();
+    }
+
+    private static void Inject(IEntityManager entMan, EntityUid uid, string reagent, float amount)
+    {
+        entMan.System<Content.Server.Body.Systems.BloodstreamSystem>()
+            .TryAddToChemicals(uid, new Content.Shared.Chemistry.Components.Solution(reagent, FixedPoint2.New(amount)));
+    }
+
+    [Test]
+    public async Task DyloveneHealsToxinAndMetabolises()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<VgBreathingComponent>(human);
+
+            var spec = new DamageSpecifier();
+            spec.DamageDict["Toxin"] = 10;
+            entMan.System<DamageableSystem>().TryChangeDamage(human, spec, true, false);
+            Inject(entMan, human, "anti_toxin", 10);
+            LifeTick(entMan, human);
+
+            Assert.Multiple(() =>
+            {
+                // heals 2 * REM and burns 0.2 of the 10 units
+                Assert.That(Damage(entMan, human, "Toxin"), Is.EqualTo(9).Within(0.01));
+                Assert.That(Amount(entMan, human, "anti_toxin"), Is.EqualTo(9.8).Within(0.01));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task BicaridineOverdoseHurts()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<VgBreathingComponent>(human);
+
+            Inject(entMan, human, "bicaridine", 31);
+            LifeTick(entMan, human);
+
+            Assert.That(Damage(entMan, human, "Toxin"), Is.EqualTo(1).Within(0.01));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+}
