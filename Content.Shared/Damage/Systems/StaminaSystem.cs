@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._VG.Status; // VG
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.CombatMode;
@@ -34,6 +35,7 @@ public sealed partial class StaminaSystem : EntitySystem
     [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
     [Dependency] private readonly SharedStunSystem _stunSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly VgStatusSystem _vgStatus = default!; // VG
 
     /// <summary>
     /// How much of a buffer is there between the stun duration and when stuns can be re-applied.
@@ -235,6 +237,10 @@ public sealed partial class StaminaSystem : EntitySystem
     public void TakeStaminaDamage(EntityUid uid, float value, StaminaComponent? component = null,
         EntityUid? source = null, EntityUid? with = null, bool visual = true, SoundSpecifier? sound = null)
     {
+        // VG: vg13 mobs have no stamina; it becomes halloss, or a vg13 stun for batons.
+        if (_vgStatus.TryConvertStamina(uid, value, with))
+            return;
+
         if (!Resolve(uid, ref component, false))
             return;
 

@@ -235,6 +235,8 @@
   - type: VgLife
   # VG: vg13 intents and zone selector replace combat mode.
   - type: VgIntent
+  # VG: vg13 halloss and traumatic shock; stamina damage becomes halloss.
+  - type: VgStatus
   - type: Bloodstream
     damageBleedModifiers: VgNoDamageBleed # VG: bleeding comes from vg wounds
   - type: Fingerprint

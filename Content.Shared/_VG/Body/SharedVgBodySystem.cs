@@ -2,7 +2,9 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Shared._VG.CCVar;
 using Content.Shared._VG.Damage;
 using Content.Shared._VG.Life;
+using Content.Shared._VG.Popups;
 using Content.Shared._VG.Random;
+using Content.Shared._VG.Status;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -13,7 +15,6 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Standing;
-using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
@@ -45,8 +46,8 @@ public abstract partial class SharedVgBodySystem : EntitySystem
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly VgPopupSystem _vgPopup = default!;
+    [Dependency] private readonly VgStatusSystem _status = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
 
     private bool _bonesCanBreak;
@@ -332,7 +333,7 @@ public abstract partial class SharedVgBodySystem : EntitySystem
     /// </summary>
     private void CustomPain(EntityUid uid, string message)
     {
-        VisibleMessage(uid, null, message);
+        _status.CustomPain(uid, message, PredictingUser);
     }
 
     /// <summary>
@@ -340,24 +341,7 @@ public abstract partial class SharedVgBodySystem : EntitySystem
     /// </summary>
     private void VisibleMessage(EntityUid uid, string? others, string? self, PopupType type = PopupType.MediumCaution)
     {
-        if (Net.IsClient)
-        {
-            // Only the predicting client is running this; it shows what its player would see.
-            _popup.PopupClient(PredictingUser == uid ? self : others, uid, PredictingUser, type);
-            return;
-        }
-
-        if (self != null && PredictingUser != uid)
-            _popup.PopupEntity(self, uid, uid, type);
-
-        if (others != null)
-        {
-            var filter = Filter.PvsExcept(uid);
-            if (PredictingUser is { } user)
-                filter.RemoveWhereAttachedEntity(e => e == user);
-
-            _popup.PopupEntity(others, uid, filter, true, type);
-        }
+        _vgPopup.Visible(uid, others, self, PredictingUser, type);
     }
 
     /// <summary>

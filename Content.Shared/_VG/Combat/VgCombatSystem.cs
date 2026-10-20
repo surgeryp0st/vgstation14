@@ -1,6 +1,7 @@
 using Content.Shared._VG.Body;
 using Content.Shared._VG.Input;
 using Content.Shared._VG.Random;
+using Content.Shared._VG.Status;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Buckle;
@@ -16,7 +17,6 @@ using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Standing;
-using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Audio;
@@ -48,7 +48,7 @@ public sealed class VgCombatSystem : EntitySystem
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly VgStatusSystem _status = default!;
     [Dependency] private readonly SharedVgBodySystem _body = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
 
@@ -68,9 +68,9 @@ public sealed class VgCombatSystem : EntitySystem
     /// </summary>
     private const float KnockoutChance = 8;
 
-    // vg13 WEAKEN durations are counted in 2 second Life() ticks.
-    private static readonly TimeSpan PunchKnockdown = TimeSpan.FromSeconds(4);
-    private static readonly TimeSpan DisarmKnockdown = TimeSpan.FromSeconds(8);
+    // vg13 apply_effect(x, WEAKEN), in Life() ticks.
+    private const float PunchKnockdown = 2;
+    private const float DisarmKnockdown = 4;
 
     // Salts for VgPredictedRandom, so different rolls in one tick don't share numbers.
     private const int SaltDisarm = 1;
@@ -334,7 +334,7 @@ public sealed class VgCombatSystem : EntitySystem
         if (random.Prob(KnockoutChance))
         {
             Visible(user, target, Loc.GetString("vg-attack-knockdown", ("user", userIdentity), ("target", targetIdentity)));
-            _stun.TryKnockdown(target, PunchKnockdown, true);
+            _status.Knockdown(target, PunchKnockdown);
         }
 
         return true;
@@ -374,7 +374,7 @@ public sealed class VgCombatSystem : EntitySystem
         if (random.Prob(40))
         {
             Visible(user, target, Loc.GetString("vg-disarm-push", ("user", userIdentity), ("target", targetIdentity)));
-            _stun.TryKnockdown(target, DisarmKnockdown, true);
+            _status.Knockdown(target, DisarmKnockdown);
             return;
         }
 

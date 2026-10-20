@@ -56,6 +56,12 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 - `VgIntentComponent` (intent + selected zone) replaces SS14 combat mode on humanoids: combat mode stays off and its toggle action is removed. Hotkeys are `VgKeyFunctions` (vg13 defaults in `keybinds.yml`); the HUD selectors are added to the hotbar row by `VgCombatUIController`.
 - Clicks go through SS14's predicted `SharedInteractionSystem.UserInteraction`, with two `// VG` hooks: `VgCombatSystem.TryUnarmed` (empty hand on a mob: disarm, grab, punch by intent; help falls through to SS14's hand interaction) and `ItemFallback` (an item no interaction handled hits a mob on any intent, other things on harm). `SharedMeleeWeaponSystem` calls `TryAimMelee` before a light attack lands (zone, vg13 miss chances, vg13 punch damage). Melee and gun "in combat mode" checks also accept intent users; the client gun loop asks `ShouldFireGun`.
 
+### Stuns, pain and treatment
+
+- `VgStatusSystem` is vg13's stun model: `Stun`/`Knockdown`/`Paralyse` take vg13 Life() ticks and set SS14's predicted status effects (stun, knocked down, forced sleep) to the longer of old and new. `VgStatusComponent` holds halloss and traumatic shock, processed on the Life() tick with pain messages. Stamina damage on these mobs is converted in a `// VG` hook at the top of `StaminaSystem.TakeStaminaDamage` (halloss, or a vg13 baton stun via `VgStunOnHit`).
+- `VgPopupSystem.Visible`/`Self` are vg13's `visible_message`/`to_chat` for predicted code; pass the predicting user.
+- `VgMedicalSystem`: vg13 medical stacks act on the aimed limb from `AfterInteractEvent`. SS14's `Brutepack`/`Gauze`/`Ointment` ids are aliases of the vg items.
+
 ### Body (`Content.Shared/_VG/Body/`, in progress)
 
 - `VgBodyComponent` holds vg13 limbs (`VgLimb`: wounds, fractures, internal bleeding, robotic/peg status), laid out by a `vgBody` prototype. Wound kinds are `vgWound` prototypes.

@@ -141,8 +141,7 @@ public abstract partial class SharedVgBodySystem
         if ((limb.BodyPart & VgBodyParts.Legs) != 0)
         {
             VisibleMessage(ent, null, Loc.GetString("vg-limb-lost-leg"), PopupType.LargeCaution);
-            // vg13 Knockdown(5): five 2 second Life() ticks.
-            _stun.TryKnockdown(ent, TimeSpan.FromSeconds(10), true);
+            _status.Knockdown(ent, 5);
         }
 
         RemoveUpstreamPart(ent, limb);
