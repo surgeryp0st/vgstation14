@@ -370,6 +370,14 @@ public abstract partial class SharedVgBodySystem : EntitySystem
     }
 
     /// <summary>
+    ///     vg13 handle_blood(): regeneration and the effects of blood loss. Server-only until the bloodstream can be
+    ///     predicted.
+    /// </summary>
+    protected virtual void HandleBlood(Entity<VgBodyComponent> ent)
+    {
+    }
+
+    /// <summary>
     ///     Removes vg13 units of blood from the mob. The bloodstream is server-only until vg13 blood is ported.
     /// </summary>
     protected virtual void RemoveBlood(EntityUid uid, float amount)

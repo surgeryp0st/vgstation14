@@ -117,6 +117,10 @@ public sealed class BloodstreamSystem : EntitySystem
 
             bloodstream.NextUpdate += bloodstream.UpdateInterval;
 
+            // VG: vg13 bodies handle their own blood (regeneration, blood loss effects, bleeding) on the Life() tick.
+            if (HasComp<Content.Shared._VG.Body.VgBodyComponent>(uid))
+                continue;
+
             if (!_solutionContainerSystem.ResolveSolution(uid, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out var bloodSolution))
                 continue;
 

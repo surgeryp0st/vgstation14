@@ -51,6 +51,12 @@ public sealed partial class VgBodyComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool HasBlood = true;
+
+    /// <summary>
+    ///     vg13 pale: low on blood.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Pale;
 }
 
 /// <summary>

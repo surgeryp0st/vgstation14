@@ -26,6 +26,7 @@ public abstract partial class SharedVgBodySystem
         }
 
         HandleBleeding(ent);
+        HandleBlood(ent);
         ProcessOrgans(ent, args.LifeTick);
 
         Dirty(ent);
