@@ -4,7 +4,7 @@
     HandheldHealthAnalyzer: 3
     Brutepack: 5
     Ointment: 5
-    Bloodpack: 5
+    # VG: Bloodpack disabled (SS14-only medical item)
     EpinephrineChemistryBottle: 3
     Syringe: 5
     BoxBottle: 3

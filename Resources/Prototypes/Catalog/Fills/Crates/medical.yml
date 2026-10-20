@@ -10,8 +10,7 @@
         amount: 2
       - id: Gauze
         amount: 2
-      - id: Bloodpack
-        amount: 2
+      # VG: Bloodpack disabled (SS14-only medical item)
       - id: BoxLatexGloves
       - id: BoxSterileMask
       - id: BoxMouthSwab

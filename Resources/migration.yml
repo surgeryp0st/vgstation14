@@ -537,3 +537,12 @@ LightTree03: LightTree
 LightTree04: LightTree
 LightTree05: LightTree
 LightTree06: LightTree
+
+# VG: SS14-only medical items disabled for the vgstation13 port (see docs/_VG/port-decisions.md).
+Tourniquet: null
+Bloodpack: null
+Bloodpack10Lingering: null
+RegenerativeMesh: null
+MedicatedSuture: null
+AloeCream: null
+HealingToolbox: null

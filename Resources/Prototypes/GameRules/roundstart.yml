@@ -29,7 +29,7 @@
   components:
   - type: DeathMatchRule
     rewardSpawns:
-    - id: HealingToolbox
+    # VG: HealingToolbox disabled (SS14-only medical item)
     - id: ClothingOuterArmorBasicSlim
       orGroup: loot
     - id: ClothingHeadHelmetBasic

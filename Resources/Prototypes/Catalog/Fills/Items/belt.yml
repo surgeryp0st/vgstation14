@@ -96,8 +96,7 @@
         amount: 2
       - id: Ointment
         amount: 1
-      - id: Bloodpack
-        amount: 1
+      # VG: Bloodpack disabled (SS14-only medical item)
       - id: Gauze
       - id: EmergencyMedipen #You never know what people are going to latejoin into
 
@@ -110,7 +109,7 @@
     contents:
       - id: Brutepack
       - id: Ointment
-      - id: Bloodpack
+      # VG: Bloodpack disabled (SS14-only medical item)
       - id: Gauze
       - id: EmergencyMedipen #You never know what people are going to latejoin into
         amount: 3

@@ -3,6 +3,6 @@
   startingInventory:
     Brutepack: 3
     Ointment: 3
-    Bloodpack: 3
+    # VG: Bloodpack disabled (SS14-only medical item)
     EpinephrineChemistryBottle: 3
     Syringe: 3

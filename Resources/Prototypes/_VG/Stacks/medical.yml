@@ -1,0 +1,43 @@
+# vgstation13 medical stacks. vg13 caps these at 5 (bandaids at 1).
+
+- type: stack
+  id: VgBruisePack
+  name: roll of gauze
+  icon: { sprite: "/Textures/_VG/obj/items.rsi", state: brutepack }
+  spawn: VgBruisePack1
+  maxCount: 5
+
+- type: stack
+  id: VgBandaid
+  name: small bandage
+  icon: { sprite: "/Textures/_VG/obj/items.rsi", state: bandaid }
+  spawn: VgBandaid
+  maxCount: 1
+
+- type: stack
+  id: VgOintment
+  name: ointment
+  icon: { sprite: "/Textures/_VG/obj/items.rsi", state: ointment }
+  spawn: VgOintment1
+  maxCount: 5
+
+- type: stack
+  id: VgAdvancedTraumaKit
+  name: advanced trauma kit
+  icon: { sprite: "/Textures/_VG/obj/items.rsi", state: traumakit }
+  spawn: VgAdvancedTraumaKit1
+  maxCount: 5
+
+- type: stack
+  id: VgAdvancedBurnKit
+  name: advanced burn kit
+  icon: { sprite: "/Textures/_VG/obj/items.rsi", state: burnkit }
+  spawn: VgAdvancedBurnKit1
+  maxCount: 5
+
+- type: stack
+  id: VgSplint
+  name: advanced medical splints
+  icon: { sprite: "/Textures/_VG/obj/items.rsi", state: splint }
+  spawn: VgSplint1
+  maxCount: 5

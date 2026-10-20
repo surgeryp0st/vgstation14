@@ -20,6 +20,8 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
+# VG: vg13 sprites mirror its icons/ layout, which has an obj/ folder.
+!Resources/Textures/_VG/obj/
 [Ll]og/
 
 # Visual Studio 2015 cache/options directory

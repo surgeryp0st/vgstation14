@@ -20,7 +20,7 @@
         - Handcuffs
         - Zipties
         - FlashlightSeclite
-        - Tourniquet
+        # VG: Tourniquet disabled (SS14-only medical item)
       chance: 0.85
 
 - type: entity
@@ -50,7 +50,7 @@
         - FlashlightSeclite
         - GrenadeFlashBang
         - SecurityWhistle
-        - Tourniquet
+        # VG: Tourniquet disabled (SS14-only medical item)
       chance: 0.85
  
 # Armory loot spawner

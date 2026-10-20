@@ -305,8 +305,7 @@
       - id: DefibrillatorSyndicate
       - id: MedkitCombatFilled
         amount: 4
-      - id: Tourniquet
-        amount: 4
+      # VG: Tourniquet disabled (SS14-only medical item)
       - id: CombatMedipen
         amount: 4
       - id: PunctAutoInjector

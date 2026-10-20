@@ -81,10 +81,16 @@
   components:
   - type: StorageFill
     contents:
-      - id: MedicatedSuture
-      - id: RegenerativeMesh
-      - id: Bloodpack
+      # VG: MedicatedSuture disabled (SS14-only medical item)
+      # VG: RegenerativeMesh disabled (SS14-only medical item)
+      # VG: Bloodpack disabled (SS14-only medical item)
+      # VG: vg13's advanced first-aid kit contents (an epinephrine medipen standing in for its autoinjector)
+      - id: EmergencyMedipen
+      - id: VgAdvancedTraumaKit
+        amount: 3
+      - id: VgAdvancedBurnKit
         amount: 2
+      - id: VgSplint
 
 - type: entity
   id: MedkitCombatFilled
@@ -93,8 +99,8 @@
   components:
   - type: StorageFill
     contents:
-      - id: MedicatedSuture
-      - id: RegenerativeMesh
+      # VG: MedicatedSuture disabled (SS14-only medical item)
+      # VG: RegenerativeMesh disabled (SS14-only medical item)
       - id: SyringeEphedrine
       - id: SyringeSaline
       - id: BruteAutoInjector

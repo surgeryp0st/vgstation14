@@ -789,7 +789,7 @@
     pocket1: Ointment
     pocket2: Brutepack
   inhand:
-  - Bloodpack
+  # VG: Bloodpack disabled (SS14-only medical item)
   - Gauze
 
 - type: startingGear
@@ -806,7 +806,7 @@
     pocket1: Ointment
     pocket2: Brutepack
   inhand:
-  - Bloodpack
+  # VG: Bloodpack disabled (SS14-only medical item)
   - Gauze
 
 - type: startingGear
@@ -821,11 +821,11 @@
     back: ClothingBackpackSatchelMedical
     ears: ClothingHeadsetMedical
     eyes: ClothingEyesHudMedical
-    pocket1: RegenerativeMesh
+    # VG: RegenerativeMesh disabled (SS14-only medical item)
     pocket2: PillCanisterBicaridine
   inhand:
   - ScalpelAdvanced
-  - MedicatedSuture
+  # VG: MedicatedSuture disabled (SS14-only medical item)
 
 - type: startingGear
   id: VisitorScrubsGreen
@@ -839,11 +839,11 @@
     back: ClothingBackpackSatchelMedical
     ears: ClothingHeadsetMedical
     eyes: ClothingEyesHudMedical
-    pocket1: RegenerativeMesh
+    # VG: RegenerativeMesh disabled (SS14-only medical item)
     pocket2: PillCanisterBicaridine
   inhand:
   - ScalpelAdvanced
-  - MedicatedSuture
+  # VG: MedicatedSuture disabled (SS14-only medical item)
 
 - type: startingGear
   id: VisitorScrubsBlue
@@ -857,11 +857,11 @@
     back: ClothingBackpackSatchelMedical
     ears: ClothingHeadsetMedical
     eyes: ClothingEyesHudMedical
-    pocket1: RegenerativeMesh
+    # VG: RegenerativeMesh disabled (SS14-only medical item)
     pocket2: PillCanisterBicaridine
   inhand: 
   - ScalpelAdvanced
-  - MedicatedSuture
+  # VG: MedicatedSuture disabled (SS14-only medical item)
 
 # Science
 

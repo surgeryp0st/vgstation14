@@ -32,8 +32,8 @@
   storage:
     back:
     - WeaponDisabler
-    - MedicatedSuture
-    - RegenerativeMesh
+    # VG: MedicatedSuture disabled (SS14-only medical item)
+    # VG: RegenerativeMesh disabled (SS14-only medical item)
     - BoxZiptie
     - CrowbarRed
     - MagazineMagnum
@@ -56,8 +56,8 @@
   storage:
     back:
     - WeaponDisabler
-    - MedicatedSuture
-    - RegenerativeMesh
+    # VG: MedicatedSuture disabled (SS14-only medical item)
+    # VG: RegenerativeMesh disabled (SS14-only medical item)
     - BoxZiptie
     - CrowbarRed
     - MagazineMagnum
@@ -82,8 +82,8 @@
   storage:
     back:
     - WeaponDisabler
-    - MedicatedSuture
-    - RegenerativeMesh
+    # VG: MedicatedSuture disabled (SS14-only medical item)
+    # VG: RegenerativeMesh disabled (SS14-only medical item)
     - BoxZiptie
     - CrowbarRed
     - MagazineMagnum
@@ -276,8 +276,8 @@
   storage:
     back:
     - WeaponDisabler
-    - MedicatedSuture
-    - RegenerativeMesh
+    # VG: MedicatedSuture disabled (SS14-only medical item)
+    # VG: RegenerativeMesh disabled (SS14-only medical item)
     - BoxZiptie
     - CrowbarRed
     - MagazinePistol
@@ -300,8 +300,8 @@
   storage:
     back:
     - WeaponDisabler
-    - MedicatedSuture
-    - RegenerativeMesh
+    # VG: MedicatedSuture disabled (SS14-only medical item)
+    # VG: RegenerativeMesh disabled (SS14-only medical item)
     - BoxZiptie
     - CrowbarRed
     - MagazinePistol
@@ -326,8 +326,8 @@
   storage:
     back:
     - WeaponDisabler
-    - MedicatedSuture
-    - RegenerativeMesh
+    # VG: MedicatedSuture disabled (SS14-only medical item)
+    # VG: RegenerativeMesh disabled (SS14-only medical item)
     - BoxZiptie
     - CrowbarRed
     - MagazinePistol

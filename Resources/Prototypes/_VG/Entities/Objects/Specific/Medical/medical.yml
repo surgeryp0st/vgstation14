@@ -1,0 +1,181 @@
+# vgstation13 medical stacks (code/game/objects/items/stacks/medical.dm). They treat the limb the user aims at.
+# SS14's Brutepack, Gauze and Ointment are aliases of these now (see Medical/healing.yml).
+
+- type: entity
+  parent: BaseItem
+  id: VgBaseMedicalStack
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _VG/obj/items.rsi
+  - type: Item
+    size: Tiny
+  - type: StaticPrice
+    price: 0
+
+- type: entity
+  parent: VgBaseMedicalStack
+  id: VgBruisePack
+  name: roll of gauze
+  description: Some sterile gauze to wrap around bloody stumps.
+  suffix: Full
+  components:
+  - type: Sprite
+    state: brutepack
+  - type: Item
+    sprite: _VG/mob/in-hand/items.rsi
+    heldPrefix: brutepack
+  - type: Tag
+    tags:
+    - Brutepack
+    - Gauze
+  - type: VgMedical
+    kind: Bandage
+  - type: Stack
+    stackType: VgBruisePack
+    count: 5
+  - type: StackPrice
+    price: 5
+
+- type: entity
+  parent: VgBruisePack
+  id: VgBruisePack1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: VgBaseMedicalStack
+  id: VgBandaid
+  name: small bandage
+  description: A small bandage to stop bleeding.
+  components:
+  - type: Sprite
+    state: bandaid
+  - type: Tag
+    tags:
+    - Brutepack
+  - type: VgMedical
+    kind: Bandage
+  - type: Stack
+    stackType: VgBandaid
+    count: 1
+  - type: StackPrice
+    price: 1
+
+- type: entity
+  parent: VgBaseMedicalStack
+  id: VgOintment
+  name: ointment
+  description: Used to treat those nasty burns.
+  suffix: Full
+  components:
+  - type: Sprite
+    state: ointment
+  - type: Item
+    sprite: _VG/mob/in-hand/items.rsi
+    heldPrefix: ointment
+  - type: Tag
+    tags:
+    - Ointment
+  - type: VgMedical
+    kind: Salve
+  - type: Stack
+    stackType: VgOintment
+    count: 5
+  - type: StackPrice
+    price: 5
+
+- type: entity
+  parent: VgOintment
+  id: VgOintment1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: VgBaseMedicalStack
+  id: VgAdvancedTraumaKit
+  name: advanced trauma kit
+  description: An advanced trauma kit for severe injuries.
+  suffix: Full
+  components:
+  - type: Sprite
+    state: traumakit
+  - type: Tag
+    tags:
+    - Brutepack
+  - type: VgMedical
+    kind: Bandage
+    healBrute: 10
+    advanced: true
+  - type: Stack
+    stackType: VgAdvancedTraumaKit
+    count: 5
+  - type: StackPrice
+    price: 15
+
+- type: entity
+  parent: VgAdvancedTraumaKit
+  id: VgAdvancedTraumaKit1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: VgBaseMedicalStack
+  id: VgAdvancedBurnKit
+  name: advanced burn kit
+  description: An advanced treatment kit for severe burns.
+  suffix: Full
+  components:
+  - type: Sprite
+    state: burnkit
+  - type: Tag
+    tags:
+    - Ointment
+  - type: VgMedical
+    kind: Salve
+    healBurn: 10
+    advanced: true
+  - type: Stack
+    stackType: VgAdvancedBurnKit
+    count: 5
+  - type: StackPrice
+    price: 15
+
+- type: entity
+  parent: VgAdvancedBurnKit
+  id: VgAdvancedBurnKit1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: VgBaseMedicalStack
+  id: VgSplint
+  name: advanced medical splints
+  description: Used to secure a fracture in any bodypart.
+  suffix: Full
+  components:
+  - type: Sprite
+    state: splint
+  - type: VgMedical
+    kind: Splint
+  - type: Stack
+    stackType: VgSplint
+    count: 5
+  - type: StackPrice
+    price: 5
+
+- type: entity
+  parent: VgSplint
+  id: VgSplint1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
