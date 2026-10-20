@@ -1,10 +1,9 @@
 using System.Linq;
-using Content.Shared._VG.Body;
 using Robust.Shared.Random;
 
-namespace Content.Server._VG.Body;
+namespace Content.Shared._VG.Body;
 
-public sealed partial class VgBodySystem
+public abstract partial class SharedVgBodySystem
 {
     /// <summary>
     ///     vg13 apply_damage() for brute/burn: damages the limb at a zone, spilling onto neighbouring limbs.
@@ -28,7 +27,7 @@ public sealed partial class VgBodySystem
 
         while (parts.Count > 0 && (brute > 0 || burn > 0))
         {
-            var picked = Random.PickAndTake(parts);
+            var picked = PredictedRandom.PickAndTake(parts);
             var bruteWas = picked.BruteDamage;
             var burnWas = picked.BurnDamage;
             var damageCap = picked.MaxDamage - picked.Health;
@@ -68,7 +67,7 @@ public sealed partial class VgBodySystem
 
         while (parts.Count > 0 && (brute > 0 || burn > 0))
         {
-            var picked = Random.PickAndTake(parts);
+            var picked = PredictedRandom.PickAndTake(parts);
             var bruteWas = picked.BruteDamage;
             var burnWas = picked.BurnDamage;
 
@@ -159,7 +158,7 @@ public sealed partial class VgBodySystem
         }
 
         // Getting hit on a broken, unsplinted limb hurts.
-        if (limb.IsBroken && brute > 0 && Random.Prob(0.4f))
+        if (limb.IsBroken && brute > 0 && Prob(40))
             Scream(ent);
 
         var canCut = (Prob(brute * 2) || sharp > 0) && limb.IsOrganic;
@@ -219,7 +218,7 @@ public sealed partial class VgBodySystem
                     if (candidates.Count > 0)
                     {
                         forbidden.Add(limb.Id);
-                        TakeLimbDamage(ent, Random.Pick(candidates), brute, burn, sharp, edge, forbidden, noDamageModifier: noDamageModifier);
+                        TakeLimbDamage(ent, PredictedRandom.Pick(candidates), brute, burn, sharp, edge, forbidden, noDamageModifier: noDamageModifier);
                     }
                 }
             }
@@ -255,13 +254,5 @@ public sealed partial class VgBodySystem
         }
 
         UpdateDamages(ent, limb);
-    }
-
-    /// <summary>
-    ///     DM prob(): a percent chance, where anything over 100 always happens.
-    /// </summary>
-    private bool Prob(float percent)
-    {
-        return Random.Prob(Math.Clamp(percent / 100f, 0f, 1f));
     }
 }

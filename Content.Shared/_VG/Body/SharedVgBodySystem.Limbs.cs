@@ -1,26 +1,22 @@
-using Content.Server._VG.Life;
-using Content.Server.Body.Components;
-using Content.Shared._VG.Body;
+using Content.Shared._VG.Life;
 using Content.Shared.Body.Part;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Audio;
 
-namespace Content.Server._VG.Body;
+namespace Content.Shared._VG.Body;
 
-public sealed partial class VgBodySystem
+public abstract partial class SharedVgBodySystem
 {
     private static readonly SoundSpecifier FractureSound = new SoundCollectionSpecifier("VgFracture");
     private static readonly SoundSpecifier GibSound = new SoundPathSpecifier("/Audio/Effects/gib3.ogg");
 
-    /// <summary>
-    ///     vg13 BLOOD_VOLUME_MAX, used to scale vg13 blood amounts onto the SS14 bloodstream until blood is ported.
-    /// </summary>
-    private const float VgBloodVolumeMax = 560f;
-
     private void OnLifeTick(Entity<VgBodyComponent> ent, ref VgLifeTickEvent args)
     {
+        // A mob's own client predicts its Life() tick.
+        BeginPrediction(ent, ent, 4);
+
         foreach (var limb in ent.Comp.Limbs.Values)
         {
             if (limb.Wounds.Count == 0 && limb.Health <= 0 && limb.Status == VgLimbStatus.None)
@@ -78,7 +74,7 @@ public sealed partial class VgBodySystem
             PopupType.LargeCaution);
 
         Scream(ent);
-        _audio.PlayPvs(FractureSound, ent);
+        _audio.PlayPredicted(FractureSound, ent, PredictingUser);
 
         limb.Status |= VgLimbStatus.Broken;
         limb.PermaInjury = limb.BruteDamage;
@@ -99,8 +95,8 @@ public sealed partial class VgBodySystem
         if (!_hands.TryDrop(ent, hand, checkActionBlocker: false))
             return;
 
-        _popup.PopupEntity(Loc.GetString("vg-limb-drop-broken", ("target", ent.Owner), ("limb", Loc.GetString(limb.Name))),
-            ent, PopupType.MediumCaution);
+        var message = Loc.GetString("vg-limb-drop-broken", ("target", ent.Owner), ("limb", Loc.GetString(limb.Name)));
+        VisibleMessage(ent, message, message);
     }
 
     /// <summary>
@@ -120,7 +116,8 @@ public sealed partial class VgBodySystem
         limb.DroppedSpawned = true;
         SetAmputatedTree(ent.Comp, limb);
 
-        if (spawnLimb && limb.DroppedPrototype is { } proto)
+        // No predicted spawning in this engine version; the client gets the limb item from the server.
+        if (spawnLimb && limb.DroppedPrototype is { } proto && Net.IsServer)
             Spawn(proto, Transform(ent).Coordinates);
 
         // Everything attached comes off with it; the severed limb item stands in for the whole lot.
@@ -143,7 +140,7 @@ public sealed partial class VgBodySystem
 
         if ((limb.BodyPart & VgBodyParts.Legs) != 0)
         {
-            _popup.PopupEntity(Loc.GetString("vg-limb-lost-leg"), ent, ent, PopupType.LargeCaution);
+            VisibleMessage(ent, null, Loc.GetString("vg-limb-lost-leg"), PopupType.LargeCaution);
             // vg13 Knockdown(5): five 2 second Life() ticks.
             _stun.TryKnockdown(ent, TimeSpan.FromSeconds(10), true);
         }
@@ -177,12 +174,13 @@ public sealed partial class VgBodySystem
         }
 
         var limbName = Loc.GetString(limb.Name);
-        var variant = Random.Next(1, 4);
+        var variant = PredictedRandom.Next(1, 4);
         var key = limb.IsRobotic && variant > 1 ? $"vg-limb-explode-robotic-{variant}" : $"vg-limb-explode-{variant}";
-        _popup.PopupEntity(Loc.GetString(key, ("target", ent.Owner), ("limb", limbName)), ent, PopupType.LargeCaution);
+        var message = Loc.GetString(key, ("target", ent.Owner), ("limb", limbName));
+        VisibleMessage(ent, message, message, PopupType.LargeCaution);
 
         if (!limb.IsRobotic)
-            _audio.PlayPvs(GibSound, ent);
+            _audio.PlayPredicted(GibSound, ent, PredictingUser);
 
         DropLimb(ent, limb, true, spawnLimb: false, message: false);
     }
@@ -204,7 +202,7 @@ public sealed partial class VgBodySystem
     /// </summary>
     private void HandleBleeding(Entity<VgBodyComponent> ent)
     {
-        if (!HasBlood(ent))
+        if (!ent.Comp.HasBlood)
             return;
 
         var bloodMax = 0f;
@@ -246,18 +244,6 @@ public sealed partial class VgBodySystem
         return MathF.Max(0, factor);
     }
 
-    /// <summary>
-    ///     Removes vg13 units of blood from the mob.
-    /// </summary>
-    private void RemoveBlood(EntityUid uid, float amount)
-    {
-        if (amount <= 0 || !TryComp<BloodstreamComponent>(uid, out var bloodstream))
-            return;
-
-        FixedPoint2 maxVolume = bloodstream.BloodMaxVolume;
-        var scale = maxVolume.Float() / VgBloodVolumeMax;
-        _bloodstream.TryModifyBloodLevel(uid, FixedPoint2.New(-amount * scale), bloodstream);
-    }
 
     private bool TryGetHand(EntityUid uid, HandLocation location, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Hand? hand)
     {
@@ -300,7 +286,7 @@ public sealed partial class VgBodySystem
 
         foreach (var (partId, part) in _body.GetBodyChildrenOfType(uid, type))
         {
-            if (part.Symmetry == symmetry)
+            if (part.Symmetry == symmetry && Net.IsServer)
                 QueueDel(partId);
         }
     }

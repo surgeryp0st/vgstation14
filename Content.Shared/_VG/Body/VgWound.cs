@@ -16,6 +16,7 @@ public sealed partial class VgWoundPrototype : IPrototype, IInheritingPrototype
     [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<VgWoundPrototype>))]
     public string[]? Parents { get; private set; }
 
+    [NeverPushInheritance]
     [AbstractDataField]
     public bool Abstract { get; private set; }
 

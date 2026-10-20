@@ -1,11 +1,10 @@
 using System.Linq;
-using Content.Shared._VG.Body;
 using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._VG.Body;
+namespace Content.Shared._VG.Body;
 
-public sealed partial class VgBodySystem
+public abstract partial class SharedVgBodySystem
 {
     /// <summary>
     ///     vg13 BLOODLOSS_SPEED_MULTIPLIER.
@@ -56,7 +55,7 @@ public sealed partial class VgBodySystem
 
         // Bad enough hits can also open up a vein.
         var localDamage = limb.Health + damage;
-        if (damage > 10 && type != VgWoundType.Burn && localDamage > 20 && Prob(damage) && limb.IsOrganic && HasBlood(ent))
+        if (damage > 10 && type != VgWoundType.Burn && localDamage > 20 && Prob(damage) && limb.IsOrganic && ent.Comp.HasBlood)
         {
             if (!limb.Wounds.Any(IsInternal))
             {
@@ -94,7 +93,7 @@ public sealed partial class VgBodySystem
             Prototype = id,
             Stage = proto.StartStage,
             Damage = damage,
-            Created = _timing.CurTime,
+            Created = Timing.CurTime,
         };
 
         // Move the wound to the stage that matches its damage.
@@ -121,9 +120,9 @@ public sealed partial class VgBodySystem
         if (valid.Count == 0)
             return false;
 
-        OpenWound(Random.Pick(valid), damage);
+        OpenWound(PredictedRandom.Pick(valid), damage);
 
-        if (Random.Prob(0.25f))
+        if (Prob(25))
         {
             var limbName = Loc.GetString(limb.Name);
             VisibleMessage(ent,
@@ -213,7 +212,7 @@ public sealed partial class VgBodySystem
     /// </summary>
     private void UpdateDamages(Entity<VgBodyComponent> ent, VgLimb limb)
     {
-        var hasBlood = HasBlood(ent);
+        var hasBlood = ent.Comp.HasBlood;
         var clamped = false;
 
         limb.NumberWounds = 0;
@@ -261,7 +260,7 @@ public sealed partial class VgBodySystem
         if (!limb.IsOrganic)
             return;
 
-        var hasBlood = HasBlood(ent);
+        var hasBlood = ent.Comp.HasBlood;
         limb.InternallyBleeding = false;
 
         for (var i = limb.Wounds.Count - 1; i >= 0; i--)
@@ -275,7 +274,7 @@ public sealed partial class VgBodySystem
                 limb.InternallyBleeding = true;
                 RemoveBlood(ent, wound.Damage * 0.07f * CalcBloodLoss(ent));
 
-                if (Random.Prob(0.01f))
+                if (Prob(1))
                     CustomPain(ent, Loc.GetString("vg-limb-internal-bleeding-pain", ("limb", Loc.GetString(limb.Name))));
             }
 
@@ -292,14 +291,14 @@ public sealed partial class VgBodySystem
             HealWound(wound, heal);
 
             // Salving also helps against infection.
-            if (wound.GermLevel > 0 && wound.Salved && Random.Prob(0.02f))
+            if (wound.GermLevel > 0 && wound.Salved && Prob(2))
             {
                 wound.GermLevel = 0;
                 wound.Disinfected = true;
             }
 
             // Healed wounds stay as scars for a while, so they show up on examine.
-            if (wound.Damage <= 0 && (internalWound || wound.Created + HealedWoundLifetime <= _timing.CurTime))
+            if (wound.Damage <= 0 && (internalWound || wound.Created + HealedWoundLifetime <= Timing.CurTime))
                 limb.Wounds.RemoveAt(i);
         }
 

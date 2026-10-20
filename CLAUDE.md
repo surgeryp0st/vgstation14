@@ -31,7 +31,8 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 
 - **Content.Shared / Content.Server / Content.Client:** standard SS14 ECS. Components hold data; `EntitySystem`s hold logic and communicate through directed events. Shared systems are often `Shared*System` with concrete server/client subclasses. Entities, reagents, damage types and so on are YAML prototypes in `Resources/Prototypes`; strings are Fluent `.ftl` in `Resources/Locale/en-US`.
 - **Access analyzer:** `[Access(...)]` on a component makes writes, and even method calls on its fields, from other systems a compile error (RA0002). Copy a field into a local before calling methods on it.
-- **Networked state:** components use `[AutoGenerateComponentState]`/`[AutoNetworkedField]`. Collections are shallow-copied, so treat networked data classes as server-written only.
+- **Networked state:** components use `[AutoGenerateComponentState]`/`[AutoNetworkedField]`. Collections are shallow-copied, so a predicted component holding mutable classes must deep-copy them in `AfterAutoHandleStateEvent` (see `SharedVgBodySystem.OnHandleState`), or prediction writes into the server state the client rolls back to.
+- **Client prediction:** always predict when possible. Gameplay logic goes in Shared systems, with server/client subclasses only for what can't be predicted. In this engine version, bloodstream and chat emotes are server-only, and there's no predicted spawn or delete, so guard those with `INetManager.IsServer`. Use `PopupClient`/`PopupPredicted` and `PlayPredicted` with the predicting user, so the server leaves that player out and nobody sees a popup or hears a sound twice. Never use `IRobustRandom` for predicted rolls. Seed a `System.Random` from the tick and `NetEntity` (not `HashCode.Combine`, which is seeded per process). Skip handlers while `IGameTiming.ApplyingState`. CVars the client reads must be `CVar.REPLICATED`.
 
 ## vgstation13 port conventions
 
@@ -50,11 +51,11 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 - Damage groups (Brute/Burn/Airloss/Toxin/Genetic) point at the vg types.
 - Code that reads damage dictionaries must use the vg type names.
 
-### Body (`Content.Shared/_VG/Body/`, `Content.Server/_VG/Body/`, in progress)
+### Body (`Content.Shared/_VG/Body/`, in progress)
 
 - `VgBodyComponent` holds vg13 limbs (`VgLimb`: wounds, fractures, internal bleeding, robotic/peg status), laid out by a `vgBody` prototype. Wound kinds are `vgWound` prototypes.
-- `DamageableComponent` stays the source of *totals*. `VgBodySystem` subscribes to `DamageChangedEvent` (ordered before `MobThresholdSystem`), routes the brute/burn difference onto limbs with vg13's `apply_damage`/`take_overall_damage`/`heal_overall_damage` rules, then writes back the sum of organic, existing limbs.
-- `VgLifeSystem` raises `VgLifeTickEvent` every 2 s (vg13's mob `Life()` rate). Per-tick organ, wound and blood processing hangs off it.
+- `DamageableComponent` stays the source of *totals*. `SharedVgBodySystem` (predicted; the server subclass only adds blood loss and screams) subscribes to `DamageChangedEvent` (ordered before `MobThresholdSystem`), routes the brute/burn difference onto limbs with vg13's `apply_damage`/`take_overall_damage`/`heal_overall_damage` rules, then writes back the sum of organic, existing limbs.
+- `VgLifeSystem` (Shared) raises `VgLifeTickEvent` every 2 s (vg13's mob `Life()` rate). The client predicts only its own mob's tick. Per-tick organ, wound and blood processing hangs off it.
 - SS14's body system is still present during the transition. Severing a vg limb deletes the matching SS14 part so hands and legs actually go away. The plan is to replace SS14's body, metabolism, breathing and digestion with vg13's versions entirely.
 
 ## Working with the user on the port

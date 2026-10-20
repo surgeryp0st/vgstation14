@@ -1,6 +1,6 @@
 using System.Linq;
 using Content.Server._VG.Body;
-using Content.Server._VG.Life;
+using Content.Shared._VG.Life;
 using Content.Shared._VG.Body;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -175,6 +175,51 @@ public sealed class VgBodyTest
             {
                 Assert.That(entMan.GetComponent<HandsComponent>(human).Count, Is.EqualTo(1));
                 Assert.That(entMan.EntityQuery<MetaDataComponent>().Any(m => m.EntityPrototype?.ID == "VgLimbRightArm"));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ClientGetsLimbState()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+        var sEntMan = server.EntMan;
+        var protoMan = server.ProtoMan;
+        var damageable = sEntMan.System<DamageableSystem>();
+
+        EntityUid human = default;
+        await server.WaitPost(() =>
+        {
+            human = sEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            damageable.TryChangeDamage(human, Blunt(protoMan, 12).WithVgZone(VgLimbs.LeftLeg), true);
+        });
+
+        await pair.RunTicksSync(10);
+
+        await client.WaitAssertion(() =>
+        {
+            var cEntMan = client.EntMan;
+            var clientHuman = cEntMan.GetEntity(sEntMan.GetNetEntity(human));
+            var serverBody = sEntMan.GetComponent<VgBodyComponent>(human);
+            var serverLeg = serverBody.Limbs[VgLimbs.LeftLeg];
+            var clientBody = cEntMan.GetComponent<VgBodyComponent>(clientHuman);
+            var clientLeg = clientBody.Limbs[VgLimbs.LeftLeg];
+
+            Assert.Multiple(() =>
+            {
+                // The client got the server's limbs, and didn't route the damage again while applying the state.
+                Assert.That(clientLeg.BruteDamage, Is.EqualTo(serverLeg.BruteDamage).Within(0.01));
+                // Not just 12: the test map is a vacuum, so barotrauma adds a little on top.
+                Assert.That(LimbTotal(clientBody, l => l.BruteDamage),
+                    Is.EqualTo(LimbTotal(serverBody, l => l.BruteDamage)).Within(0.01));
+                Assert.That(clientLeg.Wounds, Has.Count.EqualTo(serverLeg.Wounds.Count));
+                // Its own copy, so prediction can't write into the stored server state.
+                Assert.That(clientLeg, Is.Not.SameAs(serverLeg));
             });
         });
 
