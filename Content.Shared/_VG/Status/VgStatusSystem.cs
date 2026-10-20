@@ -154,6 +154,42 @@ public sealed class VgStatusSystem : EntitySystem
         return comp.LoseBreath;
     }
 
+    /// <summary>
+    ///     vg13 reagent pain_resistance, summed over everything in the body.
+    /// </summary>
+    public void SetPainResistance(EntityUid uid, float value)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp) || MathF.Abs(comp.PainResistance - value) < 0.001f)
+            return;
+
+        comp.PainResistance = value;
+        Dirty(uid, comp);
+    }
+
+    /// <summary>
+    ///     vg13 pain_numb = max(<paramref name="ticks"/>, pain_numb).
+    /// </summary>
+    public void NumbPain(EntityUid uid, int ticks)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return;
+
+        comp.PainNumb = Math.Max(comp.PainNumb, ticks);
+        Dirty(uid, comp);
+    }
+
+    /// <summary>
+    ///     vg13 pain_shock_stage += amount, not below 0.
+    /// </summary>
+    public void AdjustShockStage(EntityUid uid, int amount)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return;
+
+        comp.ShockStage = Math.Max(0, comp.ShockStage + amount);
+        Dirty(uid, comp);
+    }
+
     public bool IsParalysed(EntityUid uid)
     {
         return _statusEffects.HasStatusEffect(uid, SleepKey) || HasComp<SleepingComponent>(uid);
@@ -236,6 +272,9 @@ public sealed class VgStatusSystem : EntitySystem
 
         var random = VgPredictedRandom.Create(_timing.CurTick, GetNetEntity(ent).Id, SaltLife);
 
+        if (ent.Comp.PainNumb > 0)
+            ent.Comp.PainNumb--;
+
         HandleHalloss(ent);
         HandleShock(ent, args.LifeTick, random);
         HandlePain(ent, random);
@@ -267,6 +306,9 @@ public sealed class VgStatusSystem : EntitySystem
     public float GetPainLevel(EntityUid uid, VgStatusComponent? comp = null)
     {
         if (!Resolve(uid, ref comp, false))
+            return 0;
+
+        if (comp.PainNumb > 0)
             return 0;
 
         var pain = 2 * comp.Halloss;
@@ -303,8 +345,8 @@ public sealed class VgStatusSystem : EntitySystem
             }
         }
 
-        // TODO VG: painkillers (reagent pain_resistance) and being drunk dull this, once vg13 chemistry is in.
-        return MathF.Max(0, pain);
+        // TODO VG: being drunk (slurring) dulls this by 20, once vg13 alcohol is in.
+        return MathF.Max(0, pain - comp.PainResistance);
     }
 
     /// <summary>

@@ -89,4 +89,61 @@ public sealed class VgMetabolismTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task CryoxadoneNeedsCold()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<VgBreathingComponent>(human);
+            var temperature = entMan.System<Content.Server.Temperature.Systems.TemperatureSystem>();
+
+            var spec = new DamageSpecifier();
+            spec.DamageDict["Toxin"] = 10;
+            entMan.System<DamageableSystem>().TryChangeDamage(human, spec, true, false);
+            Inject(entMan, human, "cryoxadone", 10);
+
+            LifeTick(entMan, human);
+            Assert.That(Damage(entMan, human, "Toxin"), Is.EqualTo(10).Within(0.01), "warm body shouldn't heal");
+
+            temperature.ForceChangeTemperature(human, 90);
+            LifeTick(entMan, human);
+            Assert.That(Damage(entMan, human, "Toxin"), Is.EqualTo(8).Within(0.01), "below 95 K heals double");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PainkillersDullPain()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<VgBreathingComponent>(human);
+            var status = entMan.System<Content.Shared._VG.Status.VgStatusSystem>();
+
+            var spec = new DamageSpecifier();
+            spec.DamageDict["Oxygen"] = 50;
+            entMan.System<DamageableSystem>().TryChangeDamage(human, spec, true, false);
+            Assert.That(status.GetPainLevel(human), Is.EqualTo(50).Within(0.01));
+
+            Inject(entMan, human, "paracetamol", 10);
+            LifeTick(entMan, human);
+            Assert.That(status.GetPainLevel(human), Is.EqualTo(0).Within(0.01));
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

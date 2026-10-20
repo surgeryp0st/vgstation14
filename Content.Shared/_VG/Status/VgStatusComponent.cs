@@ -25,6 +25,18 @@ public sealed partial class VgStatusComponent : Component
     public int ShockStage;
 
     /// <summary>
+    ///     vg13 pain_numb: Life() ticks the mob feels no pain or shock at all (oxycodone).
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int PainNumb;
+
+    /// <summary>
+    ///     Sum of the pain_resistance of the reagents in the body, set by the metabolism each Life() tick.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float PainResistance;
+
+    /// <summary>
     ///     vg13 losebreath: Life() ticks of not being able to breathe (strangled, ...).
     /// </summary>
     [DataField, AutoNetworkedField]

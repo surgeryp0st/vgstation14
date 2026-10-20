@@ -65,3 +65,101 @@
       amount: 1
   products:
     bicaridine: 2
+
+- type: reaction
+  id: VgAlkysine
+  reactants:
+    Chlorine:
+      amount: 1
+    Nitrogen:
+      amount: 1
+    anti_toxin:
+      amount: 1
+  products:
+    alkysine: 2
+
+- type: reaction
+  id: VgAlkycosine
+  minTemp: 313.15
+  reactants:
+    alkysine:
+      amount: 1
+    Bleach:
+      amount: 1
+    anti_toxin:
+      amount: 1
+  products:
+    alkycosine: 4
+
+- type: reaction
+  id: VgDermaline
+  reactants:
+    Oxygen:
+      amount: 1
+    Phosphorus:
+      amount: 1
+    kelotane:
+      amount: 1
+  products:
+    dermaline: 3
+
+- type: reaction
+  id: VgDexalinP
+  reactants:
+    dexalin:
+      amount: 1
+    Carbon:
+      amount: 1
+    Iron:
+      amount: 1
+  products:
+    dexalinp: 3
+
+- type: reaction
+  id: VgCryoxadone
+  reactants:
+    dexalin:
+      amount: 1
+    Water:
+      amount: 1
+    Oxygen:
+      amount: 1
+  products:
+    cryoxadone: 3
+
+- type: reaction
+  id: VgClonexadone
+  reactants:
+    cryoxadone:
+      amount: 1
+    Sodium:
+      amount: 1
+    Plasma:
+      amount: 5
+      catalyst: true
+  products:
+    clonexadone: 2
+
+- type: reaction
+  id: VgTramadol
+  reactants:
+    inaprovaline:
+      amount: 1
+    Ethanol:
+      amount: 1
+    Oxygen:
+      amount: 1
+  products:
+    tramadol: 3
+
+- type: reaction
+  id: VgOxycodone
+  reactants:
+    Ethanol:
+      amount: 1
+    tramadol:
+      amount: 1
+    Plasma:
+      amount: 1
+  products:
+    oxycodone: 3

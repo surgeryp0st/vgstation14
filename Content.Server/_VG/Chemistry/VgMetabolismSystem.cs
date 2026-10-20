@@ -1,8 +1,10 @@
 using System.Linq;
 using Content.Server.Body.Components;
+using Content.Server.Temperature.Components;
 using Content.Shared._VG.Body;
 using Content.Shared._VG.Chemistry;
 using Content.Shared._VG.Life;
+using Content.Shared._VG.Status;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
@@ -19,7 +21,7 @@ public sealed class VgMetabolismSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly SharedVgBodySystem _body = default!;
+    [Dependency] private readonly VgStatusSystem _status = default!;
 
     private readonly List<string> _present = new();
 
@@ -28,6 +30,12 @@ public sealed class VgMetabolismSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<VgMetabolismComponent, VgLifeTickEvent>(OnLifeTick);
+        SubscribeLocalEvent<TemperatureComponent, VgGetBodyTemperatureEvent>(OnGetTemperature);
+    }
+
+    private void OnGetTemperature(Entity<TemperatureComponent> ent, ref VgGetBodyTemperatureEvent args)
+    {
+        args.Temperature = ent.Comp.CurrentTemperature;
     }
 
     private void OnLifeTick(Entity<VgMetabolismComponent> ent, ref VgLifeTickEvent args)
@@ -43,6 +51,7 @@ public sealed class VgMetabolismSystem : EntitySystem
             return;
 
         var efficiency = LiverEfficiency(ent);
+        var painResistance = 0f;
 
         _present.Clear();
         foreach (var quantity in chemicals.Contents.ToArray())
@@ -58,6 +67,7 @@ public sealed class VgMetabolismSystem : EntitySystem
             if (_proto.TryIndex<VgReagentPrototype>(id, out var vg))
             {
                 metabolism = vg.Metabolism;
+                painResistance += vg.PainResistance;
                 var volume = quantity.Quantity;
                 var args2 = new VgReagentArgs(EntityManager, ent, id, volume, tick, (reagent, amount) =>
                     _solutions.RemoveReagent(bloodstream.ChemicalSolution!.Value, reagent, FixedPoint2.New(amount)));
@@ -85,6 +95,8 @@ public sealed class VgMetabolismSystem : EntitySystem
             // vg13 liver.metabolize_reagent(): metabolism * efficiency.
             _solutions.RemoveReagent(bloodstream.ChemicalSolution!.Value, id, FixedPoint2.New(metabolism * efficiency));
         }
+
+        _status.SetPainResistance(ent, painResistance);
 
         // Reagents that left the body forget how long they were in it.
         if (ent.Comp.Ticks.Count > _present.Count)

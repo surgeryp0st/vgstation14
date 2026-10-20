@@ -123,3 +123,83 @@ public sealed partial class VgRemoveReagents : VgReagentEffect
         }
     }
 }
+
+/// <summary>
+///     Asks for a mob's body temperature, in kelvin. Answered server-side, where temperature lives; reagent effects run
+///     there too, but the prototype that names them has to load on the client.
+/// </summary>
+[ByRefEvent]
+public record struct VgGetBodyTemperatureEvent(float? Temperature = null);
+
+/// <summary>
+///     Cryoxadone and clonexadone: heal everything, but only when the body is cold enough (below 170 K, twice as well
+///     below 95 K). <see cref="Amount"/> is vg13's flat number per damage type.
+/// </summary>
+public sealed partial class VgCryoHeal : VgReagentEffect
+{
+    [DataField(required: true)]
+    public float Amount;
+
+    public override void Apply(VgReagentArgs args)
+    {
+        var ev = new VgGetBodyTemperatureEvent();
+        args.EntityManager.EventBus.RaiseLocalEvent(args.Target, ref ev);
+        if (ev.Temperature is not { } temperature || temperature >= 170)
+            return;
+
+        var amount = Amount * (temperature < 95 ? 2 : 1);
+
+        var spec = new DamageSpecifier();
+        spec.DamageDict["Clone"] = -amount;
+        spec.DamageDict["Oxygen"] = -amount;
+        spec.DamageDict["Toxin"] = -amount;
+        args.System<DamageableSystem>().TryChangeDamage(args.Target, spec, true, false);
+
+        if (args.EntityManager.TryGetComponent(args.Target, out VgBodyComponent? body))
+        {
+            args.System<SharedVgBodySystem>().HealOverallDamage((args.Target, body), amount, amount);
+            return;
+        }
+
+        var wounds = new DamageSpecifier();
+        wounds.DamageDict["Brute"] = -amount;
+        wounds.DamageDict["Burn"] = -amount;
+        args.System<DamageableSystem>().TryChangeDamage(args.Target, wounds, true, false);
+    }
+}
+
+/// <summary>
+///     vg13 <c>pain_numb = max(ticks, pain_numb)</c> (oxycodone).
+/// </summary>
+public sealed partial class VgNumbPain : VgReagentEffect
+{
+    [DataField]
+    public int Ticks = 5;
+
+    /// <summary>
+    ///     vg13 <c>pain_shock_stage -= 3</c>, so shock clears quickly once the oxycodone runs out.
+    /// </summary>
+    [DataField]
+    public int ShockStage = -3;
+
+    public override void Apply(VgReagentArgs args)
+    {
+        var status = args.System<VgStatusSystem>();
+        status.NumbPain(args.Target, Ticks);
+        status.AdjustShockStage(args.Target, ShockStage);
+    }
+}
+
+/// <summary>
+///     Tramadol's <c>if(pain_level &lt; BASE_CARBON_PAIN_RESIST) pain_shock_stage--</c>: shock recovers faster once the
+///     pain is under control.
+/// </summary>
+public sealed partial class VgSpeedShockRecovery : VgReagentEffect
+{
+    public override void Apply(VgReagentArgs args)
+    {
+        var status = args.System<VgStatusSystem>();
+        if (status.GetPainLevel(args.Target) < 80)
+            status.AdjustShockStage(args.Target, -1);
+    }
+}

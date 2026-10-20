@@ -124,3 +124,146 @@
   - !type:VgAdjustDamage
     type: Toxin
     amount: -1
+
+- type: reagent
+  id: alkysine
+  name: reagent-name-vg-alkysine
+  group: Medicine
+  desc: reagent-desc-vg-alkysine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: alkysine
+  metabolism: 0.05
+  overdoseAmount: 30
+  painResistance: 10
+  effects:
+  - !type:VgAdjustBrainLoss
+    amount: -3
+
+- type: reagent
+  id: alkycosine
+  name: reagent-name-vg-alkycosine
+  group: Medicine
+  desc: reagent-desc-vg-alkycosine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#EDEDED"
+
+- type: vgReagent
+  id: alkycosine
+  metabolism: 0.05
+  overdoseAmount: 30
+  painResistance: 15
+  effects:
+  - !type:VgAdjustBrainLoss
+    amount: -4
+
+- type: reagent
+  id: dermaline
+  name: reagent-name-vg-dermaline
+  group: Medicine
+  desc: reagent-desc-vg-dermaline
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: dermaline
+  effects:
+  - !type:VgHealOrgan
+    burn: 3
+
+- type: reagent
+  id: dexalinp
+  name: reagent-name-vg-dexalinp
+  group: Medicine
+  desc: reagent-desc-vg-dexalinp
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#4CE9FF"
+
+# vg13 sets oxygen damage to 0 outright.
+- type: vgReagent
+  id: dexalinp
+  effects:
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: -1000
+    flat: true
+
+- type: reagent
+  id: cryoxadone
+  name: reagent-name-vg-cryoxadone
+  group: Medicine
+  desc: reagent-desc-vg-cryoxadone
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: cryoxadone
+  effects:
+  - !type:VgCryoHeal
+    amount: 1
+
+- type: reagent
+  id: clonexadone
+  name: reagent-name-vg-clonexadone
+  group: Medicine
+  desc: reagent-desc-vg-clonexadone
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: clonexadone
+  effects:
+  - !type:VgCryoHeal
+    amount: 3
+
+- type: reagent
+  id: paracetamol
+  name: reagent-name-vg-paracetamol
+  group: Medicine
+  desc: reagent-desc-vg-paracetamol
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C855DC"
+
+- type: vgReagent
+  id: paracetamol
+  painResistance: 60
+
+- type: reagent
+  id: oxycodone
+  name: reagent-name-vg-oxycodone
+  group: Medicine
+  desc: reagent-desc-vg-oxycodone
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C805DC"
+
+- type: vgReagent
+  id: oxycodone
+  metabolism: 0.05
+  effects:
+  - !type:VgNumbPain
+
+- type: reagent
+  id: tramadol
+  name: reagent-name-vg-tramadol
+  group: Medicine
+  desc: reagent-desc-vg-tramadol
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: tramadol
+  metabolism: 0.1
+  painResistance: 80
+  effects:
+  - !type:VgSpeedShockRecovery
