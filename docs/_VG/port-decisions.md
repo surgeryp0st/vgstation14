@@ -48,6 +48,8 @@ Decided: the **full vg13 model**.
 | Area | Decision | Status |
 |---|---|---|
 | Chemistry | **Replace** SS14's reagents and recipes with vg13's, like the body system. Infection waits for it (spaceacillin). | Planned |
+| Chemistry engine | Keep SS14's solution/reaction engine (containers, machines, transfers, prediction); replace its data: reagents, recipes, effects and metabolism become vg13's. vg13-only engine mechanics (container-specific reactions, slime extracts, ...) are added as `_VG` extensions. | Planned |
+| SS14-only reagents | Food, drink and juice reagents **stay**, rewritten for vg13 metabolism. SS14-only medicines, toxins, narcotics and fun/misc chems are **disabled** (out of dispensers, recipes, vendors and starting contents; items needing one get the closest vg13 reagent; prototypes kept). Species bloods follow their species; gases (frezon, tritium, N2O) wait for atmos. | Planned |
 
 ## Species and movement
 
