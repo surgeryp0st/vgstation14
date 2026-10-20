@@ -48,3 +48,13 @@ Decided: the **full vg13 model**.
 | Area | Decision | Status |
 |---|---|---|
 | Chemistry | **Replace** SS14's reagents and recipes with vg13's, like the body system. Infection waits for it (spaceacillin). | Planned |
+
+## Species and movement
+
+| Area | Decision | Status |
+|---|---|---|
+| Shared species | Become vg13's versions (body layout, organs, flags, stats, sprites): Human, Diona, Vox; SS14 Reptilian becomes Unathi, Slime person becomes vg13 Slime, Skeleton becomes Skellington. | Planned (with the body replacement) |
+| vg13-only species | Add the player-selectable ones: Tajaran, Skrell, Grey, Insectoid, Mushroom, Plasmaman. Special ones (Golem, Muton, Ghoul, vampire forms) come with the antags/events that make them. | Planned |
+| SS14-only species | Arachnid, Moth, Dwarf, Gingerbread: **disabled for now** (not selectable, prototypes kept, existing characters fall back to Human). | Planned |
+| Movement speed | vg13's movement delays: base run/walk speeds and all slowdowns (shock, missing/broken legs, hunger, ...) as in vg13. | Planned |
+
