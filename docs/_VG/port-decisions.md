@@ -9,7 +9,7 @@ Decisions made so far for porting vgstation13 into vgstation14. When vg13 and SS
 - **Overlapping systems:** no default. Each system that exists in both vg13 and SS14 is decided on its own (see below).
 - **SS14-only content** (things vg13 doesn't have): decided case by case as it comes up: keep, disable, or remove.
 - **Sprites:** vg13 sprites wherever both games have the thing; SS14-only content keeps SS14 art. Convert with `Tools/_VG/dmi2rsi.py` into `Resources/Textures/_VG/`, mirroring vg13's `icons/` layout.
-- **Client prediction:** use SS14 client prediction wherever possible. vg13 ran everything on the server, but ported systems put their logic in Shared so the acting player's client predicts it. Only what the engine can't predict yet (bloodstream, chat emotes, spawning) stays server-side.
+- **Client prediction:** everything that can be client-predicted must be, including SS14 systems we replace or rework. vg13 ran everything on the server, but ported systems put their logic in Shared so the acting player's client predicts it. Only what the engine can't predict yet (bloodstream, chat emotes, spawning) stays server-side.
 - **Gameplay numbers:** default to vg13's shipped `config-example/game_options.txt`. Tunables are `vg.*` CVars.
 
 ## Plan
