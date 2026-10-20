@@ -462,6 +462,10 @@ public partial class SharedBodySystem
             return;
         }
 
+        // VG: vg13 mobs move at vg13 speeds, with legs handled as slowdowns (VgMovementSystem).
+        if (HasComp<Content.Shared._VG.Movement.VgMovementComponent>(bodyId))
+            return;
+
         var walkSpeed = 0f;
         var sprintSpeed = 0f;
         var acceleration = 0f;

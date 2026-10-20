@@ -54,6 +54,10 @@ public sealed class ClothingSpeedModifierSystem : EntitySystem
 
     private void OnRefreshMoveSpeed(EntityUid uid, ClothingSpeedModifierComponent component, InventoryRelayedEvent<RefreshMovementSpeedModifiersEvent> args)
     {
+        // VG: vg13 mobs use vg13 clothing slowdowns (VgMovementSystem) instead.
+        if (HasComp<Content.Shared._VG.Body.VgBodyComponent>(Transform(uid).ParentUid))
+            return;
+
         if (_toggle.IsActivated(uid))
             args.Args.ModifySpeed(component.WalkModifier, component.SprintModifier);
     }

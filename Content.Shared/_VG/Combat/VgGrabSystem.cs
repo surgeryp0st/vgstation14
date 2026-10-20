@@ -13,6 +13,7 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Events;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.Movement.Pulling.Systems;
@@ -45,6 +46,7 @@ public sealed class VgGrabSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
@@ -133,6 +135,7 @@ public sealed class VgGrabSystem : EntitySystem
         }
 
         Dirty(user, grabber);
+        _speed.RefreshMovementSpeedModifiers(user);
 
         var grabbed = EnsureComp<VgGrabbedComponent>(target);
         grabbed.Grabber = user;
@@ -163,6 +166,7 @@ public sealed class VgGrabSystem : EntitySystem
         RemComp<VgGrabberComponent>(grabber);
         RemComp<VgGrabbedComponent>(victim);
         DeleteItem(item);
+        _speed.RefreshMovementSpeedModifiers(grabber);
 
         if (TryComp<PullableComponent>(victim, out var pullable) && pullable.Puller == grabber.Owner)
             _pulling.TryStopPull(victim, pullable, grabber);
@@ -379,6 +383,7 @@ public sealed class VgGrabSystem : EntitySystem
         RemComp<VgGrabbedComponent>(ent.Comp.Victim);
         RemComp<VgGrabberComponent>(ent);
         DeleteItem(item);
+        _speed.RefreshMovementSpeedModifiers(ent);
     }
 
     /// <summary>

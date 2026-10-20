@@ -32,6 +32,15 @@ public sealed class SlippingTest : MovementTest
         var sys = SEntMan.System<SlipTestSystem>();
         await SpawnTarget("TrashBananaPeel");
 
+        // VG: vg13 slows down bare feet, so give the player shoes for a full speed baseline.
+        await Server.WaitPost(() =>
+        {
+            var shoes = SEntMan.SpawnEntity("ClothingShoesColorBlack", SEntMan.GetCoordinates(PlayerCoords));
+            SEntMan.System<Content.Shared.Inventory.InventorySystem>().TryEquip(SPlayer, shoes, "shoes", silent: true, force: true);
+            SEntMan.System<Content.Shared.Movement.Systems.MovementSpeedModifierSystem>().RefreshMovementSpeedModifiers(SPlayer);
+        });
+        await RunTicks(5);
+
         var modifier = Comp<MovementSpeedModifierComponent>(Player).SprintSpeedModifier;
         Assert.That(modifier, Is.EqualTo(1), "Player is not moving at full speed.");
 

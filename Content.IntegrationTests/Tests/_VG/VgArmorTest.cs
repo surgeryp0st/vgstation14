@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Shared._VG.Armor;
 using Content.Shared._VG.Body;
+using Content.Shared._VG.Clothing;
 using Content.Shared.Armor;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -26,9 +27,9 @@ public sealed class VgArmorTest
         {
             Assert.Multiple(() =>
             {
-                foreach (var armor in protoMan.EnumeratePrototypes<VgArmorPrototype>())
+                foreach (var armor in protoMan.EnumeratePrototypes<VgClothingPrototype>())
                 {
-                    Assert.That(protoMan.HasIndex<EntityPrototype>(armor.ID), $"vgArmor {armor.ID} names no entity");
+                    Assert.That(protoMan.HasIndex<EntityPrototype>(armor.ID), $"vgClothing {armor.ID} names no entity");
                 }
 
                 // Every SS14 clothing item with real armor has vg13 armor, itself or through a parent.
@@ -41,8 +42,8 @@ public sealed class VgArmorTest
                     }
 
                     var hasVg = protoMan.EnumerateParents<EntityPrototype>(proto.ID, includeSelf: true)
-                        .Any(p => protoMan.HasIndex<VgArmorPrototype>(p.ID));
-                    Assert.That(hasVg, $"{proto.ID} has SS14 armor but no vgArmor");
+                        .Any(p => protoMan.HasIndex<VgClothingPrototype>(p.ID));
+                    Assert.That(hasVg, $"{proto.ID} has SS14 armor but no vgClothing");
                 }
             });
         });

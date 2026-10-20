@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._VG.Body;
+using Content.Shared._VG.Clothing;
 using Content.Shared._VG.Combat;
 using Content.Shared._VG.Damage;
 using Content.Shared._VG.Popups;
@@ -10,7 +11,6 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._VG.Armor;
@@ -23,8 +23,8 @@ namespace Content.Shared._VG.Armor;
 public sealed class VgArmorSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly VgClothingSystem _clothing = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedVgBodySystem _body = default!;
     [Dependency] private readonly VgCombatSystem _combat = default!;
@@ -42,40 +42,12 @@ public sealed class VgArmorSystem : EntitySystem
 
     private const int SaltProjectile = 30;
 
-    /// <summary>
-    ///     Entity prototype id to its vg13 armor (resolved through parents), or null if it has none.
-    /// </summary>
-    private readonly Dictionary<string, VgArmorPrototype?> _cache = new();
-
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<VgBodyComponent, DamageModifyEvent>(OnDamageModify);
         SubscribeLocalEvent<VgBodyComponent, GetExplosionResistanceEvent>(OnGetExplosionResistance);
-        SubscribeLocalEvent<PrototypesReloadedEventArgs>(_ => _cache.Clear());
-    }
-
-    /// <summary>
-    ///     The vg13 armor of an item, from its own prototype or the nearest parent with one.
-    /// </summary>
-    public VgArmorPrototype? GetItemArmor(EntityUid item)
-    {
-        if (MetaData(item).EntityPrototype is not { } entityProto)
-            return null;
-
-        if (_cache.TryGetValue(entityProto.ID, out var cached))
-            return cached;
-
-        VgArmorPrototype? found = null;
-        foreach (var parent in _proto.EnumerateParents<EntityPrototype>(entityProto.ID, includeSelf: true))
-        {
-            if (_proto.TryIndex<VgArmorPrototype>(parent.ID, out found))
-                break;
-        }
-
-        _cache[entityProto.ID] = found;
-        return found;
     }
 
     /// <summary>
@@ -87,7 +59,7 @@ public sealed class VgArmorSystem : EntitySystem
         var absorb = 0f;
         foreach (var slot in ArmorSlots)
         {
-            if (!_inventory.TryGetSlotEntity(mob, slot, out var item) || GetItemArmor(item.Value) is not { } itemArmor)
+            if (!_inventory.TryGetSlotEntity(mob, slot, out var item) || _clothing.Get(item.Value) is not { } itemArmor)
                 continue;
 
             if ((itemArmor.CoverageFlags & part) == 0)

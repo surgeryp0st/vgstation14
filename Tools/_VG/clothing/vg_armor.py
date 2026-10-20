@@ -1,4 +1,4 @@
-"""Extracts vg13 clothing armor: path, name, armor, armor_absorb, body_parts_covered (with inheritance)."""
+"""Extracts vg13 clothing: path, name, armor, armor_absorb, body_parts_covered, slowdown (with inheritance)."""
 import re, glob, json, sys
 
 defs = {}  # path -> dict of raw var strings
@@ -33,16 +33,34 @@ def parse_armor(s):
         return None
     return {k: float(v) for k, v in re.findall(r'(\w+)\s*=\s*(-?[\d.]+)', s)}
 
+# Slowdown defines (__DEFINES/game.dm).
+DEFINES = {}
+for line in open('../vgstation13/__DEFINES/game.dm', errors='ignore'):
+    m = re.match(r'#define\s+(\w*SLOWDOWN\w*)\s+([\w.]+)', line)
+    if m:
+        DEFINES[m.group(1)] = m.group(2)
+
+def slowdown(path):
+    v = get(path, 'slowdown')
+    for _ in range(5):
+        if v in DEFINES:
+            v = DEFINES[v]
+    try:
+        return float(v) if v else 1.0
+    except ValueError:
+        return 1.0
+
 out = []
 for path in defs:
     if not path.startswith('/obj/item/clothing'):
         continue
-    armor = parse_armor(get(path, 'armor'))
-    if not armor or not any(armor.values()):
+    armor = parse_armor(get(path, 'armor')) or {}
+    slow = slowdown(path)
+    if not any(armor.values()) and slow == 1.0:
         continue
     name = get(path, 'name')
     out.append({'path': path, 'name': name.strip('"') if name else None, 'armor': armor,
                 'absorb': parse_armor(get(path, 'armor_absorb')), 'covered': get(path, 'body_parts_covered'),
-                'pen': get(path, 'armor_penetration')})
+                'pen': get(path, 'armor_penetration'), 'slowdown': slow})
 json.dump(out, open(sys.argv[1], 'w'), indent=1)
 print(len(out))

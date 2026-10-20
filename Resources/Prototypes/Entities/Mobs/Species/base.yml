@@ -79,10 +79,7 @@
     horizontalRotation: 90
   - type: HumanoidAppearance
     species: Human
-  - type: SlowOnDamage
-    speedModifierThresholds:
-      60: 0.7
-      80: 0.5
+  # VG: no SlowOnDamage; vg13 movement slows the badly hurt itself (VgMovementSystem).
   - type: Fixtures
     fixtures: # TODO: This needs a second fixture just for mob collisions.
       fix1:
@@ -237,6 +234,8 @@
   - type: VgIntent
   # VG: vg13 halloss and traumatic shock; stamina damage becomes halloss.
   - type: VgStatus
+  # VG: vg13 movement speeds and slowdowns.
+  - type: VgMovement
   - type: Bloodstream
     damageBleedModifiers: VgNoDamageBleed # VG: bleeding comes from vg wounds
   - type: Fingerprint
