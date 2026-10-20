@@ -32,8 +32,11 @@ Decided: the **full vg13 model**.
 | Limbs | Per-limb damage on vg13's 11 limbs (including groin): wounds, fractures, internal bleeding, dismemberment, infection, robotic and peg limbs. Only organic, attached limbs count towards health. Fractures and dismemberment are on, as in vg13's config. | In progress |
 | Body system | **Replace** SS14's body/organ system with vg13's. | Planned |
 | Metabolism, breathing, digestion | Replace SS14's organ-based versions with vg13's: mob-level reagent metabolism, breathing in the Life() tick, food reagents going straight into the body. | Planned |
-| Controls | vg13's four intents (help/disarm/grab/harm) and zone selector, replacing SS14 combat mode. | Planned |
+| Controls | vg13's four intents (help/disarm/grab/harm) and zone selector, replacing SS14 combat mode. Pure vg13: SS14's wide swing (heavy attack) and combat-mode shove are removed; harm is a single click attack, disarm uses vg13's odds. | Planned |
+| Zone selector | vg13's body-doll sprite, click regions and hotkeys, placed beside SS14's hotbar/hands so it fits the SS14 HUD layout (not vg13's exact corner). | Planned |
 | Stuns | vg13's model: no stamina; stunned/weakened/paralysis; vg13 disarm odds (40% miss, 40% knockdown). | Planned |
 | Grabs | vg13's grab levels: passive → aggressive → neck → strangle. | Planned |
 | Armor | vg13's armor: melee/bullet/laser/energy/bomb/bio/rad categories, per-limb coverage, additive percentages, armor penetration. SS14-only clothing has its coefficients translated when loaded. | Planned |
+| Wound treatment items | Replace SS14's bruise packs, ointment and gauze with vg13's medical stacks (bruise pack, ointment, advanced trauma/burn kits, splints) and their behaviour: bandage/salve/splint the aimed limb's wounds. SS14's versions are removed or remapped to the vg13 items in maps and vendors. | Planned |
+| SS14-only medical items | Tourniquet, blood pack, regenerative mesh, medicated suture, aloe cream, healing toolbox: **disabled for now**. Taken out of vendors, lockers and maps, prototypes kept so this can be revisited once vg13 medical is in. | Planned |
 | Natural healing | SS14's passive regeneration is removed for organic species; healing happens through vg13 wounds. | Done |
