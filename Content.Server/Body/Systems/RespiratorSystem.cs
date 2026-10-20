@@ -71,6 +71,10 @@ public sealed class RespiratorSystem : EntitySystem
 
             respirator.NextUpdate += respirator.UpdateInterval;
 
+            // VG: vg13 bodies breathe the vg13 way (VgBreathingSystem).
+            if (HasComp<Content.Shared._VG.Body.VgBodyComponent>(uid))
+                continue;
+
             if (_mobState.IsDead(uid))
                 continue;
 

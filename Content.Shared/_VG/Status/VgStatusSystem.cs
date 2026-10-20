@@ -30,8 +30,6 @@ namespace Content.Shared._VG.Status;
 public sealed class VgStatusSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
@@ -48,7 +46,6 @@ public sealed class VgStatusSystem : EntitySystem
     private const string KnockdownKey = "KnockedDown";
     private const string SleepKey = "ForcedSleep";
 
-    private static readonly ProtoId<DamageTypePrototype> OxygenDamage = "Asphyxiation";
 
     // Salts for VgPredictedRandom.
     private const int SaltLife = 10;
@@ -239,26 +236,11 @@ public sealed class VgStatusSystem : EntitySystem
 
         var random = VgPredictedRandom.Create(_timing.CurTick, GetNetEntity(ent).Id, SaltLife);
 
-        HandleLoseBreath(ent);
         HandleHalloss(ent);
         HandleShock(ent, args.LifeTick, random);
         HandlePain(ent, random);
 
         Dirty(ent);
-    }
-
-    /// <summary>
-    ///     vg13 handle_breath(): while losebreath lasts the mob takes no breath and suffocates a little.
-    /// </summary>
-    /// <remarks>TODO VG: move into vg13 breathing once it replaces SS14's respirator.</remarks>
-    private void HandleLoseBreath(Entity<VgStatusComponent> ent)
-    {
-        if (ent.Comp.LoseBreath <= 0)
-            return;
-
-        ent.Comp.LoseBreath--;
-        // vg13 HUMAN_MAX_OXYLOSS.
-        _damageable.TryChangeDamage(ent, new DamageSpecifier(_proto.Index(OxygenDamage), 1), true);
     }
 
     /// <summary>

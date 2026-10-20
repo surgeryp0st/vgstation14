@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Shared._VG.Body;
+using Content.Shared._VG.Breathing;
 using Content.Shared._VG.Life;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -35,6 +36,8 @@ public sealed class VgBloodTest
         await server.WaitAssertion(() =>
         {
             var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            // The test map is a vacuum; leave breathing out of it.
+            entMan.RemoveComponent<VgBreathingComponent>(human);
             var bloodstream = entMan.System<BloodstreamSystem>();
             var comp = entMan.GetComponent<BloodstreamComponent>(human);
             var body = entMan.GetComponent<VgBodyComponent>(human);
@@ -66,6 +69,7 @@ public sealed class VgBloodTest
         await server.WaitAssertion(() =>
         {
             var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<VgBreathingComponent>(human);
             var body = entMan.GetComponent<VgBodyComponent>(human);
             body.Organs[VgOrgans.Heart].Damage = 40;
             LifeTick(entMan, human);

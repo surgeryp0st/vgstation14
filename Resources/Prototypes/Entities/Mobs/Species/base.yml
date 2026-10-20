@@ -236,6 +236,8 @@
   - type: VgStatus
   # VG: vg13 movement speeds and slowdowns.
   - type: VgMovement
+  # VG: vg13 breathing (human lungs by default) instead of SS14's respirator.
+  - type: VgBreathing
   - type: Bloodstream
     damageBleedModifiers: VgNoDamageBleed # VG: bleeding comes from vg wounds
   - type: Fingerprint
