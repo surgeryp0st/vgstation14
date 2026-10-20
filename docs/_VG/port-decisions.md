@@ -34,10 +34,17 @@ Decided: the **full vg13 model**.
 | Metabolism, breathing, digestion | Replace SS14's organ-based versions with vg13's: mob-level reagent metabolism, breathing in the Life() tick, food reagents going straight into the body. | Planned |
 | Controls | vg13's four intents (help/disarm/grab/harm) and zone selector, replacing SS14 combat mode. Pure vg13: SS14's wide swing (heavy attack) and combat-mode shove are removed; harm is a single click attack, disarm uses vg13's odds. Items no interaction handles hit mobs on any intent and other things on harm intent. Guns fire at anything out of reach on any intent, point blank on adjacent mobs only on harm. Grab intent is an SS14 pull until grab levels are ported; stuns are SS14 knockdowns until the stun model is. | Done (predicted) |
 | Zone selector | vg13's body-doll sprite, click regions and hotkeys, placed beside SS14's hotbar/hands so it fits the SS14 HUD layout (not vg13's exact corner). Midnight style (vg13's default). Hotkeys are vg13's: Ctrl+1-4, Insert, Ctrl/Alt+Numpad. | Done |
-| Stuns | vg13's model: no stamina; stunned/weakened/paralysis; vg13 disarm odds (40% miss, 40% knockdown). | Planned |
+| Stuns | vg13's model: no stamina; stunned/weakened/paralysis; vg13 disarm odds (40% miss, 40% knockdown). Stun weapons both games have (stun baton, taser) use vg13's numbers: one-hit stuns, ~20 s. Pain and traumatic shock (halloss, pain_shock_stage) come with it. | Planned |
+| SS14-only stamina damage | Disablers, beanbag/rubber/baton-grenade rounds, cane, cowbar, boxing gloves, toy hammer, luminous person, tesla gun, anti-materiel round: their stamina damage becomes vg13 halloss, feeding pain shock. | Planned |
 | Grabs | vg13's grab levels: passive → aggressive → neck → strangle. | Planned |
-| Armor | vg13's armor: melee/bullet/laser/energy/bomb/bio/rad categories, per-limb coverage, additive percentages, armor penetration. SS14-only clothing has its coefficients translated when loaded. | Planned |
+| Armor | vg13's armor: melee/bullet/laser/energy/bomb/bio/rad categories, per-limb coverage, additive percentages, armor penetration. SS14-only clothing has its coefficients translated when loaded. Clothing both games have gets vg13's armor values in the armor port. | Planned |
 | Examine | vg13's examine text for limbs: wounds by stage (bleeding/bandaged/infected), missing limbs, peg and robot limbs, splints, open incisions. Uniform, gloves, shoes and gas masks hide what's under them; bleeding still shows through. Predicted. | Done |
 | Wound treatment items | Replace SS14's bruise packs, ointment and gauze with vg13's medical stacks (bruise pack, ointment, advanced trauma/burn kits, splints) and their behaviour: bandage/salve/splint the aimed limb's wounds. SS14's `Brutepack`/`Gauze`/`Ointment` ids are kept as hidden aliases of vg13's roll of gauze and ointment, so maps, fills and recipes give vg13 items. SS14's advanced medkit holds vg13's advanced first-aid kit contents. Predicted. | Done |
 | SS14-only medical items | Tourniquet, blood pack, regenerative mesh, medicated suture, aloe cream, healing toolbox: **disabled for now**. Taken out of vendors, lockers and maps, prototypes kept so this can be revisited once vg13 medical is in. References are `# VG:` comments; `migration.yml` drops them from maps; their microwave recipes are commented out. | Done |
 | Natural healing | SS14's passive regeneration is removed for organic species; healing happens through vg13 wounds. | Done |
+
+## Chemistry
+
+| Area | Decision | Status |
+|---|---|---|
+| Chemistry | **Replace** SS14's reagents and recipes with vg13's, like the body system. Infection waits for it (spaceacillin). | Planned |
