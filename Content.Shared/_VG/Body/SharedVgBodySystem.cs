@@ -6,6 +6,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -42,6 +43,7 @@ public abstract partial class SharedVgBodySystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
@@ -77,6 +79,8 @@ public abstract partial class SharedVgBodySystem : EntitySystem
         SubscribeLocalEvent<VgBodyComponent, DamageChangedEvent>(OnDamageChanged, before: new[] { typeof(MobThresholdSystem) });
         SubscribeLocalEvent<VgBodyComponent, RejuvenateEvent>(OnRejuvenate);
         SubscribeLocalEvent<VgBodyComponent, VgLifeTickEvent>(OnLifeTick);
+
+        InitializeExamine();
 
         Subs.CVar(_cfg, VgCCVars.BonesCanBreak, value => _bonesCanBreak = value, true);
         Subs.CVar(_cfg, VgCCVars.LimbsCanBreak, value => _limbsCanBreak = value, true);

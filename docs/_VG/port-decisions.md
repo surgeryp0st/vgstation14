@@ -37,6 +37,7 @@ Decided: the **full vg13 model**.
 | Stuns | vg13's model: no stamina; stunned/weakened/paralysis; vg13 disarm odds (40% miss, 40% knockdown). | Planned |
 | Grabs | vg13's grab levels: passive → aggressive → neck → strangle. | Planned |
 | Armor | vg13's armor: melee/bullet/laser/energy/bomb/bio/rad categories, per-limb coverage, additive percentages, armor penetration. SS14-only clothing has its coefficients translated when loaded. | Planned |
+| Examine | vg13's examine text for limbs: wounds by stage (bleeding/bandaged/infected), missing limbs, peg and robot limbs, splints, open incisions. Uniform, gloves, shoes and gas masks hide what's under them; bleeding still shows through. Predicted. | Done |
 | Wound treatment items | Replace SS14's bruise packs, ointment and gauze with vg13's medical stacks (bruise pack, ointment, advanced trauma/burn kits, splints) and their behaviour: bandage/salve/splint the aimed limb's wounds. SS14's versions are removed or remapped to the vg13 items in maps and vendors. | Planned |
 | SS14-only medical items | Tourniquet, blood pack, regenerative mesh, medicated suture, aloe cream, healing toolbox: **disabled for now**. Taken out of vendors, lockers and maps, prototypes kept so this can be revisited once vg13 medical is in. | Planned |
 | Natural healing | SS14's passive regeneration is removed for organic species; healing happens through vg13 wounds. | Done |

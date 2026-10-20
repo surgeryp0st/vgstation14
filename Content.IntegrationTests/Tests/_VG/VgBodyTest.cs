@@ -4,6 +4,8 @@ using Content.Shared._VG.Life;
 using Content.Shared._VG.Body;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Examine;
+using Content.Shared.Inventory;
 using Content.Shared.Hands.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Rejuvenate;
@@ -221,6 +223,61 @@ public sealed class VgBodyTest
                 // Its own copy, so prediction can't write into the stored server state.
                 Assert.That(clientLeg, Is.Not.SameAs(serverLeg));
             });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ExamineShowsWounds()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+        var protoMan = server.ProtoMan;
+        var damageable = entMan.System<DamageableSystem>();
+        var examine = entMan.System<ExamineSystemShared>();
+        var inventory = entMan.System<InventorySystem>();
+
+        EntityUid human = default;
+        EntityUid examiner = default;
+        await server.WaitPost(() =>
+        {
+            human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            examiner = entMan.SpawnEntity("MobHuman", map.GridCoords);
+        });
+
+        // Identity (and with it the pronouns examine uses) updates a tick later.
+        await server.WaitRunTicks(2);
+
+        await server.WaitAssertion(() =>
+        {
+            // A 20 damage slash always makes a bleeding "deep ripped cut".
+            var slash = new DamageSpecifier(protoMan.Index<DamageTypePrototype>("Slash"), 20);
+            damageable.TryChangeDamage(human, slash.WithVgZone(VgLimbs.LeftArm), true);
+
+            damageable.TryChangeDamage(human, Blunt(protoMan, 4).WithVgZone(VgLimbs.Head), true);
+            var text = examine.GetExamineText(human, examiner).ToString();
+            Assert.That(text, Does.Contain("bleeding deep ripped cut"));
+            Assert.That(text, Does.Contain("left arm"));
+
+            // A jumpsuit hides the arm, but the blood still shows.
+            var suit = entMan.SpawnEntity("ClothingUniformJumpsuitColorGrey", map.GridCoords);
+            Assert.That(inventory.TryEquip(human, suit, "jumpsuit", silent: true, force: true));
+            text = examine.GetExamineText(human, examiner).ToString();
+            Assert.Multiple(() =>
+            {
+                Assert.That(text, Does.Not.Contain("deep ripped cut"));
+                Assert.That(text, Does.Contain("blood soaking through"));
+            });
+
+            // Missing limbs show through clothing.
+            var cut = new DamageSpecifier(protoMan.Index<DamageTypePrototype>("Slash"), 10) { VgSharpness = 100 };
+            damageable.TryChangeDamage(human, cut.WithVgZone(VgLimbs.RightLeg), true);
+            text = examine.GetExamineText(human, examiner).ToString();
+            Assert.That(text, Does.Contain("missing"));
+            Assert.That(text, Does.Contain("right leg"));
         });
 
         await pair.CleanReturnAsync();
