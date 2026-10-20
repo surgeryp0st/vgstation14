@@ -157,6 +157,8 @@ public abstract partial class SharedVgBodySystem
             }
         }
 
+        brute = DamageOrganInside(ent, limb, brute, sharp);
+
         // Getting hit on a broken, unsplinted limb hurts.
         if (limb.IsBroken && brute > 0 && Prob(40))
             Scream(ent);

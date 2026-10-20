@@ -20,6 +20,18 @@ public sealed partial class VgBodyComponent : Component
     public Dictionary<string, VgLimb> Limbs = new();
 
     /// <summary>
+    ///     Internal organs by id. Predicted like the limbs, so deep-copied out of server states.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public Dictionary<string, VgOrgan> Organs = new();
+
+    /// <summary>
+    ///     vg13 brainloss: brain damage, separate from health (and from the brain organ's own damage).
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BrainLoss;
+
+    /// <summary>
     ///     Total wounds over all limbs; more wounds make existing ones easier to tear open.
     /// </summary>
     [DataField, AutoNetworkedField]
@@ -52,4 +64,10 @@ public sealed partial class VgBodyPrototype : IPrototype
 
     [DataField(required: true)]
     public List<VgLimb> Limbs = new();
+
+    /// <summary>
+    ///     vg13 species has_organ.
+    /// </summary>
+    [DataField]
+    public List<VgOrgan> Organs = new();
 }

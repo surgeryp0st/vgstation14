@@ -6,6 +6,7 @@ using Content.Shared._VG.Random;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mobs.Systems;
@@ -126,6 +127,21 @@ public sealed class VgStatusSystem : EntitySystem
         var time = ticks * LifeTick;
         if (Longer(uid, "Muted", time))
             _statusEffects.TryAddStatusEffect<MutedComponent>(uid, "Muted", time, true);
+    }
+
+    /// <summary>
+    ///     vg13 eye_blind: can't see for at least this many Life() ticks.
+    /// </summary>
+    public void Blind(EntityUid uid, float ticks)
+    {
+        var time = ticks * LifeTick;
+        if (Longer(uid, "TemporaryBlindness", time))
+            _statusEffects.TryAddStatusEffect<TemporaryBlindnessComponent>(uid, "TemporaryBlindness", time, true);
+    }
+
+    public int GetLoseBreath(EntityUid uid)
+    {
+        return TryComp<VgStatusComponent>(uid, out var comp) ? comp.LoseBreath : 0;
     }
 
     /// <summary>

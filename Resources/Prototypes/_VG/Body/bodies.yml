@@ -92,3 +92,31 @@
     minBrokenDamage: 15
     canStand: true
     droppedPrototype: VgLimbRightFoot
+  # vg13 species has_organ (code/modules/organs/organ_internal.dm, internal/*).
+  organs:
+  - id: heart
+    name: vg-organ-heart
+    parent: chest
+  - id: lungs
+    name: vg-organ-lungs
+    parent: chest
+    minBruisedDamage: 8
+    minBrokenDamage: 15
+  - id: liver
+    name: vg-organ-liver
+    parent: chest
+  - id: kidneys
+    name: vg-organ-kidneys
+    parent: groin
+  - id: brain
+    name: vg-organ-brain
+    parent: head
+    vital: true
+  - id: appendix
+    name: vg-organ-appendix
+    parent: groin
+  - id: eyes
+    name: vg-organ-eyes
+    parent: head
+    minBruisedDamage: 5
+    minBrokenDamage: 35

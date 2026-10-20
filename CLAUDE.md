@@ -69,6 +69,7 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 
 - `VgBodyComponent` holds vg13 limbs (`VgLimb`: wounds, fractures, internal bleeding, robotic/peg status), laid out by a `vgBody` prototype. Wound kinds are `vgWound` prototypes.
 - `DamageableComponent` stays the source of *totals*. `SharedVgBodySystem` (predicted; the server subclass only adds blood loss and screams) subscribes to `DamageChangedEvent` (ordered before `MobThresholdSystem`), routes the brute/burn difference onto limbs with vg13's `apply_damage`/`take_overall_damage`/`heal_overall_damage` rules, then writes back the sum of organic, existing limbs.
+- `VgBodyComponent.Organs` holds vg13 internal organs (`VgOrgan`, laid out by the `vgBody` prototype's `organs`), processed on the Life() tick in `SharedVgBodySystem.Organs.cs`; `BrainLoss` is vg13's mob-level brain damage.
 - `VgLifeSystem` (Shared) raises `VgLifeTickEvent` every 2 s (vg13's mob `Life()` rate). The client predicts only its own mob's tick. Per-tick organ, wound and blood processing hangs off it.
 - SS14's body system is still present during the transition. Severing a vg limb deletes the matching SS14 part so hands and legs actually go away. The plan is to replace SS14's body, metabolism, breathing and digestion with vg13's versions entirely.
 

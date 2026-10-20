@@ -108,6 +108,11 @@ public abstract partial class SharedVgBodySystem : EntitySystem
             if (limb.Parent != null && ent.Comp.Limbs.TryGetValue(limb.Parent, out var parent))
                 parent.Children.Add(limb.Id);
         }
+
+        foreach (var template in proto.Organs)
+        {
+            ent.Comp.Organs[template.Id] = new VgOrgan(template);
+        }
     }
 
     /// <summary>
@@ -119,6 +124,11 @@ public abstract partial class SharedVgBodySystem : EntitySystem
         foreach (var id in new List<string>(ent.Comp.Limbs.Keys))
         {
             ent.Comp.Limbs[id] = new VgLimb(ent.Comp.Limbs[id]);
+        }
+
+        foreach (var id in new List<string>(ent.Comp.Organs.Keys))
+        {
+            ent.Comp.Organs[id] = new VgOrgan(ent.Comp.Organs[id]);
         }
     }
 
@@ -158,6 +168,14 @@ public abstract partial class SharedVgBodySystem : EntitySystem
             limb.Open = 0;
         }
 
+        // vg13 organ rejuvenate().
+        foreach (var organ in ent.Comp.Organs.Values)
+        {
+            organ.Damage = 0;
+            organ.GermLevel = 0;
+        }
+
+        ent.Comp.BrainLoss = 0;
         ent.Comp.NumberWounds = 0;
         Dirty(ent);
         WriteBackTotals(ent);
