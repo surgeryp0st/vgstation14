@@ -1,0 +1,67 @@
+# vgstation13 recipes (code/modules/reagents/Chemistry-Recipes.dm) for the medicines in medicine.yml. Elements and
+# gases are still SS14's reagents; they become vg13's with the basic reagents.
+
+- type: reaction
+  id: VgInaprovaline
+  reactants:
+    Oxygen:
+      amount: 1
+    Carbon:
+      amount: 1
+    Sugar:
+      amount: 1
+  products:
+    inaprovaline: 3
+
+- type: reaction
+  id: VgAntiToxin
+  reactants:
+    Silicon:
+      amount: 1
+    Potassium:
+      amount: 1
+    Nitrogen:
+      amount: 1
+  products:
+    anti_toxin: 3
+
+- type: reaction
+  id: VgKelotane
+  reactants:
+    Silicon:
+      amount: 1
+    Carbon:
+      amount: 1
+  products:
+    kelotane: 2
+
+- type: reaction
+  id: VgTricordrazine
+  reactants:
+    inaprovaline:
+      amount: 1
+    anti_toxin:
+      amount: 1
+  products:
+    tricordrazine: 2
+
+- type: reaction
+  id: VgDexalin
+  reactants:
+    Oxygen:
+      amount: 2
+    Plasma:
+      amount: 5
+      catalyst: true
+  products:
+    dexalin: 1
+
+- type: reaction
+  id: VgBicaridine
+  reactants:
+    inaprovaline:
+      amount: 1
+    Carbon:
+      amount: 1
+  products:
+    bicaridine: 2
