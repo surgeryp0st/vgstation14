@@ -9,6 +9,8 @@ vg-limb-l-leg = left leg
 vg-limb-r-leg = right leg
 vg-limb-l-foot = left foot
 vg-limb-r-foot = right foot
+vg-limb-eyes = eyes
+vg-limb-mouth = mouth
 
 vg-limb-encased-ribcage = ribcage
 vg-limb-encased-skull = skull

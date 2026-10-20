@@ -235,6 +235,13 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(ContentKeyFunctions.TakeScreenshotNoUI);
             AddButton(ContentKeyFunctions.ToggleFullscreen);
 
+            // VG: vgstation13 intents and zone selection.
+            AddHeader("ui-options-header-vg-combat");
+            foreach (var function in Content.Client._VG.Input.VgContexts.AllFunctions())
+            {
+                AddButton(function);
+            }
+
             AddHeader("ui-options-header-hotbar");
             foreach (var boundKey in ContentKeyFunctions.GetHotbarBoundKeys())
             {

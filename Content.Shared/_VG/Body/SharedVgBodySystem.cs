@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Shared._VG.CCVar;
 using Content.Shared._VG.Damage;
 using Content.Shared._VG.Life;
+using Content.Shared._VG.Random;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -93,7 +94,9 @@ public abstract partial class SharedVgBodySystem : EntitySystem
         if (ent.Comp.Limbs.Count > 0)
             return;
 
-        var proto = Prototypes.Index(ent.Comp.Prototype);
+        if (ent.Comp.Prototype.Id == null || !Prototypes.TryIndex(ent.Comp.Prototype, out var proto))
+            return;
+
         foreach (var template in proto.Limbs)
         {
             ent.Comp.Limbs[template.Id] = new VgLimb(template);
@@ -172,11 +175,7 @@ public abstract partial class SharedVgBodySystem : EntitySystem
 
     private System.Random CreatePredictedRandom(EntityUid uid, int salt)
     {
-        // Not HashCode.Combine: it's seeded per process, so client and server would disagree.
-        var seed = (int) Timing.CurTick.Value;
-        seed = unchecked(seed * 397 ^ GetNetEntity(uid).Id);
-        seed = unchecked(seed * 397 ^ salt);
-        return new System.Random(seed);
+        return VgPredictedRandom.Create(Timing.CurTick, GetNetEntity(uid).Id, salt);
     }
 
     public bool TryGetLimb(Entity<VgBodyComponent?> ent, string id, [NotNullWhen(true)] out VgLimb? limb)
@@ -380,6 +379,6 @@ public abstract partial class SharedVgBodySystem : EntitySystem
     /// </summary>
     private bool Prob(float percent)
     {
-        return PredictedRandom.NextDouble() * 100 < percent;
+        return PredictedRandom.Prob(percent);
     }
 }

@@ -23,6 +23,7 @@ using Content.Shared.Popups;
 using Content.Shared.Storage;
 using Content.Shared.Strip;
 using Content.Shared.Tag;
+using Content.Shared._VG.Combat; // VG
 using Content.Shared.Timing;
 using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
@@ -67,6 +68,7 @@ namespace Content.Shared.Interaction
         [Dependency] private readonly InventorySystem _inventory = default!;
         [Dependency] private readonly IRobustRandom _random = default!;
         [Dependency] private readonly TagSystem _tagSystem = default!;
+        [Dependency] private readonly VgCombatSystem _vgCombat = default!; // VG
         [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
         [Dependency] private readonly SharedStrippableSystem _strippable = default!;
         [Dependency] private readonly SharedPlayerRateLimitManager _rateLimit = default!;
@@ -425,7 +427,8 @@ namespace Content.Shared.Interaction
             // they check this earlier before returning in
             if (!TryGetUsedEntity(user, out var used, checkCanUse))
             {
-                if (inRangeUnobstructed && target != null)
+                // VG: vg13 intents decide what an empty-handed click on a mob does.
+                if (inRangeUnobstructed && target != null && !_vgCombat.TryUnarmed(user, target.Value))
                     InteractHand(user, target.Value);
 
                 return;
@@ -439,13 +442,17 @@ namespace Content.Shared.Interaction
 
             if (inRangeUnobstructed && target != null)
             {
-                InteractUsing(
+                // VG: in vg13, an item nothing reacts to hits what you clicked.
+                if (!InteractUsing(
                     user,
                     used.Value,
                     target.Value,
                     coordinates,
                     checkCanInteract: false,
-                    checkCanUse: false);
+                    checkCanUse: false))
+                {
+                    _vgCombat.ItemFallback(user, used.Value, target.Value);
+                }
 
                 return;
             }

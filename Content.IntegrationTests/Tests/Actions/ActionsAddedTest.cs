@@ -51,6 +51,15 @@ public sealed class ActionsAddedTest
         var cActions = cActionSystem.GetActions(clientEnt).Where(
             x => x.Comp is InstantActionComponent act && act.Event?.GetType() == evType).ToArray();
 
+        // VG: vg13 intents replace combat mode, so mobs with them don't get the toggle.
+        if (sEntMan.HasComponent<Content.Shared._VG.Combat.VgIntentComponent>(serverEnt))
+        {
+            Assert.That(sActions, Is.Empty);
+            Assert.That(cActions, Is.Empty);
+            await pair.CleanReturnAsync();
+            return;
+        }
+
         Assert.That(sActions.Length, Is.EqualTo(1));
         Assert.That(cActions.Length, Is.EqualTo(1));
 

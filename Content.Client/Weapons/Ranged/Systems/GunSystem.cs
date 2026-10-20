@@ -28,6 +28,7 @@ namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
 {
+    [Dependency] private readonly Content.Shared._VG.Combat.VgCombatSystem _vgCombat = default!; // VG
     [Dependency] private readonly IComponentFactory _factory = default!;
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
@@ -149,7 +150,9 @@ public sealed partial class GunSystem : SharedGunSystem
 
         var entityNull = _player.LocalEntity;
 
-        if (entityNull == null || !TryComp<CombatModeComponent>(entityNull, out var combat) || !combat.IsInCombatMode)
+        // VG: vg13 intents replace combat mode, so guns are always ready.
+        var vgIntents = entityNull != null && _vgCombat.UsesIntents(entityNull.Value);
+        if (entityNull == null || !vgIntents && (!TryComp<CombatModeComponent>(entityNull, out var combat) || !combat.IsInCombatMode))
         {
             return;
         }
@@ -189,6 +192,14 @@ public sealed partial class GunSystem : SharedGunSystem
         NetEntity? target = null;
         if (_state.CurrentState is GameplayStateBase screen)
             target = GetNetEntity(screen.GetClickedEntity(mousePos));
+
+        // VG: clicking something in reach interacts with it instead, unless it's point blank on harm intent.
+        if (vgIntents && !_vgCombat.ShouldFireGun(entity, coordinates, GetEntity(target)))
+        {
+            if (gun.ShotCounter != 0)
+                EntityManager.RaisePredictiveEvent(new RequestStopShootEvent { Gun = GetNetEntity(gunUid) });
+            return;
+        }
 
         Log.Debug($"Sending shoot request tick {Timing.CurTick} / {Timing.CurTime}");
 

@@ -17,11 +17,13 @@
   armorCoefficientPrice: 2
   armorFlatPrice: 10
 
+# Priced like upstream Radiation: most toxin armor is rad/bio protection, and pricing it higher made rad suits
+# sell for more than their crate costs.
 - type: damageType
   id: Toxin
   name: damage-type-toxin
-  armorCoefficientPrice: 5
-  armorFlatPrice: 30
+  armorCoefficientPrice: 2.5
+  armorFlatPrice: 16
 
 - type: damageType
   id: Oxygen

@@ -4,6 +4,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Audio;
+using Content.Shared._VG.Combat; // VG
 using Content.Shared.CombatMode;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
@@ -54,6 +55,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
     [Dependency] protected readonly SharedAudioSystem Audio = default!;
     [Dependency] private   readonly SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private   readonly VgCombatSystem _vgCombat = default!; // VG
     [Dependency] protected readonly SharedContainerSystem Containers = default!;
     [Dependency] private   readonly SharedGravitySystem _gravity = default!;
     [Dependency] protected readonly SharedPointLightSystem Lights = default!;
@@ -128,7 +130,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         var user = args.SenderSession.AttachedEntity;
 
         if (user == null ||
-            !_combatMode.IsInCombatMode(user) ||
+            !_combatMode.IsInCombatMode(user) && !_vgCombat.UsesIntents(user.Value) || // VG: vg13 intents replace combat mode
             !TryGetGun(user.Value, out var ent, out var gun))
         {
             return;

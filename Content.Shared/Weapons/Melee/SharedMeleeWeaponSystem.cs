@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
+using Content.Shared._VG.Combat; // VG
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -36,6 +37,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     [Dependency] protected readonly ISharedAdminLogManager   AdminLogger     = default!;
     [Dependency] protected readonly ActionBlockerSystem      Blocker         = default!;
     [Dependency] protected readonly SharedCombatModeSystem   CombatMode      = default!;
+    [Dependency] protected readonly VgCombatSystem VgCombat = default!; // VG
     [Dependency] protected readonly DamageableSystem         Damageable      = default!;
     [Dependency] protected readonly SharedInteractionSystem  Interaction     = default!;
     [Dependency] protected readonly IMapManager              MapManager      = default!;
@@ -341,7 +343,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         if (weapon.NextAttack > curTime)
             return false;
 
-        if (!CombatMode.IsInCombatMode(user))
+        if (!CombatMode.IsInCombatMode(user) && !VgCombat.UsesIntents(user)) // VG: vg13 intents replace combat mode
             return false;
 
         EntityUid? target = null;
@@ -484,6 +486,10 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         }
 
         // Sawmill.Debug($"Melee damage is {damage.Total} out of {component.Damage.Total}");
+
+        // VG: aim at the attacker's selected zone (vg13 can miss), and use vg13 punch damage.
+        if (!VgCombat.TryAimMelee(user, target.Value, meleeUid, ref damage))
+            return;
 
         // Raise event before doing damage so we can cancel damage if the event is handled
         var hitEvent = new MeleeHitEvent(new List<EntityUid> { target.Value }, user, meleeUid, damage, null);

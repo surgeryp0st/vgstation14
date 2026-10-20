@@ -77,6 +77,7 @@ namespace Content.Client.Input
             human.AddFunction(ContentKeyFunctions.RotateObjectClockwise);
             human.AddFunction(ContentKeyFunctions.RotateObjectCounterclockwise);
             human.AddFunction(ContentKeyFunctions.FlipObject);
+            Content.Client._VG.Input.VgContexts.Setup(contexts); // VG
             human.AddFunction(ContentKeyFunctions.ArcadeUp);
             human.AddFunction(ContentKeyFunctions.ArcadeDown);
             human.AddFunction(ContentKeyFunctions.ArcadeLeft);

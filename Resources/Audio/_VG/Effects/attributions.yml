@@ -2,3 +2,8 @@
   license: "CC-BY-SA-3.0"
   copyright: "Taken from vgstation13"
   source: "https://github.com/vgstation-coders/vgstation13/tree/23f25f386f7a6c75b1a604029848d798e8b7ec06/sound/effects"
+
+- files: ["slap1.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from vgstation13"
+  source: "https://github.com/vgstation-coders/vgstation13/tree/23f25f386f7a6c75b1a604029848d798e8b7ec06/sound/effects"

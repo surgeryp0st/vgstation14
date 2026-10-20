@@ -22,7 +22,7 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 - Run: `./runserver.sh` and `./runclient.sh` (connects to localhost:1212)
 - YAML/prototype linter (~2 min): `dotnet run --project Content.YAMLLinter`
 - Unit tests: `dotnet test Content.Tests`
-- Integration tests (slow; each test spins up a server+client pair): `dotnet build Content.IntegrationTests && dotnet test Content.IntegrationTests --no-build --filter "FullyQualifiedName~VgBodyTest"`
+- Integration tests (slow; each test spins up a server+client pair): `dotnet build Content.IntegrationTests && dotnet test Content.IntegrationTests --no-build --filter "FullyQualifiedName~_VG" -- NUnit.NumberOfTestWorkers=1`. Keep one worker: this machine has 7 GB of RAM, and parallel pairs get the test host OOM-killed ("Test host process crashed"). `InteractionTest` subclasses drive real client input, which exercises prediction; test maps are vacuum unless you call `AddAtmosphere()`, so barotrauma adds damage.
 - CI builds `DebugOpt` with `/p:WarningsAsErrors=nullable` and maps NUnit warnings to failures.
 - RSI validation: `python3 RobustToolbox/Schemas/validate_rsis.py Resources/` (needs `pillow` and `jsonschema`)
 - Convert vg13 icons: `python3 Tools/_VG/dmi2rsi.py ../vgstation13/icons/obj/foo.dmi Resources/Textures/_VG/obj/foo.rsi [--states a b]`, or `--batch <dir> <outdir>`. Converted sprites mirror vg13's `icons/` layout under `Resources/Textures/_VG/`.
@@ -51,6 +51,11 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 - Damage groups (Brute/Burn/Airloss/Toxin/Genetic) point at the vg types.
 - Code that reads damage dictionaries must use the vg type names.
 
+### Controls (`Content.Shared/_VG/Combat/`, `Content.Client/_VG/Combat/`)
+
+- `VgIntentComponent` (intent + selected zone) replaces SS14 combat mode on humanoids: combat mode stays off and its toggle action is removed. Hotkeys are `VgKeyFunctions` (vg13 defaults in `keybinds.yml`); the HUD selectors are added to the hotbar row by `VgCombatUIController`.
+- Clicks go through SS14's predicted `SharedInteractionSystem.UserInteraction`, with two `// VG` hooks: `VgCombatSystem.TryUnarmed` (empty hand on a mob: disarm, grab, punch by intent; help falls through to SS14's hand interaction) and `ItemFallback` (an item no interaction handled hits a mob on any intent, other things on harm). `SharedMeleeWeaponSystem` calls `TryAimMelee` before a light attack lands (zone, vg13 miss chances, vg13 punch damage). Melee and gun "in combat mode" checks also accept intent users; the client gun loop asks `ShouldFireGun`.
+
 ### Body (`Content.Shared/_VG/Body/`, in progress)
 
 - `VgBodyComponent` holds vg13 limbs (`VgLimb`: wounds, fractures, internal bleeding, robotic/peg status), laid out by a `vgBody` prototype. Wound kinds are `vgWound` prototypes.
@@ -60,6 +65,6 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 
 ## Working with the user on the port
 
-The user wants to be asked before any big design decision or large gameplay change. That includes every system that exists in both vg13 and SS14, and whether to keep SS14-only content. Decisions so far, and what's done versus planned, are in `docs/_VG/port-decisions.md`. Update it whenever a new decision is made.
+Keep working through the plan without stopping between steps (implement, test, commit, push to the fork, next step); only stop when a decision is needed or you are blocked. The user wants to be asked before any big design decision or large gameplay change. That includes every system that exists in both vg13 and SS14, and whether to keep SS14-only content. Decisions so far, and what's done versus planned, are in `docs/_VG/port-decisions.md`. Update it whenever a new decision is made.
 
 Push to the user's fork (`fork` remote, https://github.com/surgeryp0st/vgstation14). `origin` (vgstation-coders) is read-only for this account.
