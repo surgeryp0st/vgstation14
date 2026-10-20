@@ -49,6 +49,7 @@ public sealed class VgCombatSystem : EntitySystem
     [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly VgStatusSystem _status = default!;
+    [Dependency] private readonly VgGrabSystem _grab = default!;
     [Dependency] private readonly SharedVgBodySystem _body = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
 
@@ -214,7 +215,7 @@ public sealed class VgCombatSystem : EntitySystem
                 Disarm(user, target, comp);
                 return true;
             case VgIntent.Grab:
-                Grab(user, target);
+                _grab.TryGrab(user, target);
                 return true;
             case VgIntent.Harm:
                 if (_melee.TryGetWeapon(user, out var weaponUid, out var weapon))
@@ -393,20 +394,6 @@ public sealed class VgCombatSystem : EntitySystem
 
         _hands.TryDrop(target, checkActionBlocker: false);
         Visible(user, target, Loc.GetString("vg-disarm-success", ("user", userIdentity), ("target", targetIdentity)));
-    }
-
-    /// <summary>
-    ///     vg13 grab_mob(). Until vg13 grab levels are ported, a passive grab is an SS14 pull.
-    /// </summary>
-    private void Grab(EntityUid user, EntityUid target)
-    {
-        if (!_pulling.TryStartPull(user, target))
-            return;
-
-        _audio.PlayPredicted(ThudSound, target, user);
-        Visible(user, target, Loc.GetString("vg-grab-passive",
-            ("user", Identity.Entity(user, EntityManager)),
-            ("target", Identity.Entity(target, EntityManager))));
     }
 
     /// <summary>

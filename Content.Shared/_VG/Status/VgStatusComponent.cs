@@ -25,6 +25,12 @@ public sealed partial class VgStatusComponent : Component
     public int ShockStage;
 
     /// <summary>
+    ///     vg13 losebreath: Life() ticks of not being able to breathe (strangled, ...).
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int LoseBreath;
+
+    /// <summary>
     ///     vg13 BASE_CARBON_PAIN_RESIST.
     /// </summary>
     [DataField]

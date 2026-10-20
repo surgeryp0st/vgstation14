@@ -1,0 +1,26 @@
+# vgstation13's grab (/obj/item/weapon/grab, code/modules/mob/mob_grab.dm). It only exists in the grabber's hand,
+# showing vg13's reinforce / disarm-kill HUD button. See VgGrabSystem.
+
+- type: entity
+  id: VgGrab
+  name: grab
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _VG/mob/screen1_Midnight.rsi
+    layers:
+    - state: reinforce
+      map: [ "enum.VgGrabVisuals.Layer" ]
+  - type: Item
+    size: Huge
+  - type: VgGrabItem
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.VgGrabVisuals.State:
+        enum.VgGrabVisuals.Layer:
+          Passive: { state: reinforce }
+          Aggressive: { state: reinforce }
+          Neck: { state: disarm_kill }
+          Upgrading: { state: disarm_kill1 }
+          Kill: { state: disarm_kill1 }

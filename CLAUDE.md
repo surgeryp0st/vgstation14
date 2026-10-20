@@ -22,7 +22,7 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 - Run: `./runserver.sh` and `./runclient.sh` (connects to localhost:1212)
 - YAML/prototype linter (~2 min): `dotnet run --project Content.YAMLLinter`
 - Unit tests: `dotnet test Content.Tests`
-- Integration tests (slow; each test spins up a server+client pair): `dotnet build Content.IntegrationTests && dotnet test Content.IntegrationTests --no-build --filter "FullyQualifiedName~_VG" -- NUnit.NumberOfTestWorkers=1`. Keep one worker: this machine has 7 GB of RAM, and parallel pairs get the test host OOM-killed ("Test host process crashed"). `InteractionTest` subclasses drive real client input, which exercises prediction; test maps are vacuum unless you call `AddAtmosphere()`, so barotrauma adds damage.
+- Integration tests (slow; each test spins up a server+client pair): `dotnet build Content.IntegrationTests && dotnet test Content.IntegrationTests --no-build --filter "FullyQualifiedName~_VG" -- NUnit.NumberOfTestWorkers=1`. Keep one worker: this machine has 7 GB of RAM, and parallel pairs get the test host OOM-killed ("Test host process crashed"). Even with one worker, runs of more than ~150 tests can run out of memory, so split broad regression runs into batches. `InteractionTest` subclasses drive real client input, which exercises prediction; test maps are vacuum unless you call `AddAtmosphere()`, so barotrauma adds damage.
 - CI builds `DebugOpt` with `/p:WarningsAsErrors=nullable` and maps NUnit warnings to failures.
 - RSI validation: `python3 RobustToolbox/Schemas/validate_rsis.py Resources/` (needs `pillow` and `jsonschema`)
 - Convert vg13 icons: `python3 Tools/_VG/dmi2rsi.py ../vgstation13/icons/obj/foo.dmi Resources/Textures/_VG/obj/foo.rsi [--states a b]`, or `--batch <dir> <outdir>`. Converted sprites mirror vg13's `icons/` layout under `Resources/Textures/_VG/`.
@@ -59,6 +59,7 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 ### Stuns, pain and treatment
 
 - `VgStatusSystem` is vg13's stun model: `Stun`/`Knockdown`/`Paralyse` take vg13 Life() ticks and set SS14's predicted status effects (stun, knocked down, forced sleep) to the longer of old and new. `VgStatusComponent` holds halloss and traumatic shock, processed on the Life() tick with pain messages. Stamina damage on these mobs is converted in a `// VG` hook at the top of `StaminaSystem.TakeStaminaDamage` (halloss, or a vg13 baton stun via `VgStunOnHit`).
+- `VgGrabSystem`: vg13 grabs ride on an SS14 pull; `VgGrabberComponent`/`VgGrabbedComponent` hold the state and the `VgGrab` item in hand is the grab. Aggressive+ grabs cancel the victim's `UpdateCanMoveEvent`; escape rolls happen on their `MoveInputEvent`.
 - `VgPopupSystem.Visible`/`Self` are vg13's `visible_message`/`to_chat` for predicted code; pass the predicting user.
 - `VgMedicalSystem`: vg13 medical stacks act on the aimed limb from `AfterInteractEvent`. SS14's `Brutepack`/`Gauze`/`Ointment` ids are aliases of the vg items.
 

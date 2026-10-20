@@ -14,6 +14,14 @@ vg-disarm-break-pull = [color=red]{CAPITALIZE(THE($user))} has broken {POSS-ADJ(
 vg-disarm-success = [color=red]{CAPITALIZE(THE($user))} has disarmed {THE($target)}![/color]
 
 vg-grab-passive = [color=orange]{CAPITALIZE(THE($user))} grabs {THE($target)} passively![/color]
+vg-grab-aggressive = [color=orange]{CAPITALIZE(THE($user))} has grabbed {THE($target)} aggressively (now hands)![/color]
+vg-grab-neck = [color=orange]{CAPITALIZE(THE($user))} has reinforced {POSS-ADJ($user)} grip on {THE($target)} (now neck)![/color]
+vg-grab-strangle-start = [color=red][bold]{CAPITALIZE(THE($user))} starts to tighten {POSS-ADJ($user)} grip on {THE($target)}'s neck![/bold][/color]
+vg-grab-strangle = [color=red][bold]{CAPITALIZE(THE($user))} has tightened {POSS-ADJ($user)} grip on {THE($target)}'s neck![/bold][/color]
+vg-grab-strangle-fail = [color=orange]{CAPITALIZE(THE($user))} was unable to tighten {POSS-ADJ($user)} grip on {THE($target)}'s neck![/color]
+vg-grab-break-free = [color=red][bold]{CAPITALIZE(THE($target))} has broken free of {THE($user)}'s grip![/bold][/color]
+vg-grab-break-headlock = [color=red][bold]{CAPITALIZE(THE($target))} has broken free of {THE($user)}'s headlock![/bold][/color]
+vg-grab-buckled = You cannot grab {THE($target)}, {SUBJECT($target)} {CONJUGATE-BE($target)} buckled in!
 
 vg-intent-help = help
 vg-intent-disarm = disarm

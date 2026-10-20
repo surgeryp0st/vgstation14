@@ -5,6 +5,7 @@ using Content.Shared._VG.Popups;
 using Content.Shared._VG.Random;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mobs.Systems;
@@ -12,8 +13,10 @@ using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Speech.EntitySystems;
+using Content.Shared.Speech.Muting;
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._VG.Status;
@@ -26,6 +29,8 @@ namespace Content.Shared._VG.Status;
 public sealed class VgStatusSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
@@ -41,6 +46,8 @@ public sealed class VgStatusSystem : EntitySystem
     private const string StunKey = "Stun";
     private const string KnockdownKey = "KnockedDown";
     private const string SleepKey = "ForcedSleep";
+
+    private static readonly ProtoId<DamageTypePrototype> OxygenDamage = "Asphyxiation";
 
     // Salts for VgPredictedRandom.
     private const int SaltLife = 10;
@@ -58,6 +65,7 @@ public sealed class VgStatusSystem : EntitySystem
     {
         ent.Comp.Halloss = 0;
         ent.Comp.ShockStage = 0;
+        ent.Comp.LoseBreath = 0;
         Dirty(ent);
     }
 
@@ -108,6 +116,29 @@ public sealed class VgStatusSystem : EntitySystem
         var time = ticks * LifeTick;
         if (Longer(uid, "Stutter", time))
             _stutter.DoStutter(uid, time, true);
+    }
+
+    /// <summary>
+    ///     vg13 silent: can't speak for at least this many Life() ticks.
+    /// </summary>
+    public void Mute(EntityUid uid, float ticks)
+    {
+        var time = ticks * LifeTick;
+        if (Longer(uid, "Muted", time))
+            _statusEffects.TryAddStatusEffect<MutedComponent>(uid, "Muted", time, true);
+    }
+
+    /// <summary>
+    ///     vg13 losebreath += amount, capped at <paramref name="max"/>. Returns the new value.
+    /// </summary>
+    public int AddLoseBreath(EntityUid uid, int amount, int max = int.MaxValue)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return 0;
+
+        comp.LoseBreath = Math.Min(comp.LoseBreath + amount, max);
+        Dirty(uid, comp);
+        return comp.LoseBreath;
     }
 
     public bool IsParalysed(EntityUid uid)
@@ -192,11 +223,26 @@ public sealed class VgStatusSystem : EntitySystem
 
         var random = VgPredictedRandom.Create(_timing.CurTick, GetNetEntity(ent).Id, SaltLife);
 
+        HandleLoseBreath(ent);
         HandleHalloss(ent);
         HandleShock(ent, args.LifeTick, random);
         HandlePain(ent, random);
 
         Dirty(ent);
+    }
+
+    /// <summary>
+    ///     vg13 handle_breath(): while losebreath lasts the mob takes no breath and suffocates a little.
+    /// </summary>
+    /// <remarks>TODO VG: move into vg13 breathing once it replaces SS14's respirator.</remarks>
+    private void HandleLoseBreath(Entity<VgStatusComponent> ent)
+    {
+        if (ent.Comp.LoseBreath <= 0)
+            return;
+
+        ent.Comp.LoseBreath--;
+        // vg13 HUMAN_MAX_OXYLOSS.
+        _damageable.TryChangeDamage(ent, new DamageSpecifier(_proto.Index(OxygenDamage), 1), true);
     }
 
     /// <summary>

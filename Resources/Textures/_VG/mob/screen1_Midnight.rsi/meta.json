@@ -8,6 +8,26 @@
   },
   "states": [
     {
+      "name": "reinforce"
+    },
+    {
+      "name": "!reinforce"
+    },
+    {
+      "name": "disarm_kill"
+    },
+    {
+      "name": "disarm_kill1",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
       "name": "intent_help"
     },
     {
