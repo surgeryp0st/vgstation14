@@ -114,6 +114,39 @@ public sealed class VgMetabolismTest
     }
 
     [Test]
+    public async Task RadiationDoseHurtsAndHyronalinTreatsIt()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<VgBreathingComponent>(human);
+            var rad = entMan.System<Content.Shared._VG.Radiation.VgRadiationSystem>();
+            var comp = entMan.GetComponent<Content.Shared._VG.Radiation.VgRadiationComponent>(human);
+
+            rad.Add(human, 100);
+            LifeTick(entMan, human);
+            // 75+ radiation: loses 3 and does 3 toxin damage.
+            Assert.Multiple(() =>
+            {
+                Assert.That(comp.Radiation, Is.EqualTo(97).Within(0.01));
+                Assert.That(Damage(entMan, human, "Toxin"), Is.EqualTo(3).Within(0.01));
+            });
+
+            Inject(entMan, human, "Hyronalin", 5);
+            LifeTick(entMan, human);
+            // hyronalin takes 3 * REM off first, then the dose burns 3 more
+            Assert.That(comp.Radiation, Is.EqualTo(97 - 1.5f - 3).Within(0.01));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task BicaridineOverdoseHurts()
     {
         await using var pair = await PoolManager.GetServerClient();

@@ -240,6 +240,8 @@
   - type: VgBreathing
   # VG: vg13 reagent metabolism on the Life() tick.
   - type: VgMetabolism
+  # VG: vg13's radiation dose replaces SS14's instant radiation damage.
+  - type: VgRadiation
   # VG: vg13 nutrition replaces SS14's hunger and thirst.
   - type: VgNutrition
   - type: Bloodstream

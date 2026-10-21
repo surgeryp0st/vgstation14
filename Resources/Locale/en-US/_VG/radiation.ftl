@@ -1,0 +1,8 @@
+vg-radiation-weak = You feel weak.
+vg-radiation-agony-0 = You can feel your body becoming weak!
+vg-radiation-agony-1 = You feel like you're about to die!
+vg-radiation-agony-2 = You feel every part of your body screaming in agony!
+vg-radiation-agony-3 = A low, rolling pain passes through your body!
+vg-radiation-agony-4 = Your body feels as if it's falling apart!
+vg-radiation-agony-5 = You feel extremely weak!
+vg-radiation-agony-6 = A sharp, deep pain bathes every inch of your body!

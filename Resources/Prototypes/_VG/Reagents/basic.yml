@@ -1,7 +1,7 @@
 # vg13's mob behaviour (reagents_basic.dm) for the elements. The reagents themselves stay SS14's: the ids match and
 # both games have the same element list, so vg13 behaviour is attached to them by id. Elements not listed here do
 # nothing in the body in vg13 either (they only have vg13's default metabolism and overdose).
-# Lithium's random space-drifting and emotes, and radium's radiation, wait for the systems they need.
+# Lithium's random space-drifting and emotes wait for the systems they need.
 
 - type: vgReagent
   id: Chlorine
@@ -22,3 +22,9 @@
 - type: vgReagent
   id: Lithium
   overdoseAmount: 30
+
+- type: vgReagent
+  id: Radium
+  effects:
+  - !type:VgAdjustRadiation
+    amount: 2

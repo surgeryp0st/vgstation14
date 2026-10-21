@@ -1,4 +1,5 @@
 using Content.Shared._VG.Body;
+using Content.Shared._VG.Radiation;
 using Content.Shared._VG.Status;
 using Content.Shared.Damage;
 
@@ -243,5 +244,20 @@ public sealed partial class VgStatusEffect : VgReagentEffect
                 status.AdjustDrowsiness(args.Target, Add ? (int) Ticks : Math.Max(0, (int) Ticks - current));
                 break;
         }
+    }
+}
+
+/// <summary>
+///     vg13 <c>M.radiation = max(M.radiation - x * REM, 0)</c> (hyronalin, arithrazine) and radium's
+///     <c>apply_radiation(x * REM, RAD_INTERNAL)</c>. Negative treats radiation; the amount is a multiple of REM.
+/// </summary>
+public sealed partial class VgAdjustRadiation : VgReagentEffect
+{
+    [DataField(required: true)]
+    public float Amount;
+
+    public override void Apply(VgReagentArgs args)
+    {
+        args.System<VgRadiationSystem>().Add(args.Target, Amount * VgChemistry.Rem);
     }
 }

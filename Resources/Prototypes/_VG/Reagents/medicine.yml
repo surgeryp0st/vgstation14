@@ -317,3 +317,28 @@
     burn: 1
     minTick: 16
     maxTick: 35
+
+# Hyronalin and arithrazine are in both games: SS14's reagent, vg13's behaviour and recipe.
+- type: vgReagent
+  id: Hyronalin
+  metabolism: 0.05
+  overdoseAmount: 30
+  effects:
+  - !type:VgAdjustRadiation
+    amount: -3
+
+- type: vgReagent
+  id: Arithrazine
+  metabolism: 0.05
+  overdoseAmount: 30
+  effects:
+  - !type:VgAdjustRadiation
+    amount: -7
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: -1
+  - !type:VgAdjustDamage
+    type: Brute
+    amount: 2
+    flat: true
+    chance: 15

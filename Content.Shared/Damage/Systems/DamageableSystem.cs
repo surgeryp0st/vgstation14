@@ -243,6 +243,9 @@ namespace Content.Shared.Damage
 
         private void OnIrradiated(EntityUid uid, DamageableComponent component, OnIrradiatedEvent args)
         {
+            if (HasComp<Content.Shared._VG.Radiation.VgRadiationComponent>(uid)) // VG: vg13 radiation dose instead
+                return;
+
             var damageValue = FixedPoint2.New(args.TotalRads);
 
             // Radiation should really just be a damage group instead of a list of types.

@@ -199,3 +199,23 @@
       amount: 1
   products:
     Impedrezene: 2
+
+- type: reaction
+  id: VgHyronalin
+  reactants:
+    Radium:
+      amount: 1
+    anti_toxin:
+      amount: 1
+  products:
+    Hyronalin: 2
+
+- type: reaction
+  id: VgArithrazine
+  reactants:
+    Hyronalin:
+      amount: 1
+    Hydrogen:
+      amount: 1
+  products:
+    Arithrazine: 2
