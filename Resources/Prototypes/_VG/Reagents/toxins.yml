@@ -1,0 +1,91 @@
+# vg13 toxins (reagents_toxin.dm). Reagents both games have keep SS14's id and get vg13's behaviour through a
+# vgReagent of the same id; vg13-only ones are new reagents. Left out for now: cyanide's sleeping, chloramine's
+# lung damage on contact and mercury's space-drifting and emotes, which wait for the systems they need.
+
+- type: vgReagent
+  id: Toxin
+  metabolism: 0.01
+  effects:
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: 0.2
+    flat: true
+
+- type: vgReagent
+  id: CarpoToxin
+  effects:
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: 2
+
+- type: vgReagent
+  id: Amatoxin
+  effects:
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: 1.5
+    flat: true
+
+- type: vgReagent
+  id: Mercury
+  overdoseAmount: 30
+  effects:
+  - !type:VgAdjustBrainLoss
+    amount: 4
+
+- type: reagent
+  id: cyanide
+  name: reagent-name-vg-cyanide
+  group: Toxins
+  desc: reagent-desc-vg-cyanide
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: bitter
+  color: "#CF3600"
+
+- type: vgReagent
+  id: cyanide
+  metabolism: 0.4
+  effects:
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: 4
+    flat: true
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: 4
+    flat: true
+
+- type: reagent
+  id: chloramine
+  name: reagent-name-vg-chloramine
+  group: Toxins
+  desc: reagent-desc-vg-chloramine
+  physicalDesc: reagent-physical-desc-gaseous
+  flavor: bitter
+  color: "#808080"
+
+- type: vgReagent
+  id: chloramine
+  overdoseAmount: 30
+  effects:
+  - !type:VgAdjustDamage
+    type: Brute
+    amount: 1
+
+- type: reagent
+  id: potassium_hydroxide
+  name: reagent-name-vg-potassium-hydroxide
+  group: Toxins
+  desc: reagent-desc-vg-potassium-hydroxide
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: bitter
+  color: "#FFFFFF"
+
+- type: vgReagent
+  id: potassium_hydroxide
+  metabolism: 0.1
+  overdoseAmount: 30
+  effects:
+  - !type:VgAdjustDamage
+    type: Burn
+    amount: 1.5
