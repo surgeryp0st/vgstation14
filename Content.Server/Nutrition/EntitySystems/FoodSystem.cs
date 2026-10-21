@@ -58,6 +58,7 @@ public sealed class FoodSystem : EntitySystem
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly StomachSystem _stomach = default!;
+    [Dependency] private readonly Content.Server._VG.Nutrition.VgIngestionSystem _vgIngestion = default!; // VG
     [Dependency] private readonly UtensilSystem _utensil = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
 
@@ -264,8 +265,11 @@ public sealed class FoodSystem : EntitySystem
             highestAvailable = stomachSol.AvailableVolume;
         }
 
+        // VG: vg13 bodies take food straight into the bloodstream instead of a stomach.
+        var vgIngest = _vgIngestion.Applies(args.Target.Value);
+
         // No stomach so just popup a message that they can't eat.
-        if (stomachToUse == null)
+        if (vgIngest ? !_vgIngestion.TryIngest(args.Target.Value, split) : stomachToUse == null)
         {
             _solutionContainer.TryAddSolution(soln.Value, split);
             _popup.PopupEntity(forceFeed ? Loc.GetString("food-system-you-cannot-eat-any-more-other") : Loc.GetString("food-system-you-cannot-eat-any-more"), args.Target.Value, args.User);
@@ -273,7 +277,8 @@ public sealed class FoodSystem : EntitySystem
         }
 
         _reaction.DoEntityReaction(args.Target.Value, solution, ReactionMethod.Ingestion);
-        _stomach.TryTransferSolution(stomachToUse!.Value.Owner, split, stomachToUse);
+        if (!vgIngest) // VG
+            _stomach.TryTransferSolution(stomachToUse!.Value.Owner, split, stomachToUse);
 
         var flavors = args.FlavorMessage;
 

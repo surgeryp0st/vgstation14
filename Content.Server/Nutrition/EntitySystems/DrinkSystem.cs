@@ -52,6 +52,7 @@ public sealed class DrinkSystem : SharedDrinkSystem
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private readonly StomachSystem _stomach = default!;
+    [Dependency] private readonly Content.Server._VG.Nutrition.VgIngestionSystem _vgIngestion = default!; // VG
     [Dependency] private readonly ForensicsSystem _forensics = default!;
 
     public override void Initialize()
@@ -271,10 +272,12 @@ public sealed class DrinkSystem : SharedDrinkSystem
             return;
         }
 
-        var firstStomach = stomachs.FirstOrNull(stomach => _stomach.CanTransferSolution(stomach.Owner, drained, stomach.Comp1));
+        // VG: vg13 bodies take drinks straight into the bloodstream instead of a stomach.
+        var vgIngest = _vgIngestion.Applies(args.Target.Value);
+        var firstStomach = vgIngest ? null : stomachs.FirstOrNull(stomach => _stomach.CanTransferSolution(stomach.Owner, drained, stomach.Comp1));
 
         //All stomachs are full or can't handle whatever solution we have.
-        if (firstStomach == null)
+        if (vgIngest ? !_vgIngestion.TryIngest(args.Target.Value, drained) : firstStomach == null)
         {
             _popup.PopupEntity(Loc.GetString("drink-component-try-use-drink-had-enough"), args.Target.Value, args.Target.Value);
 
@@ -320,7 +323,8 @@ public sealed class DrinkSystem : SharedDrinkSystem
         _audio.PlayPvs(entity.Comp.UseSound, args.Target.Value, AudioParams.Default.WithVolume(-2f).WithVariation(0.25f));
 
         _reaction.DoEntityReaction(args.Target.Value, solution, ReactionMethod.Ingestion);
-        _stomach.TryTransferSolution(firstStomach.Value.Owner, drained, firstStomach.Value.Comp1);
+        if (!vgIngest) // VG
+            _stomach.TryTransferSolution(firstStomach!.Value.Owner, drained, firstStomach.Value.Comp1);
 
         _forensics.TransferDna(entity, args.Target.Value);
 
