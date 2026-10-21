@@ -2,7 +2,8 @@
 
 species-name-human = Human
 species-name-dwarf = Dwarf
-species-name-reptilian = Reptilian
+# VG: Reptilians are vg13 Unathi.
+species-name-reptilian = Unathi
 species-name-slime = Slime Person
 species-name-diona = Diona
 species-name-arachnid = Arachnid

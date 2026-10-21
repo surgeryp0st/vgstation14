@@ -1,6 +1,6 @@
 # vgstation13 attack messages.
 
-vg-attack-punch = [color=red]{CAPITALIZE(THE($user))} punches {THE($target)}![/color]
+vg-attack-punch = [color=red]{CAPITALIZE(THE($user))} {$verb} {THE($target)}![/color]
 vg-attack-knockdown = [color=red][bold]{CAPITALIZE(THE($user))} has knocked down {THE($target)}![/bold][/color]
 vg-attack-miss-unarmed = [color=orange][bold]{CAPITALIZE(THE($user))} misses {THE($target)}![/bold][/color]
 vg-attack-miss-item = [color=orange][bold]{CAPITALIZE(THE($user))} misses {THE($target)} with {THE($item)}![/bold][/color]
@@ -50,3 +50,7 @@ ui-options-function-vg-zone-left-leg = Target left leg
 ui-options-function-vg-zone-right-leg = Target right leg
 ui-options-function-vg-zone-left-foot = Target left foot
 ui-options-function-vg-zone-right-foot = Target right foot
+
+vg-attack-verb-punches = punches
+vg-attack-verb-scratches = scratches
+vg-attack-verb-claws = claws

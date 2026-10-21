@@ -27,6 +27,9 @@
     - id: FoodMeatLizard
       amount: 5
   - type: LizardAccent
+  # VG: Reptilians are vg13 Unathi.
+  - type: VgSpecies
+    species: Unathi
   - type: Speech
     speechSounds: Lizard
     speechVerb: Reptilian

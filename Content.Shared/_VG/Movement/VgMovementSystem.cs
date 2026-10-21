@@ -4,6 +4,7 @@ using Content.Shared._VG.Clothing;
 using Content.Shared._VG.Combat;
 using Content.Shared._VG.Life;
 using Content.Shared._VG.Nutrition;
+using Content.Shared._VG.Species;
 using Content.Shared._VG.Status;
 using Content.Shared.Damage;
 using Content.Shared.Hands.EntitySystems;
@@ -32,6 +33,7 @@ public sealed class VgMovementSystem : EntitySystem
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly VgClothingSystem _clothing = default!;
     [Dependency] private readonly VgNutritionSystem _nutrition = default!;
+    [Dependency] private readonly VgSpeciesSystem _species = default!;
     [Dependency] private readonly VgStatusSystem _status = default!;
 
     // vg13 MOB_RUN_TALLY and MOB_WALK_TALLY, in deciseconds per tile.
@@ -117,6 +119,10 @@ public sealed class VgMovementSystem : EntitySystem
     {
         var tally = 0f;
 
+        // vg13 species move_speed_mod.
+        if (_species.Get(ent) is { } species)
+            tally += species.MoveSpeedMod;
+
         if (HasComp<VgGrabberComponent>(ent))
             tally += GrabTally;
 
@@ -177,7 +183,7 @@ public sealed class VgMovementSystem : EntitySystem
     /// </summary>
     public float TallyMultiplier(Entity<VgBodyComponent> ent)
     {
-        var multiplier = 1f;
+        var multiplier = _species.Get(ent)?.MoveSpeedMultiplier ?? 1f;
 
         if (!_inventory.TryGetSlotEntity(ent, "shoes", out _) && HasVulnerableFoot(ent.Comp))
             multiplier *= NoShoesSlowdown;

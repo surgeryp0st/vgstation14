@@ -2,6 +2,7 @@ using Content.Shared._VG.Armor;
 using Content.Shared._VG.Body;
 using Content.Shared._VG.Input;
 using Content.Shared._VG.Random;
+using Content.Shared._VG.Species;
 using Content.Shared._VG.Status;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
@@ -38,6 +39,7 @@ public sealed class VgCombatSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly VgSpeciesSystem _species = default!;
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly PullingSystem _pulling = default!;
@@ -319,7 +321,9 @@ public sealed class VgCombatSystem : EntitySystem
         var userIdentity = Identity.Entity(user, EntityManager);
         var targetIdentity = Identity.Entity(target, EntityManager);
 
-        var amount = random.Next(0, MaxPunchDamage + 1);
+        // vg13 get_unarmed_damage(): rand(0, max_hurt_damage) from the species, plus its punch damage and claws.
+        var species = _species.Get(user);
+        var amount = random.Next(0, (species?.MaxHurtDamage ?? MaxPunchDamage) + 1);
         if (amount == 0)
         {
             Visible(user, target, Loc.GetString("vg-attack-miss-unarmed", ("user", userIdentity), ("target", targetIdentity)));
@@ -327,11 +331,25 @@ public sealed class VgCombatSystem : EntitySystem
             return false;
         }
 
+        // vg13: the species' punch damage and claws are added to a hit, not to a miss.
+        var sharpness = species?.PunchSharpness ?? 0;
+        if (species != null)
+        {
+            amount += species.PunchDamage;
+            if (species.Claws)
+            {
+                amount += 3;
+                sharpness = MathF.Max(sharpness, 1.5f);
+            }
+        }
+
         // vg13 unarmed attacks check melee armor, absorb included.
         damage = new DamageSpecifier(_proto.Index(PunchDamageType), amount)
             .WithVgAttack(VgArmorType.Melee, HasComp<VgBodyComponent>(target) ? _body.RandomZone(target, comp.Zone) : null, absorb: true);
 
-        Visible(user, target, Loc.GetString("vg-attack-punch", ("user", userIdentity), ("target", targetIdentity)));
+        damage.VgSharpness = sharpness;
+        var verb = Loc.GetString(species?.AttackVerb ?? "vg-attack-verb-punches");
+        Visible(user, target, Loc.GetString("vg-attack-punch", ("user", userIdentity), ("target", targetIdentity), ("verb", verb)));
 
         if (random.Prob(KnockoutChance))
         {

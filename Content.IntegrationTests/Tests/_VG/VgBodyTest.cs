@@ -85,6 +85,9 @@ public sealed class VgBodyTest
             var body = entMan.GetComponent<VgBodyComponent>(human);
             var damage = entMan.GetComponent<DamageableComponent>(human);
 
+            // A heavy hit can reach an organ inside the limb, which takes half of it; keep that out of the sums.
+            body.Organs.Clear();
+
             var burn = new DamageSpecifier(protoMan.Index<DamageTypePrototype>("Heat"), 25);
             damageable.TryChangeDamage(human, burn + Blunt(protoMan, 15), true);
 

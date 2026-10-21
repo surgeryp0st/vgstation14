@@ -238,6 +238,9 @@
   - type: VgMovement
   # VG: vg13 breathing (human lungs by default) instead of SS14's respirator.
   - type: VgBreathing
+  # VG: vg13 species numbers; species override the id.
+  - type: VgSpecies
+    species: Human
   # VG: vg13 reagent metabolism on the Life() tick.
   - type: VgMetabolism
   # VG: vg13's radiation dose replaces SS14's instant radiation damage.

@@ -1,0 +1,16 @@
+# vgstation13 species numbers (code/modules/mob/living/carbon/species.dm).
+
+- type: vgSpecies
+  id: Human
+
+- type: vgSpecies
+  id: Unathi
+  attackVerb: vg-attack-verb-scratches
+  punchDamage: 2
+  claws: true
+  coldLevel1: 260
+  coldLevel2: 220
+  coldLevel3: 130
+  heatLevel1: 420
+  heatLevel2: 480
+  heatLevel3: 1100
