@@ -44,8 +44,8 @@
       orGroup: loot
     - id: FoodPieBananaCream
       orGroup: loot
-    - id: Stimpack
-      orGroup: loot
+#    - id: Stimpack
+#      orGroup: loot
   - type: KillCalloutRule
   - type: PointManager
   - type: RespawnDeadRule

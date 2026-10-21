@@ -367,9 +367,9 @@
     - Hypospray
     - MedkitAdvancedFilled
     - CrowbarRed
-    - OmnizineChemistryBottle
-    - EpinephrineChemistryBottle
-    - EpinephrineChemistryBottle
+#    - OmnizineChemistryBottle
+#    - EpinephrineChemistryBottle
+#    - EpinephrineChemistryBottle
 
 - type: startingGear
   id: ERTMedicalGearEVA
@@ -390,9 +390,9 @@
     - Hypospray
     - MedkitAdvancedFilled
     - CrowbarRed
-    - OmnizineChemistryBottle
-    - EpinephrineChemistryBottle
-    - EpinephrineChemistryBottle
+#    - OmnizineChemistryBottle
+#    - EpinephrineChemistryBottle
+#    - EpinephrineChemistryBottle
 
 # Janitor
 - type: job

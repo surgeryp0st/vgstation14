@@ -51,8 +51,8 @@
     JugSulfur: 1
     JugWeldingFuel: 1
   emaggedInventory:
-    PaxChemistryBottle: 3
-    MuteToxinChemistryBottle: 3
-    LeadChemistryBottle: 2
+#    PaxChemistryBottle: 3
+#    MuteToxinChemistryBottle: 3
+#    LeadChemistryBottle: 2
     ToxinChemistryBottle: 1
     

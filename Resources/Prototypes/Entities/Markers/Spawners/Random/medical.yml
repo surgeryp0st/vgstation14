@@ -19,7 +19,7 @@
         - Brutepack
         - Ointment
         - Gauze
-        - EmergencyMedipen
+#        - EmergencyMedipen
         - PillCanisterIron
       chance: 0.9
       offset: 0.0
@@ -53,11 +53,11 @@
         - Brutepack
         - Ointment
         - Gauze
-        - EmergencyMedipen
-        - EpinephrineChemistryBottle
+#        - EmergencyMedipen
+#        - EpinephrineChemistryBottle
         - PillCanisterTricordrazine
         - PillCanisterCharcoal
-        - PillCanisterHyronalin
+#        - PillCanisterHyronalin
         - PillCanisterIron
         # VG: Bloodpack disabled (SS14-only medical item)
         - MedkitFilled

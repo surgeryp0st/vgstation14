@@ -585,8 +585,8 @@
     outerClothing: ClothingOuterCoatLabGene
     pocket1: PillCanisterCharcoal
     pocket2: PillCanisterRandom
-  inhand:
-  - SyringePhalanximine
+#  inhand:
+#  - SyringePhalanximine
 
 - type: startingGear
   id: VisitorGeneticistAlt
@@ -601,7 +601,7 @@
     ears: ClothingHeadsetMedical
     eyes: ClothingEyesHudMedical
     outerClothing: ClothingOuterWinterGen
-    pocket1: PillCanisterHyronalin
+#    pocket1: PillCanisterHyronalin
     pocket2: PillCanisterRandom
   inhand:
   - SyringeBicaridine
@@ -640,8 +640,8 @@
     outerClothing: ClothingOuterWinterViro
     pocket1: PillCanisterTricordrazine
     pocket2: PillCanisterRandom
-  inhand:
-  - SyringeEphedrine
+#  inhand:
+#  - SyringeEphedrine
 
 - type: startingGear
   id: VisitorMedicalDoctor
@@ -678,8 +678,8 @@
     outerClothing: ClothingOuterWinterMed
     pocket1: PillCanisterTricordrazine
     pocket2: PillCanisterBicaridine
-  inhand:
-  - SyringeSaline
+#  inhand:
+#  - SyringeSaline
 
 - type: startingGear
   id: VisitorDentist
@@ -749,7 +749,7 @@
     ears: ClothingHeadsetMedical
     eyes: ClothingEyesHudMedical
     outerClothing: ClothingOuterWinterPara
-    pocket1: CombatMedipen
+#    pocket1: CombatMedipen
     pocket2: Brutepack
   inhand:
   - SyringeTranexamicAcid
@@ -769,10 +769,10 @@
     ears: ClothingHeadsetMedical
     eyes: ClothingEyesHudMedical
     outerClothing: ClothingOuterCoatParamedicWB
-    pocket1: CombatMedipen
+#    pocket1: CombatMedipen
     pocket2: Brutepack
   inhand:
-  - AntiPoisonMedipen
+#  - AntiPoisonMedipen
   - Gauze
 
 - type: startingGear

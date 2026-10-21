@@ -9,7 +9,7 @@
     contents:
     - id: ClothingMaskBreath
     - id: EmergencyOxygenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
     - id: DrinkWaterBottleFull
@@ -27,7 +27,7 @@
     contents:
     - id: ClothingMaskBreath
     - id: EmergencyNitrogenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
     - id: DrinkWaterBottleFull
@@ -49,7 +49,7 @@
     contents:
     - id: ClothingMaskBreath
     - id: ExtendedEmergencyOxygenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
     - id: DrinkWaterBottleFull
@@ -67,7 +67,7 @@
     contents:
     - id: ClothingMaskBreath
     - id: ExtendedEmergencyNitrogenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
     - id: DrinkWaterBottleFull
@@ -90,7 +90,7 @@
     contents:
     - id: ClothingMaskGasSecurity
     - id: EmergencyOxygenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
     - id: DrinkWaterBottleFull
@@ -108,7 +108,7 @@
     contents:
     - id: ClothingMaskGasSecurity
     - id: EmergencyNitrogenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
     - id: DrinkWaterBottleFull
@@ -131,7 +131,7 @@
     contents:
     - id: ClothingMaskBreathMedical
     - id: EmergencyOxygenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
     - id: DrinkWaterBottleFull
@@ -149,7 +149,7 @@
     contents:
     - id: ClothingMaskBreathMedical
     - id: EmergencyNitrogenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
     - id: DrinkWaterBottleFull
@@ -177,7 +177,7 @@
     contents:
     - id: ClothingMaskBreath
     - id: EmergencyFunnyOxygenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
     - id: DrinkWaterBottleFull
@@ -194,7 +194,7 @@
     contents:
     - id: ClothingMaskBreath
     - id: EmergencyNitrogenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
     - id: DrinkWaterBottleFull
@@ -210,7 +210,7 @@
     contents:
     - id: ClothingMaskBreath
     - id: EmergencyOxygenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodBreadBaguette
     - id: DrinkWaterBottleFull
@@ -224,7 +224,7 @@
     contents:
     - id: ClothingMaskBreath
     - id: EmergencyNitrogenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodBreadBaguette
     - id: DrinkWaterBottleFull
@@ -246,7 +246,7 @@
     contents:
     - id: ClothingMaskGasSyndicate
     - id: ExtendedEmergencyOxygenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
   - type: Sprite
@@ -263,7 +263,7 @@
     contents:
     - id: ClothingMaskGasSyndicate
     - id: ExtendedEmergencyNitrogenTankFilled
-    - id: EmergencyMedipen
+#    - id: EmergencyMedipen
     - id: Flare
     - id: FoodSnackNutribrick
   - type: Sprite

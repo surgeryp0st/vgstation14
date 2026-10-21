@@ -43,9 +43,9 @@
   components:
   - type: StorageFill
     contents:
-      - id: SyringeIpecac
-      - id: SyringeEthylredoxrazine
-      - id: AntiPoisonMedipen
+#      - id: SyringeIpecac
+#      - id: SyringeEthylredoxrazine
+#      - id: AntiPoisonMedipen
       - id: PillCanisterDylovene
       - id: PillCanisterCharcoal
 
@@ -58,7 +58,7 @@
     contents:
       - id: ClothingMaskBreathMedical
       - id: EmergencyOxygenTankFilled
-      - id: EmergencyMedipen
+#      - id: EmergencyMedipen
       - id: SyringeInaprovaline
       - id: PillCanisterDexalin
 
@@ -68,11 +68,12 @@
   parent: MedkitRadiation
   components:
   - type: StorageFill
-    contents:
-      - id: SyringePhalanximine
-      - id: RadAutoInjector
-      - id: PillCanisterPotassiumIodide
-      - id: PillCanisterHyronalin
+    # VG: every item was an SS14-only chem item, disabled; empty until vg13's replacements exist
+    contents: []
+#      - id: SyringePhalanximine
+#      - id: RadAutoInjector
+#      - id: PillCanisterPotassiumIodide
+#      - id: PillCanisterHyronalin
 
 - type: entity
   id: MedkitAdvancedFilled
@@ -85,7 +86,7 @@
       # VG: RegenerativeMesh disabled (SS14-only medical item)
       # VG: Bloodpack disabled (SS14-only medical item)
       # VG: vg13's advanced first-aid kit contents (an epinephrine medipen standing in for its autoinjector)
-      - id: EmergencyMedipen
+#      - id: EmergencyMedipen
       - id: VgAdvancedTraumaKit
         amount: 3
       - id: VgAdvancedBurnKit
@@ -98,13 +99,14 @@
   parent: MedkitCombat
   components:
   - type: StorageFill
-    contents:
+    # VG: every item was an SS14-only chem item, disabled; empty until vg13's replacements exist
+    contents: []
       # VG: MedicatedSuture disabled (SS14-only medical item)
       # VG: RegenerativeMesh disabled (SS14-only medical item)
-      - id: SyringeEphedrine
-      - id: SyringeSaline
-      - id: BruteAutoInjector
-      - id: BurnAutoInjector
+#      - id: SyringeEphedrine
+#      - id: SyringeSaline
+#      - id: BruteAutoInjector
+#      - id: BurnAutoInjector
 
 - type: entity
   id: StimkitFilled
@@ -112,6 +114,7 @@
   parent: Medkit
   components:
   - type: StorageFill
-    contents:
-      - id: StimpackMini
-        amount: 6
+    # VG: every item was an SS14-only chem item, disabled; empty until vg13's replacements exist
+    contents: []
+#      - id: StimpackMini
+#        amount: 6

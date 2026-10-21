@@ -546,3 +546,26 @@ RegenerativeMesh: null
 MedicatedSuture: null
 AloeCream: null
 HealingToolbox: null
+
+# VG: SS14-only chem items disabled for the vgstation13 port (see docs/_VG/port-decisions.md).
+ChemicalMedipen: null
+EmergencyMedipen: null
+AntiPoisonMedipen: null
+BruteAutoInjector: null
+BurnAutoInjector: null
+RadAutoInjector: null
+PunctAutoInjector: null
+PyraAutoInjector: null
+AirlossAutoInjector: null
+Stimpack: null
+StimpackMini: null
+CombatMedipen: null
+EpinephrineChemistryBottle: null
+UnstableMutagenChemistryBottle: null
+NocturineChemistryBottle: null
+EphedrineChemistryBottle: null
+OmnizineChemistryBottle: null
+CognizineChemistryBottle: null
+PaxChemistryBottle: null
+MuteToxinChemistryBottle: null
+LeadChemistryBottle: null

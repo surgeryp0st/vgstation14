@@ -45,7 +45,7 @@
   content:
   - StorageImplanter
   - DnaScramblerImplanter
-  - EphedrineChemistryBottle
+#  - EphedrineChemistryBottle
   - SoapOmega
   - Syringe
   - DrinkShaker
@@ -73,8 +73,8 @@
     sprite: Objects/Tanks/anesthetic.rsi
     state: icon
   content:
-  - NocturineChemistryBottle
-  - NocturineChemistryBottle
+#  - NocturineChemistryBottle
+#  - NocturineChemistryBottle
   - HypopenBox
   - NitrousOxideTankFilled
 

@@ -306,14 +306,14 @@
       - id: MedkitCombatFilled
         amount: 4
       # VG: Tourniquet disabled (SS14-only medical item)
-      - id: CombatMedipen
-        amount: 4
-      - id: PunctAutoInjector
-        amount: 4
-      - id: PyraAutoInjector
-        amount: 4
-      - id: AirlossAutoInjector
-        amount: 4
+#      - id: CombatMedipen
+#        amount: 4
+#      - id: PunctAutoInjector
+#        amount: 4
+#      - id: PyraAutoInjector
+#        amount: 4
+#      - id: AirlossAutoInjector
+#        amount: 4
 
 - type: entity
   parent: ClothingBackpackDuffelSyndicateBundle

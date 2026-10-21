@@ -98,7 +98,7 @@
         amount: 1
       # VG: Bloodpack disabled (SS14-only medical item)
       - id: Gauze
-      - id: EmergencyMedipen #You never know what people are going to latejoin into
+#      - id: EmergencyMedipen #You never know what people are going to latejoin into
 
 - type: entity
   id: ClothingBeltMedicalEMTFilled
@@ -111,8 +111,8 @@
       - id: Ointment
       # VG: Bloodpack disabled (SS14-only medical item)
       - id: Gauze
-      - id: EmergencyMedipen #You never know what people are going to latejoin into
-        amount: 3
+#      - id: EmergencyMedipen #You never know what people are going to latejoin into
+#        amount: 3
 
 - type: entity
   id: ClothingBeltPlantFilled
@@ -164,11 +164,11 @@
   components:
   - type: StorageFill
     contents:
-      - id: EpinephrineChemistryBottle
-        amount: 2
-      - id: EphedrineChemistryBottle
-        amount: 2
-      - id: OmnizineChemistryBottle
+#      - id: EpinephrineChemistryBottle
+#        amount: 2
+#      - id: EphedrineChemistryBottle
+#        amount: 2
+#      - id: OmnizineChemistryBottle
       - id: MedkitCombatFilled
 
 - type: entity
