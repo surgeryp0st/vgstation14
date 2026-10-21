@@ -18,6 +18,7 @@ namespace Content.Shared.Damage
     public sealed class DamageableSystem : EntitySystem
     {
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+        [Dependency] private readonly Content.Shared._VG.Species.VgSpeciesSystem _vgSpecies = default!; // VG
         [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
         [Dependency] private readonly INetManager _netMan = default!;
         [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
@@ -139,6 +140,7 @@ namespace Content.Shared.Damage
             }
 
             damage = VgDamageTranslation.Translate(damage); // VG: upstream damage types -> vg damage types
+            damage = _vgSpecies.ModifyDamage(uid.Value, damage); // VG: vg13 species tox_mod
 
             var before = new BeforeDamageChangedEvent(damage, origin);
             RaiseLocalEvent(uid.Value, ref before);

@@ -122,4 +122,63 @@ public sealed class VgSpeciesTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task Vg13OnlySpeciesSpawnWithTheirNumbers()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var species = entMan.System<VgSpeciesSystem>();
+            foreach (var id in new[] { "Tajaran", "Skrell", "Grey", "Insectoid", "Plasmaman", "Mushroom" })
+            {
+                var mob = entMan.SpawnEntity("Mob" + id, map.GridCoords);
+                Assert.That(species.Get(mob)?.ID, Is.EqualTo(id));
+            }
+
+            var plasmaman = entMan.SpawnEntity("MobPlasmaman", map.GridCoords);
+            var breathing = entMan.GetComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(plasmaman);
+            Assert.Multiple(() =>
+            {
+                Assert.That(breathing.BreathGas, Is.EqualTo(Content.Shared.Atmos.Gas.Plasma));
+                Assert.That(breathing.ToxicGases, Is.Empty);
+                Assert.That(entMan.GetComponent<VgBodyComponent>(plasmaman).BruteModifier, Is.EqualTo(1.5f));
+            });
+
+            var mushroom = entMan.SpawnEntity("MobMushroom", map.GridCoords);
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(mushroom), Is.False);
+                Assert.That(entMan.GetComponent<VgBodyComponent>(mushroom).Organs.Keys, Is.EquivalentTo(new[] { "brain", "eyes" }));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SpeciesDamageModsApply()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var slime = entMan.SpawnEntity("MobSlimePerson", map.GridCoords);
+            var spec = new Content.Shared.Damage.DamageSpecifier();
+            spec.DamageDict["Toxin"] = 5;
+            entMan.System<Content.Shared.Damage.DamageableSystem>().TryChangeDamage(slime, spec, true, false);
+
+            var dict = entMan.GetComponent<Content.Shared.Damage.DamageableComponent>(slime).Damage.DamageDict;
+            Assert.That(dict["Toxin"].Float(), Is.EqualTo(10).Within(0.01));
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

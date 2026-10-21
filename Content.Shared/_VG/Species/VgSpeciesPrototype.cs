@@ -62,6 +62,27 @@ public sealed partial class VgSpeciesPrototype : IPrototype
     public List<string> Organs = new() { "heart", "lungs", "liver", "kidneys", "brain", "appendix", "eyes" };
 
     /// <summary>
+    ///     vg13 brute_mod and burn_mod: multiply the damage the limbs take (organic limbs only).
+    /// </summary>
+    [DataField]
+    public float BruteMod = 1;
+
+    [DataField]
+    public float BurnMod = 1;
+
+    /// <summary>
+    ///     vg13 tox_mod: multiplies every change in toxin damage, healing included.
+    /// </summary>
+    [DataField]
+    public float ToxMod = 1;
+
+    /// <summary>
+    ///     vg13 rad_mod: multiplies the radiation dose taken.
+    /// </summary>
+    [DataField]
+    public float RadMod = 1;
+
+    /// <summary>
     ///     vg13 NO_BREATHE: doesn't breathe, and takes no harm from the air.
     /// </summary>
     [DataField]

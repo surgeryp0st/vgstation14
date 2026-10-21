@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.Damage;
 using Content.Shared._VG.Body;
 using Content.Shared._VG.Breathing;
 using Robust.Shared.Prototypes;
@@ -30,6 +31,9 @@ public sealed class VgSpeciesSystem : EntitySystem
             if (species.NoBlood)
                 body.HasBlood = false;
 
+            body.BruteModifier = species.BruteMod;
+            body.BurnModifier = species.BurnMod;
+
             // The species decides which internal organs the body has.
             foreach (var id in body.Organs.Keys.ToArray())
             {
@@ -39,6 +43,23 @@ public sealed class VgSpeciesSystem : EntitySystem
 
             Dirty(ent.Owner, body);
         }
+    }
+
+    /// <summary>
+    ///     vg13 adjustToxLoss(): the species' tox_mod scales every change in toxin damage.
+    /// </summary>
+    public DamageSpecifier ModifyDamage(EntityUid uid, DamageSpecifier damage)
+    {
+        if (!damage.DamageDict.TryGetValue("Toxin", out var tox))
+            return damage;
+
+        var species = Get(uid);
+        if (species == null || species.ToxMod == 1)
+            return damage;
+
+        var modified = new DamageSpecifier(damage);
+        modified.DamageDict["Toxin"] = tox * species.ToxMod;
+        return modified;
     }
 
     /// <summary>

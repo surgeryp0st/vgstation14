@@ -36,16 +36,19 @@ def mean_color(img: Image.Image):
     return tuple(sum(p[i] for p in px) / len(px) / 255 for i in range(3))
 
 
+EYE_PLACEHOLDER = (51, 153, 0)
+
+
 def strip_eye_placeholders(img: Image.Image) -> Image.Image:
-    """vg13 heads have bright green pixels where the eyes go (the eyes are drawn over them). SS14 draws its own eyes
-    layer, so paint them over with the head's skin colour."""
+    """vg13 heads have (51, 153, 0) pixels where the eyes go (the eyes are drawn over them). SS14 draws its own eyes
+    layer, so paint them over with the head's most common skin colour."""
     img = img.convert("RGBA")
     px = img.load()
     skin = {}
     for y in range(img.height):
         for x in range(img.width):
             r, g, b, a = px[x, y]
-            if a > 200 and not (g > r + 30 and g > b + 30):
+            if a > 200 and (r, g, b) != EYE_PLACEHOLDER:
                 skin[(r, g, b)] = skin.get((r, g, b), 0) + 1
     if not skin:
         return img
@@ -53,7 +56,7 @@ def strip_eye_placeholders(img: Image.Image) -> Image.Image:
     for y in range(img.height):
         for x in range(img.width):
             r, g, b, a = px[x, y]
-            if a > 200 and g > r + 30 and g > b + 30:
+            if a > 200 and (r, g, b) == EYE_PLACEHOLDER:
                 px[x, y] = (*fill, a)
     return img
 

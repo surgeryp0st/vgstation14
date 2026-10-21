@@ -21,11 +21,12 @@
   coldLevel2: 50
   coldLevel3: 0
 
-# Skellington: no skin, blood or breath, and only a brain inside. Its brute_mod 2.0 isn't wired up in vg13 either.
+# Skellington: no skin, blood or breath, and only a brain inside. Brute damage is doubled.
 - type: vgSpecies
   id: Skellington
   noBreathe: true
   noBlood: true
+  bruteMod: 2
   moveSpeedMultiplier: 1.5
   organs: [ brain ]
 
@@ -37,6 +38,7 @@
   noBlood: true
   noPain: true
   radAbsorb: true
+  burnMod: 2.5
   moveSpeedMod: 4
   coldLevel1: 50
   coldLevel2: -1
@@ -48,6 +50,7 @@
 - type: vgSpecies
   id: Slime
   attackVerb: vg-attack-verb-glomps
+  toxMod: 2
   noBreathe: true
   noBlood: true
   organs: [ brain ]
@@ -56,4 +59,55 @@
   coldLevel3: 230.15
   heatLevel1: 330.15
   heatLevel2: 350.15
+  heatLevel3: 373.15
+
+# vg13-only species.
+
+- type: vgSpecies
+  id: Tajaran
+  attackVerb: vg-attack-verb-scratches
+  punchDamage: 2
+  claws: true
+  coldLevel1: 200
+  coldLevel2: 140
+  coldLevel3: 80
+  heatLevel1: 330
+  heatLevel2: 380
+  heatLevel3: 800
+
+- type: vgSpecies
+  id: Skrell
+
+- type: vgSpecies
+  id: Grey
+  maxHurtDamage: 3
+
+- type: vgSpecies
+  id: Insectoid
+  burnMod: 1.1
+  toxMod: 0.5
+  radMod: 0.5
+  organs: [ heart, lungs, liver, kidneys, brain, eyes ]
+
+- type: vgSpecies
+  id: Plasmaman
+  noBlood: true
+  bruteMod: 1.5
+  burnMod: 0.5
+  heatLevel1: 350
+  heatLevel2: 400
+  heatLevel3: 500
+
+- type: vgSpecies
+  id: Mushroom
+  noBreathe: true
+  toxMod: 0.8
+  bruteMod: 1.8
+  burnMod: 0.6
+  organs: [ brain, eyes ]
+  coldLevel1: 50
+  coldLevel2: -1
+  coldLevel3: -1
+  heatLevel1: 323.15
+  heatLevel2: 348.15
   heatLevel3: 373.15

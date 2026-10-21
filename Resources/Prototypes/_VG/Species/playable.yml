@@ -1,0 +1,694 @@
+# vg13-only playable species, from vgstation13's species datums (code/modules/mob/living/carbon/species.dm).
+# Their body sprites are vg13's (Tools/_VG/species_rsi.py). Missing for now: Tajaran ears and tail, Plasmaman's fire
+# and containment suit rules, Grey water vulnerability and telepathy, Mushroom's mouthlessness, special organs and
+# species names and clothing sprites.
+
+- type: species
+  id: Tajaran
+  name: species-name-vg-tajaran
+  roundStart: true
+  prototype: MobTajaran
+  sprites: MobTajaranSprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: MobTajaranDummy
+  skinColoration: TintedHues
+  defaultSkinTone: "#ffffff"
+
+- type: speciesBaseSprites
+  id: MobTajaranSprites
+  sprites:
+    Special: MobHumanoidAnyMarking
+    Head: MobTajaranHead
+    Hair: MobHumanoidAnyMarking
+    FacialHair: MobHumanoidAnyMarking
+    Snout: MobHumanoidAnyMarking
+    Chest: MobTajaranTorso
+    Eyes: MobHumanoidEyes
+    HeadTop: MobHumanoidAnyMarking
+    LArm: MobTajaranLArm
+    RArm: MobTajaranRArm
+    LHand: MobTajaranLHand
+    RHand: MobTajaranRHand
+    LLeg: MobTajaranLLeg
+    RLeg: MobTajaranRLeg
+    LFoot: MobTajaranLFoot
+    RFoot: MobTajaranRFoot
+
+- type: humanoidBaseSprite
+  id: MobTajaranHead
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobTajaranHeadMale
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobTajaranHeadFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: head_f
+
+- type: humanoidBaseSprite
+  id: MobTajaranTorso
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobTajaranTorsoMale
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobTajaranTorsoFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: torso_f
+
+- type: humanoidBaseSprite
+  id: MobTajaranLLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: l_leg
+
+- type: humanoidBaseSprite
+  id: MobTajaranLArm
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: l_arm
+
+- type: humanoidBaseSprite
+  id: MobTajaranLHand
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: l_hand
+
+- type: humanoidBaseSprite
+  id: MobTajaranLFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: l_foot
+
+- type: humanoidBaseSprite
+  id: MobTajaranRLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: r_leg
+
+- type: humanoidBaseSprite
+  id: MobTajaranRArm
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: r_arm
+
+- type: humanoidBaseSprite
+  id: MobTajaranRHand
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: r_hand
+
+- type: humanoidBaseSprite
+  id: MobTajaranRFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: r_foot
+
+- type: species
+  id: Skrell
+  name: species-name-vg-skrell
+  roundStart: true
+  prototype: MobSkrell
+  sprites: MobSkrellSprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: MobSkrellDummy
+  skinColoration: TintedHues
+  defaultSkinTone: "#ffffff"
+
+- type: speciesBaseSprites
+  id: MobSkrellSprites
+  sprites:
+    Special: MobHumanoidAnyMarking
+    Head: MobSkrellHead
+    Hair: MobHumanoidAnyMarking
+    FacialHair: MobHumanoidAnyMarking
+    Snout: MobHumanoidAnyMarking
+    Chest: MobSkrellTorso
+    Eyes: MobHumanoidEyes
+    HeadTop: MobHumanoidAnyMarking
+    LArm: MobSkrellLArm
+    RArm: MobSkrellRArm
+    LHand: MobSkrellLHand
+    RHand: MobSkrellRHand
+    LLeg: MobSkrellLLeg
+    RLeg: MobSkrellRLeg
+    LFoot: MobSkrellLFoot
+    RFoot: MobSkrellRFoot
+
+- type: humanoidBaseSprite
+  id: MobSkrellHead
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobSkrellHeadMale
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobSkrellHeadFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: head_f
+
+- type: humanoidBaseSprite
+  id: MobSkrellTorso
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobSkrellTorsoMale
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobSkrellTorsoFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: torso_f
+
+- type: humanoidBaseSprite
+  id: MobSkrellLLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: l_leg
+
+- type: humanoidBaseSprite
+  id: MobSkrellLArm
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: l_arm
+
+- type: humanoidBaseSprite
+  id: MobSkrellLHand
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: l_hand
+
+- type: humanoidBaseSprite
+  id: MobSkrellLFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: l_foot
+
+- type: humanoidBaseSprite
+  id: MobSkrellRLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: r_leg
+
+- type: humanoidBaseSprite
+  id: MobSkrellRArm
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: r_arm
+
+- type: humanoidBaseSprite
+  id: MobSkrellRHand
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: r_hand
+
+- type: humanoidBaseSprite
+  id: MobSkrellRFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: r_foot
+
+- type: species
+  id: Grey
+  name: species-name-vg-grey
+  roundStart: true
+  prototype: MobGrey
+  sprites: MobGreySprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: MobGreyDummy
+  skinColoration: TintedHues
+  defaultSkinTone: "#ffffff"
+
+- type: speciesBaseSprites
+  id: MobGreySprites
+  sprites:
+    Special: MobHumanoidAnyMarking
+    Head: MobGreyHead
+    Hair: MobHumanoidAnyMarking
+    FacialHair: MobHumanoidAnyMarking
+    Snout: MobHumanoidAnyMarking
+    Chest: MobGreyTorso
+    Eyes: MobHumanoidEyes
+    HeadTop: MobHumanoidAnyMarking
+    LArm: MobGreyLArm
+    RArm: MobGreyRArm
+    LHand: MobGreyLHand
+    RHand: MobGreyRHand
+    LLeg: MobGreyLLeg
+    RLeg: MobGreyRLeg
+    LFoot: MobGreyLFoot
+    RFoot: MobGreyRFoot
+
+- type: humanoidBaseSprite
+  id: MobGreyHead
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobGreyHeadMale
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobGreyHeadFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: head_f
+
+- type: humanoidBaseSprite
+  id: MobGreyTorso
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobGreyTorsoMale
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobGreyTorsoFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: torso_f
+
+- type: humanoidBaseSprite
+  id: MobGreyLLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: l_leg
+
+- type: humanoidBaseSprite
+  id: MobGreyLArm
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: l_arm
+
+- type: humanoidBaseSprite
+  id: MobGreyLHand
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: l_hand
+
+- type: humanoidBaseSprite
+  id: MobGreyLFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: l_foot
+
+- type: humanoidBaseSprite
+  id: MobGreyRLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: r_leg
+
+- type: humanoidBaseSprite
+  id: MobGreyRArm
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: r_arm
+
+- type: humanoidBaseSprite
+  id: MobGreyRHand
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: r_hand
+
+- type: humanoidBaseSprite
+  id: MobGreyRFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/grey.rsi
+    state: r_foot
+
+- type: species
+  id: Insectoid
+  name: species-name-vg-insectoid
+  roundStart: true
+  prototype: MobInsectoid
+  sprites: MobInsectoidSprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: MobInsectoidDummy
+  skinColoration: TintedHues
+  defaultSkinTone: "#ffffff"
+
+- type: speciesBaseSprites
+  id: MobInsectoidSprites
+  sprites:
+    Special: MobHumanoidAnyMarking
+    Head: MobInsectoidHead
+    Hair: MobHumanoidAnyMarking
+    FacialHair: MobHumanoidAnyMarking
+    Snout: MobHumanoidAnyMarking
+    Chest: MobInsectoidTorso
+    Eyes: MobHumanoidEyes
+    HeadTop: MobHumanoidAnyMarking
+    LArm: MobInsectoidLArm
+    RArm: MobInsectoidRArm
+    LHand: MobInsectoidLHand
+    RHand: MobInsectoidRHand
+    LLeg: MobInsectoidLLeg
+    RLeg: MobInsectoidRLeg
+    LFoot: MobInsectoidLFoot
+    RFoot: MobInsectoidRFoot
+
+- type: humanoidBaseSprite
+  id: MobInsectoidHead
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobInsectoidHeadMale
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobInsectoidHeadFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: head_f
+
+- type: humanoidBaseSprite
+  id: MobInsectoidTorso
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobInsectoidTorsoMale
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobInsectoidTorsoFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: torso_f
+
+- type: humanoidBaseSprite
+  id: MobInsectoidLLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: l_leg
+
+- type: humanoidBaseSprite
+  id: MobInsectoidLArm
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: l_arm
+
+- type: humanoidBaseSprite
+  id: MobInsectoidLHand
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: l_hand
+
+- type: humanoidBaseSprite
+  id: MobInsectoidLFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: l_foot
+
+- type: humanoidBaseSprite
+  id: MobInsectoidRLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: r_leg
+
+- type: humanoidBaseSprite
+  id: MobInsectoidRArm
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: r_arm
+
+- type: humanoidBaseSprite
+  id: MobInsectoidRHand
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: r_hand
+
+- type: humanoidBaseSprite
+  id: MobInsectoidRFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: r_foot
+
+- type: species
+  id: Plasmaman
+  name: species-name-vg-plasmaman
+  roundStart: true
+  prototype: MobPlasmaman
+  sprites: MobPlasmamanSprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: MobPlasmamanDummy
+  skinColoration: TintedHues
+  defaultSkinTone: "#ffffff"
+
+- type: speciesBaseSprites
+  id: MobPlasmamanSprites
+  sprites:
+    Special: MobHumanoidAnyMarking
+    Head: MobPlasmamanHead
+    Hair: MobHumanoidAnyMarking
+    FacialHair: MobHumanoidAnyMarking
+    Snout: MobHumanoidAnyMarking
+    Chest: MobPlasmamanTorso
+    Eyes: MobHumanoidEyes
+    HeadTop: MobHumanoidAnyMarking
+    LArm: MobPlasmamanLArm
+    RArm: MobPlasmamanRArm
+    LHand: MobPlasmamanLHand
+    RHand: MobPlasmamanRHand
+    LLeg: MobPlasmamanLLeg
+    RLeg: MobPlasmamanRLeg
+    LFoot: MobPlasmamanLFoot
+    RFoot: MobPlasmamanRFoot
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanHead
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanHeadMale
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanHeadFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: head_f
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanTorso
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanTorsoMale
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanTorsoFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: torso_f
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanLLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: l_leg
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanLArm
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: l_arm
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanLHand
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: l_hand
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanLFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: l_foot
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanRLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: r_leg
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanRArm
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: r_arm
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanRHand
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: r_hand
+
+- type: humanoidBaseSprite
+  id: MobPlasmamanRFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: r_foot
+
+- type: species
+  id: Mushroom
+  name: species-name-vg-mushroom
+  roundStart: true
+  prototype: MobMushroom
+  sprites: MobMushroomSprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: MobMushroomDummy
+  skinColoration: TintedHues
+  defaultSkinTone: "#ffffff"
+
+- type: speciesBaseSprites
+  id: MobMushroomSprites
+  sprites:
+    Special: MobHumanoidAnyMarking
+    Head: MobMushroomHead
+    Hair: MobHumanoidAnyMarking
+    FacialHair: MobHumanoidAnyMarking
+    Snout: MobHumanoidAnyMarking
+    Chest: MobMushroomTorso
+    Eyes: MobHumanoidEyes
+    HeadTop: MobHumanoidAnyMarking
+    LArm: MobMushroomLArm
+    RArm: MobMushroomRArm
+    LHand: MobMushroomLHand
+    RHand: MobMushroomRHand
+    LLeg: MobMushroomLLeg
+    RLeg: MobMushroomRLeg
+    LFoot: MobMushroomLFoot
+    RFoot: MobMushroomRFoot
+
+- type: humanoidBaseSprite
+  id: MobMushroomHead
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobMushroomHeadMale
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: head_m
+
+- type: humanoidBaseSprite
+  id: MobMushroomHeadFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: head_f
+
+- type: humanoidBaseSprite
+  id: MobMushroomTorso
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobMushroomTorsoMale
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: torso_m
+
+- type: humanoidBaseSprite
+  id: MobMushroomTorsoFemale
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: torso_f
+
+- type: humanoidBaseSprite
+  id: MobMushroomLLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: l_leg
+
+- type: humanoidBaseSprite
+  id: MobMushroomLArm
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: l_arm
+
+- type: humanoidBaseSprite
+  id: MobMushroomLHand
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: l_hand
+
+- type: humanoidBaseSprite
+  id: MobMushroomLFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: l_foot
+
+- type: humanoidBaseSprite
+  id: MobMushroomRLeg
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: r_leg
+
+- type: humanoidBaseSprite
+  id: MobMushroomRArm
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: r_arm
+
+- type: humanoidBaseSprite
+  id: MobMushroomRHand
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: r_hand
+
+- type: humanoidBaseSprite
+  id: MobMushroomRFoot
+  baseSprite:
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: r_foot

@@ -1,0 +1,305 @@
+# Entities for the vg13-only species.
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobSpeciesOrganic
+  id: BaseMobTajaran
+  abstract: true
+  components:
+  - type: Icon
+    sprite: _VG/mob/human_races/tajaran.rsi
+    state: full
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeatHuman
+      amount: 5
+  - type: HumanoidAppearance
+    species: Tajaran
+    hideLayersOnEquip:
+    - Hair
+    - Snout
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+  # VG: vg13 species numbers.
+  - type: VgSpecies
+    species: Tajaran
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobTajaran
+  id: MobTajaran
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobTajaranDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobSpeciesOrganic
+  id: BaseMobSkrell
+  abstract: true
+  components:
+  - type: Icon
+    sprite: _VG/mob/human_races/skrell.rsi
+    state: full
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeatHuman
+      amount: 5
+  - type: HumanoidAppearance
+    species: Skrell
+    hideLayersOnEquip:
+    - Hair
+    - Snout
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+  # VG: vg13 species numbers.
+  - type: VgSpecies
+    species: Skrell
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobSkrell
+  id: MobSkrell
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobSkrellDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobSpeciesOrganic
+  id: BaseMobGrey
+  abstract: true
+  components:
+  - type: Icon
+    sprite: _VG/mob/human_races/grey.rsi
+    state: full
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeatHuman
+      amount: 5
+  - type: HumanoidAppearance
+    species: Grey
+    hideLayersOnEquip:
+    - Hair
+    - Snout
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+  # VG: vg13 species numbers.
+  - type: VgSpecies
+    species: Grey
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobGrey
+  id: MobGrey
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobGreyDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobSpeciesOrganic
+  id: BaseMobInsectoid
+  abstract: true
+  components:
+  - type: Icon
+    sprite: _VG/mob/human_races/insectoid.rsi
+    state: full
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeatHuman
+      amount: 5
+  - type: HumanoidAppearance
+    species: Insectoid
+    hideLayersOnEquip:
+    - Hair
+    - Snout
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+  # VG: vg13 species numbers.
+  - type: VgSpecies
+    species: Insectoid
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobInsectoid
+  id: MobInsectoid
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobInsectoidDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobSpeciesOrganic
+  id: BaseMobPlasmaman
+  abstract: true
+  components:
+  - type: Icon
+    sprite: _VG/mob/human_races/plasmaman.rsi
+    state: full
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeatHuman
+      amount: 5
+  - type: HumanoidAppearance
+    species: Plasmaman
+    hideLayersOnEquip:
+    - Hair
+    - Snout
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+  # VG: vg13 species numbers.
+  - type: VgSpecies
+    species: Plasmaman
+  # VG: vg13 Plasmaman: breathes plasma.
+  - type: VgBreathing
+    breathGas: Plasma
+    toxicGases: []
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobPlasmaman
+  id: MobPlasmaman
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobPlasmamanDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobSpeciesOrganic
+  id: BaseMobMushroom
+  abstract: true
+  components:
+  - type: Icon
+    sprite: _VG/mob/human_races/mushroom.rsi
+    state: full
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeatHuman
+      amount: 5
+  - type: HumanoidAppearance
+    species: Mushroom
+    hideLayersOnEquip:
+    - Hair
+    - Snout
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+  # VG: vg13 species numbers.
+  - type: VgSpecies
+    species: Mushroom
+
+- type: entity
+  save: false
+  name: Urist McHands
+  parent: BaseMobMushroom
+  id: MobMushroom
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobMushroomDummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female

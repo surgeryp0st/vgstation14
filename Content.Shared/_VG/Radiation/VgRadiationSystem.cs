@@ -75,6 +75,9 @@ public sealed class VgRadiationSystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp, false) || rads == 0)
             return;
 
+        if (rads > 0 && _species.Get(ent) is { } species)
+            rads *= species.RadMod;
+
         ent.Comp.Radiation = MathF.Max(0, ent.Comp.Radiation + rads);
         Dirty(ent);
     }
