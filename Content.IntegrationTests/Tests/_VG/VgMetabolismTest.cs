@@ -69,6 +69,29 @@ public sealed class VgMetabolismTest
     }
 
     [Test]
+    public async Task FluorineHurtsLikeVg13()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<VgBreathingComponent>(human);
+
+            Inject(entMan, human, "Fluorine", 5);
+            LifeTick(entMan, human);
+
+            // adjustToxLoss(REM)
+            Assert.That(Damage(entMan, human, "Toxin"), Is.EqualTo(0.5).Within(0.01));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task BicaridineOverdoseHurts()
     {
         await using var pair = await PoolManager.GetServerClient();
