@@ -54,3 +54,5 @@ ui-options-function-vg-zone-right-foot = Target right foot
 vg-attack-verb-punches = punches
 vg-attack-verb-scratches = scratches
 vg-attack-verb-claws = claws
+vg-attack-verb-slashes = slashes
+vg-attack-verb-glomps = glomps

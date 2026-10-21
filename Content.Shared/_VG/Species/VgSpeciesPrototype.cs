@@ -61,6 +61,30 @@ public sealed partial class VgSpeciesPrototype : IPrototype
     [DataField]
     public List<string> Organs = new() { "heart", "lungs", "liver", "kidneys", "brain", "appendix", "eyes" };
 
+    /// <summary>
+    ///     vg13 NO_BREATHE: doesn't breathe, and takes no harm from the air.
+    /// </summary>
+    [DataField]
+    public bool NoBreathe;
+
+    /// <summary>
+    ///     vg13 NO_BLOOD.
+    /// </summary>
+    [DataField]
+    public bool NoBlood;
+
+    /// <summary>
+    ///     vg13 NO_PAIN: no pain, no traumatic shock.
+    /// </summary>
+    [DataField]
+    public bool NoPain;
+
+    /// <summary>
+    ///     vg13 RAD_ABSORB: radiation is absorbed as nutrition and healing instead of poisoning.
+    /// </summary>
+    [DataField]
+    public bool RadAbsorb;
+
     // vg13 body temperature levels, kept here for the temperature port.
     [DataField]
     public float BodyTemperature = 310.15f;

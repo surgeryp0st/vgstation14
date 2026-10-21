@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared._VG.CCVar;
 using Content.Shared._VG.Damage;
-using Content.Shared._VG.Species;
 using Content.Shared._VG.Life;
 using Content.Shared._VG.Popups;
 using Content.Shared._VG.Random;
@@ -37,8 +36,6 @@ namespace Content.Shared._VG.Body;
 /// </remarks>
 public abstract partial class SharedVgBodySystem : EntitySystem
 {
-    [Dependency] private readonly VgSpeciesSystem _species = default!;
-
     [Dependency] protected readonly IPrototypeManager Prototypes = default!;
     [Dependency] protected readonly IGameTiming Timing = default!;
     [Dependency] protected readonly INetManager Net = default!;
@@ -112,12 +109,9 @@ public abstract partial class SharedVgBodySystem : EntitySystem
                 parent.Children.Add(limb.Id);
         }
 
-        // The species decides which internal organs the body has.
-        var species = _species.Get(ent);
         foreach (var template in proto.Organs)
         {
-            if (species == null || species.Organs.Contains(template.Id))
-                ent.Comp.Organs[template.Id] = new VgOrgan(template);
+            ent.Comp.Organs[template.Id] = new VgOrgan(template);
         }
     }
 

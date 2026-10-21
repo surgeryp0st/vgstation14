@@ -20,3 +20,40 @@
   coldLevel1: 80
   coldLevel2: 50
   coldLevel3: 0
+
+# Skellington: no skin, blood or breath, and only a brain inside. Its brute_mod 2.0 isn't wired up in vg13 either.
+- type: vgSpecies
+  id: Skellington
+  noBreathe: true
+  noBlood: true
+  moveSpeedMultiplier: 1.5
+  organs: [ brain ]
+
+- type: vgSpecies
+  id: Diona
+  attackVerb: vg-attack-verb-slashes
+  punchDamage: 5
+  noBreathe: true
+  noBlood: true
+  noPain: true
+  radAbsorb: true
+  moveSpeedMod: 4
+  coldLevel1: 50
+  coldLevel2: -1
+  coldLevel3: -1
+  heatLevel1: 323.15
+  heatLevel2: 348.15
+  heatLevel3: 373.15
+
+- type: vgSpecies
+  id: Slime
+  attackVerb: vg-attack-verb-glomps
+  noBreathe: true
+  noBlood: true
+  organs: [ brain ]
+  coldLevel1: 273.15
+  coldLevel2: 250.15
+  coldLevel3: 230.15
+  heatLevel1: 330.15
+  heatLevel2: 350.15
+  heatLevel3: 373.15

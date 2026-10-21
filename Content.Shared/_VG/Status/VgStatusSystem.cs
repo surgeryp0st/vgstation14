@@ -3,6 +3,7 @@ using Content.Shared._VG.Damage;
 using Content.Shared._VG.Life;
 using Content.Shared._VG.Popups;
 using Content.Shared._VG.Random;
+using Content.Shared._VG.Species;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -39,6 +40,7 @@ public sealed class VgStatusSystem : EntitySystem
     [Dependency] private readonly SharedStutteringSystem _stutter = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly VgPopupSystem _popup = default!;
+    [Dependency] private readonly VgSpeciesSystem _species = default!;
 
     /// <summary>
     ///     vg13 counts stuns in Life() ticks, which come every 2 seconds.
@@ -351,7 +353,7 @@ public sealed class VgStatusSystem : EntitySystem
         if (!Resolve(uid, ref comp, false))
             return 0;
 
-        if (comp.PainNumb > 0)
+        if (comp.PainNumb > 0 || _species.Get(uid)?.NoPain == true)
             return 0;
 
         var pain = 2 * comp.Halloss;

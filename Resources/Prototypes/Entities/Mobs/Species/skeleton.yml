@@ -16,6 +16,15 @@
     prototype: Skeleton
     requiredLegs: 2
     gibSound: /Audio/Effects/bone_rattle.ogg
+  # VG: vg13 Skellington. The skeleton isn't organic, so it gets the vg body pieces itself.
+  - type: VgSpecies
+    species: Skellington
+  - type: VgBody
+    prototype: Human
+  - type: VgLife
+  - type: VgIntent
+  - type: VgStatus
+  - type: VgMovement
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: Skeleton

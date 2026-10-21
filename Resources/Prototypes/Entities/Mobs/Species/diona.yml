@@ -17,6 +17,9 @@
   - type: Body
     prototype: Diona
     requiredLegs: 2
+  # VG: vg13 Diona.
+  - type: VgSpecies
+    species: Diona
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: Diona

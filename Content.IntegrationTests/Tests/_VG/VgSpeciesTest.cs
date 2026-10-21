@@ -58,4 +58,68 @@ public sealed class VgSpeciesTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task SpeciesFlagsRemoveWhatTheyDontHave()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var skeleton = entMan.SpawnEntity("MobSkeletonPerson", map.GridCoords);
+            var diona = entMan.SpawnEntity("MobDiona", map.GridCoords);
+            var slime = entMan.SpawnEntity("MobSlimePerson", map.GridCoords);
+
+            foreach (var mob in new[] { skeleton, diona, slime })
+            {
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entMan.HasComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(mob), Is.False);
+                    Assert.That(entMan.GetComponent<VgBodyComponent>(mob).HasBlood, Is.False);
+                });
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.GetComponent<VgBodyComponent>(skeleton).Organs.Keys, Is.EquivalentTo(new[] { "brain" }));
+                Assert.That(entMan.GetComponent<VgBodyComponent>(slime).Organs.Keys, Is.EquivalentTo(new[] { "brain" }));
+                Assert.That(entMan.GetComponent<VgBodyComponent>(diona).Organs, Has.Count.EqualTo(7));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DionaAbsorbRadiation()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var diona = entMan.SpawnEntity("MobDiona", map.GridCoords);
+            var rad = entMan.System<Content.Shared._VG.Radiation.VgRadiationSystem>();
+            var comp = entMan.GetComponent<Content.Shared._VG.Radiation.VgRadiationComponent>(diona);
+            var nutrition = entMan.GetComponent<Content.Shared._VG.Nutrition.VgNutritionComponent>(diona);
+
+            rad.Add(diona, 100);
+            var before = nutrition.Nutrition;
+            var ev = new Content.Shared._VG.Life.VgLifeTickEvent(1);
+            entMan.EventBus.RaiseLocalEvent(diona, ref ev);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(comp.Radiation, Is.EqualTo(96).Within(0.01));
+                Assert.That(nutrition.Nutrition, Is.GreaterThan(before));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

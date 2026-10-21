@@ -1,8 +1,10 @@
 using Content.Shared._VG.Armor;
 using Content.Shared._VG.Body;
 using Content.Shared._VG.Life;
+using Content.Shared._VG.Nutrition;
 using Content.Shared._VG.Popups;
 using Content.Shared._VG.Random;
+using Content.Shared._VG.Species;
 using Content.Shared._VG.Status;
 using Content.Shared.Damage;
 using Content.Shared.Mobs.Systems;
@@ -19,7 +21,9 @@ public sealed class VgRadiationSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedVgBodySystem _body = default!;
     [Dependency] private readonly VgArmorSystem _armor = default!;
+    [Dependency] private readonly VgNutritionSystem _nutrition = default!;
     [Dependency] private readonly VgPopupSystem _popup = default!;
+    [Dependency] private readonly VgSpeciesSystem _species = default!;
     [Dependency] private readonly VgStatusSystem _status = default!;
 
     // vg13 RADDOSELIGHT .. RADDOSECRITICAL.
@@ -85,6 +89,20 @@ public sealed class VgRadiationSystem : EntitySystem
 
         var comp = ent.Comp;
         var random = VgPredictedRandom.Create(_timing.CurTick, GetNetEntity(ent).Id, SaltRadiation);
+
+        // vg13 RAD_ABSORB (Diona): radiation feeds and heals instead of poisoning.
+        if (comp.Radiation > 0 && _species.Get(ent)?.RadAbsorb == true)
+        {
+            var rads = comp.Radiation / 25;
+            comp.Radiation -= rads;
+            comp.RadTick = 0;
+            _nutrition.AddNutrition(ent, rads);
+            Hurt(ent, "Brute", -rads);
+            Hurt(ent, "Oxygen", -rads);
+            Hurt(ent, "Toxin", -rads);
+            Dirty(ent);
+            return;
+        }
 
         if (comp.Radiation > 0)
         {

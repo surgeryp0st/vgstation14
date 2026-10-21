@@ -12,6 +12,9 @@
   - type: Body
     prototype: Slime
     requiredLegs: 2
+  # VG: vg13 Slime.
+  - type: VgSpecies
+    species: Slime
   # they like eat it idk lol
   - type: Storage
     clickInsert: false
