@@ -1,0 +1,30 @@
+# Dispenser jugs for the reagents in vg13's chem dispenser that SS14's has no jug for.
+- type: entity
+  parent: Jug
+  suffix: water
+  id: JugWater
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Label
+    currentLabel: reagent-name-water
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        reagents:
+        - ReagentId: Water
+          Quantity: 200
+
+- type: entity
+  parent: Jug
+  suffix: sulfuric acid
+  id: JugSulfuricAcid
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Label
+    currentLabel: reagent-name-sulfuric-acid
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        reagents:
+        - ReagentId: SulfuricAcid
+          Quantity: 200

@@ -9,7 +9,9 @@
   - JugFluorine
   - JugSugar
   - JugHydrogen
-  - JugIodine
+  # VG: vg13's dispenser has no iodine, but water and sulfuric acid (and tungsten, which has no reagent yet).
+  - JugWater
+  - JugSulfuricAcid
   - JugIron
   - JugLithium
   - JugMercury
