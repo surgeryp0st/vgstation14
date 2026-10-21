@@ -147,6 +147,36 @@ public sealed class VgMetabolismTest
     }
 
     [Test]
+    public async Task OxygenPoisonsVoxButNotHumans()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            var vox = entMan.SpawnEntity("MobVox", map.GridCoords);
+            entMan.RemoveComponent<VgBreathingComponent>(human);
+            entMan.RemoveComponent<VgBreathingComponent>(vox);
+
+            Inject(entMan, human, "Oxygen", 5);
+            Inject(entMan, vox, "Oxygen", 5);
+            LifeTick(entMan, human);
+            LifeTick(entMan, vox);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(Damage(entMan, human, "Toxin"), Is.EqualTo(0).Within(0.01));
+                Assert.That(Damage(entMan, vox, "Toxin"), Is.EqualTo(0.5).Within(0.01));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task BicaridineOverdoseHurts()
     {
         await using var pair = await PoolManager.GetServerClient();

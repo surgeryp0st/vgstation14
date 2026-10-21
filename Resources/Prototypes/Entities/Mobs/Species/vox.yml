@@ -13,6 +13,20 @@
     requiredLegs: 2
   - type:  HumanoidAppearance
     species: Vox
+  # VG: vg13 Vox: nitrogen breathers, oxygen is a poison (vox lungs).
+  - type: VgSpecies
+    species: Vox
+  - type: VgBreathing
+    breathGas: Nitrogen
+    toxicGases:
+    - gas: Oxygen
+      maxPressure: 0.5
+      maxPressureMask: 0
+      multiplier: 0.1
+    - gas: Plasma
+      maxPressure: 0.5
+      maxPressureMask: 5
+      multiplier: 0.1
     #- type: VoxAccent # Not yet coded
   - type: Speech
     speechVerb: Vox

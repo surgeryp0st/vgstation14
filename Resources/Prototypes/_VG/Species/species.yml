@@ -14,3 +14,9 @@
   heatLevel1: 420
   heatLevel2: 480
   heatLevel3: 1100
+
+- type: vgSpecies
+  id: Vox
+  coldLevel1: 80
+  coldLevel2: 50
+  coldLevel3: 0

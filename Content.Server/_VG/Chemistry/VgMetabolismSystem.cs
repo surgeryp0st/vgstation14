@@ -3,6 +3,7 @@ using Content.Server.Body.Components;
 using Content.Server.Temperature.Components;
 using Content.Shared._VG.Body;
 using Content.Shared._VG.Nutrition;
+using Content.Shared._VG.Species;
 using Content.Shared._VG.Chemistry;
 using Content.Shared._VG.Life;
 using Content.Shared._VG.Status;
@@ -25,6 +26,7 @@ public sealed class VgMetabolismSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private readonly VgNutritionSystem _nutrition = default!;
+    [Dependency] private readonly VgSpeciesSystem _species = default!;
     [Dependency] private readonly VgStatusSystem _status = default!;
 
     private readonly List<string> _present = new();
@@ -35,6 +37,18 @@ public sealed class VgMetabolismSystem : EntitySystem
 
         SubscribeLocalEvent<VgMetabolismComponent, VgLifeTickEvent>(OnLifeTick);
         SubscribeLocalEvent<TemperatureComponent, VgGetBodyTemperatureEvent>(OnGetTemperature);
+    }
+
+    private bool SpeciesAllows(EntityUid mob, VgReagentEffect effect)
+    {
+        if (effect.OnlySpecies == null && effect.ExceptSpecies == null)
+            return true;
+
+        var species = _species.Get(mob)?.ID;
+        if (effect.OnlySpecies != null && (species == null || !effect.OnlySpecies.Contains(species)))
+            return false;
+
+        return effect.ExceptSpecies == null || species == null || !effect.ExceptSpecies.Contains(species);
     }
 
     private void OnGetTemperature(Entity<TemperatureComponent> ent, ref VgGetBodyTemperatureEvent args)
@@ -80,7 +94,7 @@ public sealed class VgMetabolismSystem : EntitySystem
 
                 foreach (var effect in vg.Effects)
                 {
-                    if (effect.InTickRange(tick) && (effect.Chance >= 100 || _random.Prob(effect.Chance / 100)))
+                    if (effect.InTickRange(tick) && SpeciesAllows(ent, effect) && (effect.Chance >= 100 || _random.Prob(effect.Chance / 100)))
                         effect.Apply(args2);
                 }
 

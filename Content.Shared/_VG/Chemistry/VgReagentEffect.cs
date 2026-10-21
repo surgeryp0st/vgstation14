@@ -26,6 +26,18 @@ public abstract partial class VgReagentEffect
     [DataField]
     public float Chance = 100;
 
+    /// <summary>
+    ///     vg13 <c>alien == IS_VOX</c> and the like: only mobs of these vg species.
+    /// </summary>
+    [DataField]
+    public List<string>? OnlySpecies;
+
+    /// <summary>
+    ///     Everything except these vg species.
+    /// </summary>
+    [DataField]
+    public List<string>? ExceptSpecies;
+
     public bool InTickRange(int tick)
     {
         return tick >= MinTick && (MaxTick <= 0 || tick <= MaxTick);

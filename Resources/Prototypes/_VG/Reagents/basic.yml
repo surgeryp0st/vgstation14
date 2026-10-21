@@ -19,6 +19,27 @@
     type: Toxin
     amount: 1
 
+# Vox are poisoned by oxygen and fed by nitrogen.
+- type: vgReagent
+  id: Oxygen
+  effects:
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: 1
+    onlySpecies: [ Vox ]
+
+- type: vgReagent
+  id: Nitrogen
+  effects:
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: -2
+    onlySpecies: [ Vox ]
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: -2
+    onlySpecies: [ Vox ]
+
 - type: vgReagent
   id: Lithium
   overdoseAmount: 30

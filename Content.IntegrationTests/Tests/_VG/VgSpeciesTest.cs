@@ -33,4 +33,29 @@ public sealed class VgSpeciesTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task VoxBreatheNitrogenAndOxygenPoisonsThem()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var vox = entMan.SpawnEntity("MobVox", map.GridCoords);
+            var breathing = entMan.GetComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(vox);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.System<VgSpeciesSystem>().Get(vox)!.ID, Is.EqualTo("Vox"));
+                Assert.That(breathing.BreathGas, Is.EqualTo(Content.Shared.Atmos.Gas.Nitrogen));
+                Assert.That(breathing.ToxicGases, Has.Count.EqualTo(2));
+                Assert.That(breathing.ToxicGases[0].Gas, Is.EqualTo(Content.Shared.Atmos.Gas.Oxygen));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

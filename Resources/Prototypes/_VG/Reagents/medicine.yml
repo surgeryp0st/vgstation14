@@ -102,6 +102,12 @@
   painResistance: 25
   effects:
   - !type:VgEaseLoseBreath
+    exceptSpecies: [ Vox ]
+  # Poison to Vox.
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: 1
+    onlySpecies: [ Vox ]
 
 - type: reagent
   id: tricordrazine
