@@ -182,6 +182,10 @@ public sealed class VgMovementSystem : EntitySystem
         if (!_inventory.TryGetSlotEntity(ent, "shoes", out _) && HasVulnerableFoot(ent.Comp))
             multiplier *= NoShoesSlowdown;
 
+        // vg13: hyperzine can't save you, fatty!
+        if (TryComp<VgNutritionComponent>(ent, out var nutrition) && nutrition.Fat)
+            multiplier *= 1.5f;
+
         foreach (var slot in WornSlots)
         {
             if (!_inventory.TryGetSlotEntity(ent, slot, out var item) || _clothing.Get(item.Value) is not { } clothing)

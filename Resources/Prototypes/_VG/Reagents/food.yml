@@ -1,7 +1,7 @@
 # vg13 nutriment_factor for the food and drink reagents both games have (reagents_food.dm, reagents_drink.dm,
 # reagents_ethanol.dm; factor * REAGENTS_METABOLISM), attached to SS14's reagent ids. SS14 has Protein, Fat and
-# Vitamin where vg13 only has nutriment, so they feed like nutriment does. Reagents vg13 has under other names
-# (the juices, sauces, ...) are still to be matched up.
+# Vitamin where vg13 only has nutriment, so they feed like nutriment does. The juices, cocoa, soy milk, butter and egg are vg13's
+# apple juice, coco, soymilk, liquid butter and egg yolk under SS14's names; other renamed ones are still to be matched up.
 
 - type: vgReagent
   id: BananaHonk
@@ -89,4 +89,68 @@
 
 - type: vgReagent
   id: Fat
+  nutrimentFactor: 3
+
+- type: vgReagent
+  id: JuiceApple
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: JuiceBanana
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: JuiceBerry
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: JuiceCarrot
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: JuiceGrape
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: JuiceLemon
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: JuiceLime
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: JuiceOrange
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: JuiceTomato
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: JuiceWatermelon
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: JuicePotato
+  nutrimentFactor: 1
+
+- type: vgReagent
+  id: CocoaPowder
+  nutrimentFactor: 1
+
+- type: vgReagent
+  id: HotCocoa
+  nutrimentFactor: 1.2
+
+- type: vgReagent
+  id: MilkSoy
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: Butter
+  nutrimentFactor: 5
+
+- type: vgReagent
+  id: Egg
   nutrimentFactor: 3

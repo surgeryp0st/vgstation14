@@ -32,4 +32,11 @@ public sealed partial class VgNutritionComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public int OverEatDuration;
+
+    /// <summary>
+    ///     vg13 M_FAT: 500 Life() ticks of overeating make you fat until it drops below 100. Fat mobs move 1.5 times
+    ///     slower. The fat sprites and clothing fit are not ported yet.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Fat;
 }

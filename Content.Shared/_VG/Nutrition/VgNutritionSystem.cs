@@ -1,4 +1,5 @@
 using Content.Shared._VG.Life;
+using Content.Shared._VG.Popups;
 using Content.Shared.Alert;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Examine;
@@ -14,6 +15,7 @@ public sealed class VgNutritionSystem : EntitySystem
 {
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly VgPopupSystem _popup = default!;
 
     // SS14's hunger alerts, which show the same states as vg13's food alert (hungry, starving).
     private static readonly ProtoId<AlertPrototype> HungryAlert = "Peckish";
@@ -76,7 +78,19 @@ public sealed class VgNutritionSystem : EntitySystem
         }
         else if (comp.OverEatDuration > 1)
         {
-            comp.OverEatDuration -= 2;
+            // Those already fat take twice as long to unfat.
+            comp.OverEatDuration -= comp.Fat ? 1 : 2;
+        }
+
+        if (comp.Fat && comp.OverEatDuration < 100)
+        {
+            comp.Fat = false;
+            _popup.Self(ent, Loc.GetString("vg-nutrition-fit-again"), ent);
+        }
+        else if (!comp.Fat && comp.OverEatDuration > 500)
+        {
+            comp.Fat = true;
+            _popup.Self(ent, Loc.GetString("vg-nutrition-blubbery"), ent);
         }
 
         Dirty(ent);
