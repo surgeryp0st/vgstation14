@@ -1,3 +1,4 @@
+# VG: reagent ids of chemicals vg13 also has are swapped to the vg13 ids (docs/_VG/port-decisions.md).
 - type: seed
   id: wheat
   name: seeds-wheat-name
@@ -1172,7 +1173,7 @@
       Min: 1
       Max: 2
       PotencyDivisor: 50
-    Bicaridine:
+    bicaridine:
       Min: 1
       Max: 20
       PotencyDivisor: 5
@@ -1198,7 +1199,7 @@
       Min: 1
       Max: 10
       PotencyDivisor: 10
-    Dermaline:
+    dermaline:
       Min: 1
       Max: 10
       PotencyDivisor: 10
@@ -1226,7 +1227,7 @@
       Min: 1
       Max: 2
       PotencyDivisor: 50
-    Bicaridine:
+    bicaridine:
       Min: 1
       Max: 20
       PotencyDivisor: 5
@@ -1280,11 +1281,11 @@
       Min: 1
       Max: 2
       PotencyDivisor: 10
-    Bicaridine:
+    bicaridine:
       Min: 1
       Max: 5
       PotencyDivisor: 20
-    Kelotane:
+    kelotane:
       Min: 1
       Max: 5
       PotencyDivisor: 20

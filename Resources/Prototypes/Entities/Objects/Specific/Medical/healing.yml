@@ -1,3 +1,4 @@
+# VG: reagent ids of chemicals vg13 also has are swapped to the vg13 ids (docs/_VG/port-decisions.md).
 - type: entity
   parent: BaseItem
   id: BaseHealingItem
@@ -292,7 +293,7 @@
       food:
         maxVol: 20
         reagents:
-        - ReagentId: Dexalin
+        - ReagentId: dexalin
           Quantity: 10
 
 - type: entity
@@ -325,7 +326,7 @@
       food:
         maxVol: 20
         reagents:
-        - ReagentId: Dylovene
+        - ReagentId: anti_toxin
           Quantity: 10
 
 - type: entity
@@ -490,7 +491,7 @@
       food:
         maxVol: 20
         reagents:
-        - ReagentId: Kelotane
+        - ReagentId: kelotane
           Quantity: 10
 
 - type: entity
@@ -523,7 +524,7 @@
       food:
         maxVol: 20
         reagents:
-        - ReagentId: Dermaline
+        - ReagentId: dermaline
           Quantity: 10
 
 - type: entity
@@ -569,7 +570,7 @@
       food:
         maxVol: 20
         reagents:
-        - ReagentId: Tricordrazine
+        - ReagentId: tricordrazine
           Quantity: 10
 
 - type: entity
@@ -602,7 +603,7 @@
       food:
         maxVol: 20
         reagents:
-        - ReagentId: Bicaridine
+        - ReagentId: bicaridine
           Quantity: 10
 
 - type: entity
@@ -790,7 +791,7 @@
       injector:
         maxVol: 15
         reagents:
-        - ReagentId: Inaprovaline
+        - ReagentId: inaprovaline
           Quantity: 15
 
 - type: entity
@@ -820,7 +821,7 @@
       injector:
         maxVol: 15
         reagents:
-        - ReagentId: Bicaridine
+        - ReagentId: bicaridine
           Quantity: 15
 
 - type: entity
@@ -835,7 +836,7 @@
       injector:
         maxVol: 15
         reagents:
-        - ReagentId: Dermaline
+        - ReagentId: dermaline
           Quantity: 15
 
 - type: entity

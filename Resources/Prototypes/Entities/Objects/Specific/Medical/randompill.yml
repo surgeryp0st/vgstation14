@@ -1,3 +1,4 @@
+# VG: reagent ids of chemicals vg13 also has are swapped to the vg13 ids (docs/_VG/port-decisions.md).
 - type: weightedRandomFillSolution
   id: RandomFillStrangePill
   fills:
@@ -22,7 +23,7 @@
       - Desoxyephedrine
       - Ephedrine
       - Omnizine
-      - Tricordrazine
+      - tricordrazine
       - Vitamin
   # Neutral - weight: 20
     - quantity: 20

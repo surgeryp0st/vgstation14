@@ -1,3 +1,4 @@
+# VG: reagent ids of chemicals vg13 also has are swapped to the vg13 ids (docs/_VG/port-decisions.md).
 - type: artifactTrigger
   id: TriggerInteraction
   targetDepth: 0
@@ -126,7 +127,7 @@
     groups:
       Acidic: [ Touch ]
     reactions:
-    - reagents: [ Dylovene, Diphenhydramine, Arithrazine, Bicaridine, Dermaline, Dexalin, DexalinPlus, Tricordrazine, Leporazine, Bruizine, Lacerinol, Puncturase, Pyrazine, Insuzine, Kelotane, Hyronalin, Inaprovaline, Epinephrine ]
+    - reagents: [ anti_toxin, Diphenhydramine, Arithrazine, bicaridine, dermaline, dexalin, dexalinp, tricordrazine, Leporazine, Bruizine, Lacerinol, Puncturase, Pyrazine, Insuzine, kelotane, Hyronalin, inaprovaline, Epinephrine ]
       methods: [ Touch ]
       effects:
       - !type:ActivateArtifact

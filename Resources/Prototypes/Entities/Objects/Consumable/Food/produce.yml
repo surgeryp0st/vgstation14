@@ -1,3 +1,4 @@
+# VG: reagent ids of chemicals vg13 also has are swapped to the vg13 ids (docs/_VG/port-decisions.md).
 # When adding new food also add to random spawner located in Resources\Prototypes\Entities\Markers\Spawners\Random\Food_Drinks\food_produce.yml
 # For produce that can't be immediately eaten
 
@@ -1416,7 +1417,7 @@
         reagents:
         - ReagentId: Aloe
           Quantity: 10
-        - ReagentId: Dermaline
+        - ReagentId: dermaline
           Quantity: 10
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/aloe.rsi
@@ -1452,7 +1453,7 @@
         reagents:
         - ReagentId: Nutriment
           Quantity: 2
-        - ReagentId: Bicaridine
+        - ReagentId: bicaridine
           Quantity: 20
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/poppy.rsi
@@ -1484,7 +1485,7 @@
         reagents:
         - ReagentId: Nutriment
           Quantity: 2
-        - ReagentId: Bicaridine
+        - ReagentId: bicaridine
           Quantity: 20
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/lily.rsi
@@ -1545,9 +1546,9 @@
       food:
         maxVol: 24
         reagents:
-        - ReagentId: Bicaridine
+        - ReagentId: bicaridine
           Quantity: 5
-        - ReagentId: Kelotane
+        - ReagentId: kelotane
           Quantity: 5
         - ReagentId: Nutriment
           Quantity: 2

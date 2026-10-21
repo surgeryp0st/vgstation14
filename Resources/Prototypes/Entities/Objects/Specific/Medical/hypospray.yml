@@ -1,3 +1,4 @@
+# VG: reagent ids of chemicals vg13 also has are swapped to the vg13 ids (docs/_VG/port-decisions.md).
 - type: entity
   name: hypospray
   parent: [BaseItem, BaseGrandTheftContraband]
@@ -212,7 +213,7 @@
       pen:
         maxVol: 20
         reagents:
-        - ReagentId: Bicaridine
+        - ReagentId: bicaridine
           Quantity: 15
         - ReagentId: TranexamicAcid
           Quantity: 5
@@ -244,7 +245,7 @@
       pen:
         maxVol: 20
         reagents:
-        - ReagentId: Dermaline
+        - ReagentId: dermaline
           Quantity: 10
         - ReagentId: Leporazine
           Quantity: 10
@@ -278,7 +279,7 @@
         reagents:
         - ReagentId: Arithrazine
           Quantity: 15
-        - ReagentId: Bicaridine
+        - ReagentId: bicaridine
           Quantity: 5
   - type: Tag
     tags: []
@@ -342,7 +343,7 @@
         reagents:
         - ReagentId: Pyrazine
           Quantity: 10
-        - ReagentId: Dermaline
+        - ReagentId: dermaline
           Quantity: 10
   - type: Tag
     tags: []
@@ -374,7 +375,7 @@
         reagents:
         - ReagentId: Saline
           Quantity: 20
-        - ReagentId: DexalinPlus
+        - ReagentId: dexalinp
           Quantity: 20
   - type: Tag
     tags: []

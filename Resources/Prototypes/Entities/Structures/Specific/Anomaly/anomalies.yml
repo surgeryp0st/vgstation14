@@ -1,3 +1,4 @@
+# VG: reagent ids of chemicals vg13 also has are swapped to the vg13 ids (docs/_VG/port-decisions.md).
 - type: entity
   abstract: true
   id: BaseAnomaly
@@ -771,17 +772,17 @@
     - RobustHarvest
     usefulChemicals:
     - Cryptobiolin
-    - Dylovene
+    - anti_toxin
     - Arithrazine
-    - Bicaridine
-    - Cryoxadone
-    - Dermaline
-    - Dexalin
-    - DexalinPlus
+    - bicaridine
+    - cryoxadone
+    - dermaline
+    - dexalin
+    - dexalinp
     - Epinephrine
     - Leporazine
     - Ambuzol
-    - Tricordrazine
+    - tricordrazine
     - Artifexium
     - Ethylredoxrazine
     funChemicals:

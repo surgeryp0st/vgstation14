@@ -1,3 +1,4 @@
+# VG: reagent ids of chemicals vg13 also has are swapped to the vg13 ids (docs/_VG/port-decisions.md).
 - type: weightedRandomFillSolution
   id: RandomPickBotanyReagent
   fills:
@@ -39,9 +40,9 @@
     - Ipecac
     - Hyronalin
     - Pax
-    - Cryoxadone
+    - cryoxadone
     - Ethylredoxrazine
-    - Dylovene
+    - anti_toxin
     - Histamine
     - Blood
     - WeldingFuel
@@ -60,11 +61,11 @@
   - quantity: 10
     weight: 3
     reagents:
-    - Bicaridine
-    - Dermaline
+    - bicaridine
+    - dermaline
     - Ephedrine
     - NorepinephricAcid
-    - Tricordrazine
+    - tricordrazine
     - Saline
     - PulpedBananaPeel
     - Cryptobiolin
@@ -94,8 +95,8 @@
     weight: 3.5
     reagents:
     - Vitamin
-    - Kelotane
-    - Inaprovaline
+    - kelotane
+    - inaprovaline
     - Oil
     - Slime
     - Fiber

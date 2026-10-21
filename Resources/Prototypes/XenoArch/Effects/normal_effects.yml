@@ -1,3 +1,4 @@
+# VG: reagent ids of chemicals vg13 also has are swapped to the vg13 ids (docs/_VG/port-decisions.md).
 - type: artifactEffect
   id: EffectBadFeeling
   targetDepth: 0
@@ -471,12 +472,12 @@
   components:
   - type: FoamArtifact
     reagents:
-    - Dermaline
+    - dermaline
     - Arithrazine
-    - Bicaridine
-    - Inaprovaline
-    - Kelotane
-    - Dexalin
+    - bicaridine
+    - inaprovaline
+    - kelotane
+    - dexalin
     - Omnizine
 
 - type: artifactEffect
@@ -489,12 +490,12 @@
       maxVol: 500
       canReact: false
     possibleChemicals:
-    - Dermaline
+    - dermaline
     - Arithrazine
-    - Bicaridine
-    - Inaprovaline
-    - Kelotane
-    - Dexalin
+    - bicaridine
+    - inaprovaline
+    - kelotane
+    - dexalin
     - Omnizine
     - Napalm
     - Toxin
