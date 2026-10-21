@@ -1,13 +1,14 @@
+# VG: the body parts use vg13's species sprites (Resources/Textures/_VG/mob/human_races, made with Tools/_VG/species_rsi.py).
 - type: species
   id: Diona
   name: species-name-diona
   roundStart: true
   prototype: MobDiona
   sprites: MobDionaSprites
-  defaultSkinTone: "#cdb369"
+  defaultSkinTone: "#ffffff" # VG: vg13 sprites keep their own colours
   markingLimits: MobDionaMarkingLimits
   dollPrototype: MobDionaDummy
-  skinColoration: Hues
+  skinColoration: TintedHues # VG: vg13 sprites keep their own colours
   maleFirstNames: DionaFirst
   femaleFirstNames: DionaFirst
   lastNames: DionaLast
@@ -66,83 +67,83 @@
 - type: humanoidBaseSprite
   id: MobDionaHead
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: head_m
 
 - type: humanoidBaseSprite
   id: MobDionaHeadMale
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: head_m
 
 - type: humanoidBaseSprite
   id: MobDionaHeadFemale
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: head_f
 
 - type: humanoidBaseSprite
   id: MobDionaTorso
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: torso_m
 
 - type: humanoidBaseSprite
   id: MobDionaTorsoMale
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: torso_m
 
 - type: humanoidBaseSprite
   id: MobDionaTorsoFemale
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: torso_f
 
 - type: humanoidBaseSprite
   id: MobDionaLLeg
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: l_leg
 
 - type: humanoidBaseSprite
   id: MobDionaLHand
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: l_hand
 
 - type: humanoidBaseSprite
   id: MobDionaLArm
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: l_arm
 
 - type: humanoidBaseSprite
   id: MobDionaLFoot
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: l_foot
 
 - type: humanoidBaseSprite
   id: MobDionaRLeg
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: r_leg
 
 - type: humanoidBaseSprite
   id: MobDionaRHand
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: r_hand
 
 - type: humanoidBaseSprite
   id: MobDionaRArm
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: r_arm
 
 - type: humanoidBaseSprite
   id: MobDionaRFoot
   baseSprite:
-    sprite: Mobs/Species/Diona/parts.rsi
+    sprite: _VG/mob/human_races/diona.rsi
     state: r_foot
