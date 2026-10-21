@@ -569,3 +569,17 @@ CognizineChemistryBottle: null
 PaxChemistryBottle: null
 MuteToxinChemistryBottle: null
 LeadChemistryBottle: null
+
+# VG: SS14-only gases (tritium, water vapor, ammonia, frezon) disabled for the vgstation13 port (docs/_VG/port-decisions.md).
+TritiumCanister: null
+TritiumCanisterBroken: null
+WaterVaporCanister: null
+WaterVaporCanisterBroken: null
+AmmoniaCanister: null
+AmmoniaCanisterBroken: null
+FrezonCanister: null
+FrezonCanisterBroken: null
+GasMinerTritium: null
+GasMinerFrezon: null
+GasMinerAmmonia: null
+GasMinerWaterVapor: null

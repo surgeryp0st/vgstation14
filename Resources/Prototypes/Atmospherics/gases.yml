@@ -11,7 +11,7 @@
 - type: gas
   id: 1
   name: gases-nitrogen
-  specificHeat: 30
+  specificHeat: 20 # VG: vg13
   heatCapacityRatio: 1.4
   molarMass: 28
   color: DA1010
@@ -33,7 +33,7 @@
   name: gases-plasma
   specificHeat: 200
   heatCapacityRatio: 1.7
-  molarMass: 120
+  molarMass: 405 # VG: vg13
   gasOverlaySprite: /Textures/Effects/atmospherics.rsi
   gasOverlayState: plasma
   color: FF3300

@@ -1,0 +1,58 @@
+# vg13's gas reactions (code/modules/ZAS/XGM_reactions.dm). The gas order of minimumRequirements is the Gas enum:
+# oxygen, nitrogen, co2, plasma, tritium, vapor, ammonia, n2o, frezon, volatile fuel, oxygen agent B, cryotheum, radon.
+
+- type: gasReaction
+  id: VgN2ODecomposition
+  priority: 0
+  minimumTemperature: 573.15
+  minimumRequirements:
+  - 0     # oxygen
+  - 0     # nitrogen
+  - 0     # carbon dioxide
+  - 0     # plasma
+  - 0     # tritium
+  - 0     # vapor
+  - 0     # ammonia
+  - 0.01  # n2o
+  effects:
+  - !type:VgN2ODecompositionReaction {}
+
+- type: gasReaction
+  id: VgCryotheumOxygen
+  priority: 1
+  minimumTemperature: 243
+  minimumRequirements:
+  - 0.01  # oxygen
+  - 0     # nitrogen
+  - 0     # carbon dioxide
+  - 0     # plasma
+  - 0     # tritium
+  - 0     # vapor
+  - 0     # ammonia
+  - 0     # n2o
+  - 0     # frezon
+  - 0     # volatile fuel
+  - 0     # oxygen agent B
+  - 0.01  # cryotheum
+  effects:
+  - !type:VgCryotheumOxygenReaction {}
+
+- type: gasReaction
+  id: VgCryotheumPlasma
+  priority: 2
+  minimumTemperature: 0.2
+  minimumRequirements:
+  - 0     # oxygen
+  - 0     # nitrogen
+  - 0     # carbon dioxide
+  - 0.7   # plasma
+  - 0     # tritium
+  - 0     # vapor
+  - 0     # ammonia
+  - 0     # n2o
+  - 0     # frezon
+  - 0     # volatile fuel
+  - 0     # oxygen agent B
+  - 0.01  # cryotheum
+  effects:
+  - !type:VgCryotheumPlasmaReaction {}

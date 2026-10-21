@@ -57,6 +57,14 @@ Decided: the **full vg13 model**.
 | Chem dispenser | Decided: replace with vg13's. SS14's jug-based machine and UI stay; the stock list becomes vg13's (iodine out, water and sulfuric acid in; tungsten waits for its reagent). Ported medicines join once the basic elements are vg13's. | In progress |
 | SS14-only reagents | Food, drink and juice reagents **stay**, rewritten for vg13 metabolism. SS14-only medicines, toxins, narcotics and fun/misc chems are **disabled** (out of dispensers, recipes, vendors and starting contents; items needing one get the closest vg13 reagent; prototypes kept). Species bloods follow their species; gases (frezon, tritium, N2O) wait for atmos. | Planned |
 
+## Atmospherics
+
+| Area | Decision | Status |
+|---|---|---|
+| Engine | Decided: **keep SS14's atmos engine** (tile-based LINDA/Monstermos, predicted-friendly, upstream-maintained) and port vg13's gases and rules onto it, not ZAS (zones sharing one mixture). Mob code already reads the engine's API. | Done |
+| Gases | vg13's gases: oxygen, nitrogen, CO2, plasma, N2O (both games) plus volatile fuel, oxygen agent B, cryotheum and radon, added to the Gas enum (13 gases) with vg13's specific heats and molar masses (nitrogen heat 20, plasma 405 g/mol). SS14-only gases (tritium, water vapor, ammonia, frezon) are **disabled**: reactions commented out, canisters, miners and crate contents removed, maps migrated; prototypes kept. | Done (overlay sprites missing) |
+| Reactions | vg13's N2O decomposition (above 300 C, pressure-scaled), cryotheum with oxygen and cryotheum with plasma. Not yet: vg13's fire (flammable objects, firelevel), plasma contamination, radon, volatile fuel and oxygen agent B behaviour, canisters/miners for the new gases, vg13's pressure and airflow numbers. | In progress |
+
 ## Species and movement
 
 | Area | Decision | Status |

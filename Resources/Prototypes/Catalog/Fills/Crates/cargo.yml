@@ -76,15 +76,15 @@
     - id: AirCanister
       prob: 0.001
       orGroup: Canister
-    - id: AmmoniaCanister
-      prob: 0.001
-      orGroup: Canister
+#    - id: AmmoniaCanister
+#      prob: 0.001
+#      orGroup: Canister
     - id: CarbonDioxideCanister
       prob: 0.001
       orGroup: Canister
-    - id: FrezonCanister
-      prob: 0.001
-      orGroup: Canister
+#    - id: FrezonCanister
+#      prob: 0.001
+#      orGroup: Canister
     - id: NitrogenCanister
       prob: 0.001
       orGroup: Canister
@@ -97,12 +97,12 @@
     - id: PlasmaCanister
       prob: 0.001
       orGroup: Canister
-    - id: TritiumCanister
-      prob: 0.001
-      orGroup: Canister
-    - id: WaterVaporCanister
-      prob: 0.001
-      orGroup: Canister
+#    - id: TritiumCanister
+#      prob: 0.001
+#      orGroup: Canister
+#    - id: WaterVaporCanister
+#      prob: 0.001
+#      orGroup: Canister
     #weapons
     - id: WeaponPulseCarbine
       prob: 0.0001

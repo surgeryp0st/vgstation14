@@ -1,0 +1,35 @@
+# vg13's gases that SS14 doesn't have (code/modules/ZAS/XGM_gases.dm). Ids continue after SS14's 0-8; the Gas enum
+# in Atmospherics.cs has the same four. Specific heat and molar mass are vg13's (molar mass in g/mol here).
+# TODO VG: gas overlay sprites (cryotheum has six levels in vg13's tile_effects.dmi).
+
+- type: gas
+  id: 9
+  name: gases-vg-volatile-fuel
+  specificHeat: 30
+  molarMass: 163
+  color: c26a1f
+  pricePerMole: 0
+
+- type: gas
+  id: 10
+  name: gases-vg-oxygen-agent-b
+  specificHeat: 300
+  molarMass: 300
+  color: 66ccff
+  pricePerMole: 0
+
+- type: gas
+  id: 11
+  name: gases-vg-cryotheum
+  specificHeat: 10
+  molarMass: 32
+  color: 9de3ff
+  pricePerMole: 0
+
+- type: gas
+  id: 12
+  name: gases-vg-radon
+  specificHeat: 20
+  molarMass: 222
+  color: 6fa86f
+  pricePerMole: 0
