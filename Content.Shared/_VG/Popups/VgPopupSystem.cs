@@ -1,4 +1,5 @@
 using Content.Shared.Popups;
+using Robust.Shared.Utility;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 
@@ -20,6 +21,10 @@ public sealed class VgPopupSystem : EntitySystem
     /// <param name="predictingUser">The player whose client is running this prediction, if any.</param>
     public void Visible(EntityUid uid, string? others, string? self, EntityUid? predictingUser, PopupType type = PopupType.MediumCaution)
     {
+        // Popups draw plain text; the chat markup in vg13 messages (colour, bold) would show up literally.
+        others = others == null ? null : FormattedMessage.RemoveMarkupPermissive(others);
+        self = self == null ? null : FormattedMessage.RemoveMarkupPermissive(self);
+
         if (_net.IsClient)
         {
             _popup.PopupClient(predictingUser == uid ? self : others, uid, predictingUser, type);

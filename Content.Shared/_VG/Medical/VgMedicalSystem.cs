@@ -1,3 +1,4 @@
+using Robust.Shared.Utility;
 using Content.Shared._VG.Body;
 using Content.Shared._VG.Combat;
 using Content.Shared._VG.Random;
@@ -259,11 +260,11 @@ public sealed class VgMedicalSystem : EntitySystem
 
     private void Self(EntityUid user, string message)
     {
-        _popup.PopupClient(message, user, user, PopupType.SmallCaution);
+        _popup.PopupClient(FormattedMessage.RemoveMarkupPermissive(message), user, user, PopupType.SmallCaution);
     }
 
     private void Visible(EntityUid user, EntityUid target, string message)
     {
-        _popup.PopupPredicted(message, target, user);
+        _popup.PopupPredicted(FormattedMessage.RemoveMarkupPermissive(message), target, user);
     }
 }

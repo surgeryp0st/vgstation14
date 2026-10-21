@@ -1,3 +1,4 @@
+using Robust.Shared.Utility;
 using Content.Shared._VG.Armor;
 using Content.Shared._VG.Body;
 using Content.Shared._VG.Input;
@@ -461,6 +462,6 @@ public sealed class VgCombatSystem : EntitySystem
     /// </summary>
     private void Visible(EntityUid user, EntityUid target, string message)
     {
-        _popup.PopupPredicted(message, target, user, PopupType.MediumCaution);
+        _popup.PopupPredicted(FormattedMessage.RemoveMarkupPermissive(message), target, user, PopupType.MediumCaution);
     }
 }
