@@ -6,3 +6,5 @@ vg-radiation-agony-3 = A low, rolling pain passes through your body!
 vg-radiation-agony-4 = Your body feels as if it's falling apart!
 vg-radiation-agony-5 = You feel extremely weak!
 vg-radiation-agony-6 = A sharp, deep pain bathes every inch of your body!
+vg-vomit-nauseous = You feel nauseous...
+vg-vomit-about-to = You feel like you are about to throw up!

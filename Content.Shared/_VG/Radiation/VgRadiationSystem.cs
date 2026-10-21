@@ -135,15 +135,20 @@ public sealed class VgRadiationSystem : EntitySystem
     }
 
     /// <summary>
-    ///     The symptoms of a long exposure, which get likelier the more irradiated you are. Vomiting, nosebleeds,
+    ///     The symptoms of a long exposure, which get likelier the more irradiated you are. Nosebleeds,
     ///     hallucinations, internal bleeding, limb mutation, blindness and necrosis wait for the systems they need.
     /// </summary>
     private void LongTermEffects(Entity<VgRadiationComponent> ent, System.Random random)
     {
         var radiation = ent.Comp.Radiation;
         var radTick = ent.Comp.RadTick;
-        var minor = MathF.Max(1, radiation / 20);
         var normal = MathF.Max(1, radiation / 50);
+
+        if (radTick > DoseLight && random.Prob(5 * normal))
+        {
+            var vomit = new VgVomitEvent();
+            RaiseLocalEvent(ent, ref vomit);
+        }
 
         if (radTick > DoseAdvanced && TryComp<VgBodyComponent>(ent, out var body) && random.Prob(5 * normal))
         {

@@ -83,4 +83,32 @@ public sealed class VgNutritionTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task VomitingCostsNutrition()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        EntityUid human = default;
+        await server.WaitPost(() =>
+        {
+            human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<VgBreathingComponent>(human);
+
+            var ev = new Content.Shared._VG.Status.VgVomitEvent(true);
+            entMan.EventBus.RaiseLocalEvent(human, ref ev);
+        });
+
+        await server.WaitRunTicks(10);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entMan.GetComponent<VgNutritionComponent>(human).Nutrition, Is.EqualTo(360));
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

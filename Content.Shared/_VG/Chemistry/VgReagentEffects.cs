@@ -261,3 +261,15 @@ public sealed partial class VgAdjustRadiation : VgReagentEffect
         args.System<VgRadiationSystem>().Add(args.Target, Amount * VgChemistry.Rem);
     }
 }
+
+/// <summary>
+///     vg13 <c>M.vomit()</c>.
+/// </summary>
+public sealed partial class VgVomit : VgReagentEffect
+{
+    public override void Apply(VgReagentArgs args)
+    {
+        var ev = new VgVomitEvent();
+        args.EntityManager.EventBus.RaiseLocalEvent(args.Target, ref ev);
+    }
+}
