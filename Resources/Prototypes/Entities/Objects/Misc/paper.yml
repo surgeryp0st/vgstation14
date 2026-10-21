@@ -4,6 +4,10 @@
   id: Paper
   description: 'A piece of white paper.'
   components:
+  # VG: vg13 paper burns.
+  - type: VgBurnable
+    material: Wood
+    thermalMass: 0.2
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
     layers:

@@ -1,0 +1,26 @@
+# vg13's fire (obj/effect/fire): burning on a tile, run by VgFireSystem.
+- type: entity
+  id: VgFire
+  name: fire
+  save: false
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _VG/effects/fire.rsi
+    state: key1
+    drawdepth: FloorObjects
+    shader: unshaded
+    noRot: true
+  - type: PointLight
+    radius: 3
+    energy: 1
+    color: "#FF9933"
+  - type: VgFire
+
+# Base for things that burn: add a material and a mass (vg13 thermal_material and thermal_mass).
+- type: entity
+  id: VgBurnableBase
+  abstract: true
+  components:
+  - type: VgBurnable
+    material: Wood

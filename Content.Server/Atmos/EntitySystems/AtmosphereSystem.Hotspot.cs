@@ -18,6 +18,9 @@ namespace Content.Server.Atmos.EntitySystems
 
         private const int HotspotSoundCooldownCycles = 200;
 
+        // VG
+        private static readonly bool VgReplacesHotspots = true;
+
         private int _hotspotSoundCooldown = 0;
 
         [ViewVariables(VVAccess.ReadWrite)]
@@ -124,6 +127,14 @@ namespace Content.Server.Atmos.EntitySystems
         private void HotspotExpose(GridAtmosphereComponent gridAtmosphere, TileAtmosphere tile,
             float exposedTemperature, float exposedVolume, bool soh = false, EntityUid? sparkSourceUid = null)
         {
+            // VG: vg13 fire (VgFireSystem) replaces SS14's hotspots.
+            if (VgReplacesHotspots)
+            {
+                var vgExpose = new Content.Server._VG.Fire.VgHotspotExposeEvent(tile.GridIndex, tile.GridIndices, exposedTemperature, exposedVolume);
+                RaiseLocalEvent(ref vgExpose);
+                return;
+            }
+
             if (tile.Air == null)
                 return;
 

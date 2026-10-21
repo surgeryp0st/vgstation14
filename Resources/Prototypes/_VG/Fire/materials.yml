@@ -1,0 +1,42 @@
+# vg13 thermal materials (__DEFINES/setup.dm AUTOIGNITION_*, HHV_*, MOLECULAR_WEIGHT_*, FUEL_OX_RATIO_*,
+# FLAME_TEMPERATURE_*).
+
+- type: vgThermalMaterial
+  id: Wood
+  autoignitionTemperature: 573.15
+  heatingValue: 18.0
+  molecularWeight: 0.16
+  fuelOxRatio: 0.1666667
+  flameTemperature: 1300.15
+
+- type: vgThermalMaterial
+  id: Plastic
+  autoignitionTemperature: 661.15
+  heatingValue: 46.4
+  molecularWeight: 0.042
+  fuelOxRatio: 0.2222222
+  flameTemperature: 1773.15
+
+- type: vgThermalMaterial
+  id: Fabric
+  autoignitionTemperature: 523.15
+  heatingValue: 19.4
+  molecularWeight: 0.16
+  fuelOxRatio: 0.1666667
+  flameTemperature: 1073.15
+
+- type: vgThermalMaterial
+  id: Wax
+  autoignitionTemperature: 518.15
+  heatingValue: 42.0
+  molecularWeight: 0.35
+  fuelOxRatio: 0.0263158
+  flameTemperature: 973.15
+
+- type: vgThermalMaterial
+  id: Biological
+  autoignitionTemperature: 633.15
+  heatingValue: 38.0
+  molecularWeight: 0.86
+  fuelOxRatio: 0.0128205
+  flameTemperature: 1173.15
