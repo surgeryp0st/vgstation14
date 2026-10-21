@@ -1,0 +1,10 @@
+vg-apc-channel-equipment = Equipment
+vg-apc-channel-lighting = Lighting
+vg-apc-channel-environment = Environ
+vg-apc-mode-off = Off
+vg-apc-mode-on = On
+vg-apc-mode-auto = Auto
+vg-apc-state-off = Off
+vg-apc-state-autooff = Auto (off)
+vg-apc-state-on = On
+vg-apc-state-autoon = Auto (on)

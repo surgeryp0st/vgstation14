@@ -314,6 +314,7 @@ namespace Content.Server.Power.EntitySystems
             while (enumerator.MoveNext(out var uid, out var apcReceiver))
             {
                 var powered = !apcReceiver.PowerDisabled
+                              && !apcReceiver.VgChannelCut // VG: vg13 APC channel
                               && (!apcReceiver.NeedsPower
                                   || MathHelper.CloseToPercent(apcReceiver.NetworkLoad.ReceivingPower,
                                       apcReceiver.Load));

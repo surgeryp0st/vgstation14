@@ -25,6 +25,7 @@ namespace Content.Client.Power.APC.UI
             RobustXamlLoader.Load(this);
 
             BreakerButton.OnPressed += _ => OnBreaker?.Invoke();
+            BuildVgChannels(); // VG
         }
 
         public void SetEntity(EntityUid entity)
@@ -35,6 +36,7 @@ namespace Content.Client.Power.APC.UI
         public void UpdateState(BoundUserInterfaceState state)
         {
             var castState = (ApcBoundInterfaceState) state;
+            UpdateVgChannels(); // VG
 
             if (!BreakerButton.Disabled)
             {

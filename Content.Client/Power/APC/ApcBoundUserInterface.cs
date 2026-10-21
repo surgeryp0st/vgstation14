@@ -23,6 +23,8 @@ namespace Content.Client.Power.APC
             _menu = this.CreateWindow<ApcMenu>();
             _menu.SetEntity(Owner);
             _menu.OnBreaker += BreakerPressed;
+            _menu.SetVgApc(Owner); // VG
+            _menu.OnVgChannel += (channel, mode) => SendMessage(new Content.Shared._VG.Power.VgApcSetChannelMessage(channel, mode)); // VG
 
             var hasAccess = false;
             if (PlayerManager.LocalEntity != null)
@@ -31,6 +33,7 @@ namespace Content.Client.Power.APC
                 hasAccess = accessReader.IsAllowed((EntityUid)PlayerManager.LocalEntity, Owner);
             }
             _menu?.SetAccessEnabled(hasAccess);
+            _menu?.SetVgAccess(hasAccess); // VG
         }
 
         protected override void UpdateState(BoundUserInterfaceState state)

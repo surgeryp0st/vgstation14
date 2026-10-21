@@ -66,6 +66,14 @@ Decided: the **full vg13 model**.
 | Fire | Decided: the **full vg13 fire model**, on SS14's atmos. `VgFireSystem` replaces SS14's hotspots (a `// VG` hook in `AtmosphereSystem.HotspotExpose` hands every ignition to it; SS14's PlasmaFire and TritiumFire reactions are off). A burning tile has a `VgFire` entity that burns plasma and volatile fuel (vg13's zburn: firelevel, 25 fire-level multiplier, fuel burning 5x as fast), burns everything flammable on it, burns mobs on it (SS14 fire stacks plus vg13's burn damage), heats the air and spreads. Flammable things are `VgBurnable` (vg13 flammable + thermal_material + thermal_mass; materials wood, plastic, fabric, wax, biological with vg13's numbers): they autoignite in hot, oxygenated air or when a fire touches them, burn their mass away, give heat, oxygen use and CO2 to the fire, and ash. Paper burns so far. Liquid fuels burn too (plasma, welding fuel and ethanol in containers or puddles, vg13's numbers; glycerol waits for the vg13 reagents), and the flames and light grow with the fire level. Not yet: burning floors and walls, smoke, heat colour, extinguishers and foam, canisters/pipes burning gas (zburn from tanks), and marking vg13 items flammable as they are ported. | In progress |
 | Reactions | vg13's N2O decomposition (above 300 C, pressure-scaled), cryotheum with oxygen and cryotheum with plasma. Radon irradiates mobs standing in it (1.5 per standard-tile mole, every Life() tick). Not yet: vg13's fire (flammable objects, firelevel), plasma contamination, volatile fuel and oxygen agent B behaviour, canisters/miners for the new gases, vg13's pressure and airflow numbers. | In progress |
 
+## Power
+
+| Area | Decision | Status |
+|---|---|---|
+| Engine | Decided: **keep SS14's power engine** (cables, APCs, SMES, batteries, solars) and make it behave like vg13 on top; retune numbers to vg13's; SS14-only generators and the HV/MV/LV tiers follow the keep/disable rule when reached. | Decided |
+| Area channels | Decided: vg13's area-based APC channels. SS14 has no areas, so an APC's network is its area: every machine linked to the APC is on its equipment, lighting or environment channel (lights are lighting; doors, vents, scrubbers and air alarms are environment; the rest equipment; `VgPowerChannel` overrides). A channel that is off gives its machines no power and zero load (a `// VG` term in `PowerNetSystem.UpdateApcPowerReceiver`). `VgApcChannelSystem` runs vg13's channel states (off, auto-off, on, auto-on): below 30% battery with no charging in sight equipment goes, below 15% lighting too, an empty battery takes everything, and `longtermpower` stops a short dip from cutting anything. The APC window has off/on/auto buttons per channel. | Done |
+| Next | vg13's numbers (APC cell, SMES, solar, machine draws), power alerts, vg13-only power machines. | Planned |
+
 ## Species and movement
 
 | Area | Decision | Status |

@@ -31,6 +31,8 @@
                     </GridContainer>
                 </BoxContainer>
             </BoxContainer>
+            <!-- VG: vg13 power channels -->
+            <BoxContainer Name="VgChannels" Orientation="Vertical" Margin="10 10 0 0" />
             <!-- Charge Progress Bar-->
             <ProgressBar Name="ChargeBar"
                         HorizontalExpand="True"
