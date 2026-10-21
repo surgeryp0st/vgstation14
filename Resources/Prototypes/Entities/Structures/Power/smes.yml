@@ -59,8 +59,8 @@
       voltage: High
       node: input
     - type: PowerNetworkBattery
-      maxSupply: 150000
-      maxChargeRate: 5000
+      maxSupply: 200000 # VG: vg13 max_output
+      maxChargeRate: 50000 # VG: vg13's default charge level
       supplyRampTolerance: 5000
       supplyRampRate: 1000
     - type: PointLight
@@ -98,11 +98,11 @@
 - type: entity
   parent: BaseSMES
   id: SMESBasic
-  suffix: Basic, 8MJ
+  suffix: Basic, 5MJ # VG: vg13's SMES: 5 MJ, starting at 1 MJ
   components:
   - type: Battery
-    maxCharge: 8000000
-    startingCharge: 8000000
+    maxCharge: 5000000
+    startingCharge: 1000000
 
 - type: entity
   parent: SMESBasic

@@ -72,7 +72,8 @@ Decided: the **full vg13 model**.
 |---|---|---|
 | Engine | Decided: **keep SS14's power engine** (cables, APCs, SMES, batteries, solars) and make it behave like vg13 on top; retune numbers to vg13's; SS14-only generators and the HV/MV/LV tiers follow the keep/disable rule when reached. | Decided |
 | Area channels | Decided: vg13's area-based APC channels. SS14 has no areas, so an APC's network is its area: every machine linked to the APC is on its equipment, lighting or environment channel (lights are lighting; doors, vents, scrubbers and air alarms are environment; the rest equipment; `VgPowerChannel` overrides). A channel that is off gives its machines no power and zero load (a `// VG` term in `PowerNetSystem.UpdateApcPowerReceiver`). `VgApcChannelSystem` runs vg13's channel states (off, auto-off, on, auto-on): below 30% battery with no charging in sight equipment goes, below 15% lighting too, an empty battery takes everything, and `longtermpower` stops a short dip from cutting anything. The APC window has off/on/auto buttons per channel. | Done |
-| Next | vg13's numbers (APC cell, SMES, solar, machine draws), power alerts, vg13-only power machines. | Planned |
+| Numbers | APC: vg13's 2500-unit cell (1.25 MJ, 90% at start, charging capped at 1.25 kW); SMES: 5 MJ starting at 1 MJ, 200 kW output and 50 kW charging (vg13's defaults; SS14 has no setting UI to change them). Solar output, cells, machine draws: next. | In progress |
+| Next | power alerts, vg13-only power machines. | Planned |
 
 ## Species and movement
 
