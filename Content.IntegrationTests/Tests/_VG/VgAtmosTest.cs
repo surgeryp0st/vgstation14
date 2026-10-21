@@ -62,4 +62,34 @@ public sealed class VgAtmosTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task RadonIrradiatesMobs()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var atmos = server.System<AtmosphereSystem>();
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(human);
+
+            var air = atmos.GetContainingMixture(human);
+            Assert.That(air, Is.Not.Null);
+            air!.AdjustMoles(Gas.Radon, 2);
+            var expected = air.GetMoles(Gas.Radon) / air.Volume * Atmospherics.CellVolume * 1.5f;
+
+            var ev = new Content.Shared._VG.Life.VgLifeTickEvent(1);
+            entMan.EventBus.RaiseLocalEvent(human, ref ev);
+
+            var dose = entMan.GetComponent<Content.Shared._VG.Radiation.VgRadiationComponent>(human).Radiation;
+            // The tick's own dose ladder burns a little off afterwards.
+            Assert.That(dose, Is.GreaterThan(expected - 5).And.LessThanOrEqualTo(expected));
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

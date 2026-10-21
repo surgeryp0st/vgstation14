@@ -63,7 +63,7 @@ Decided: the **full vg13 model**.
 |---|---|---|
 | Engine | Decided: **keep SS14's atmos engine** (tile-based LINDA/Monstermos, predicted-friendly, upstream-maintained) and port vg13's gases and rules onto it, not ZAS (zones sharing one mixture). Mob code already reads the engine's API. | Done |
 | Gases | vg13's gases: oxygen, nitrogen, CO2, plasma, N2O (both games) plus volatile fuel, oxygen agent B, cryotheum and radon, added to the Gas enum (13 gases) with vg13's specific heats and molar masses (nitrogen heat 20, plasma 405 g/mol). SS14-only gases (tritium, water vapor, ammonia, frezon) are **disabled**: reactions commented out, canisters, miners and crate contents removed, maps migrated; prototypes kept. | Done (overlay sprites missing) |
-| Reactions | vg13's N2O decomposition (above 300 C, pressure-scaled), cryotheum with oxygen and cryotheum with plasma. Not yet: vg13's fire (flammable objects, firelevel), plasma contamination, radon, volatile fuel and oxygen agent B behaviour, canisters/miners for the new gases, vg13's pressure and airflow numbers. | In progress |
+| Reactions | vg13's N2O decomposition (above 300 C, pressure-scaled), cryotheum with oxygen and cryotheum with plasma. Radon irradiates mobs standing in it (1.5 per standard-tile mole, every Life() tick). Not yet: vg13's fire (flammable objects, firelevel), plasma contamination, volatile fuel and oxygen agent B behaviour, canisters/miners for the new gases, vg13's pressure and airflow numbers. | In progress |
 
 ## Species and movement
 

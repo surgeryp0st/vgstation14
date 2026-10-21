@@ -93,6 +93,11 @@ public sealed class VgRadiationSystem : EntitySystem
         var comp = ent.Comp;
         var random = VgPredictedRandom.Create(_timing.CurTick, GetNetEntity(ent).Id, SaltRadiation);
 
+        // Radiation from the surroundings (radon in the air).
+        var ambient = new VgAmbientRadiationEvent();
+        RaiseLocalEvent(ent, ref ambient);
+        Add((ent.Owner, comp), ambient.Rads);
+
         // vg13 RAD_ABSORB (Diona): radiation feeds and heals instead of poisoning.
         if (comp.Radiation > 0 && _species.Get(ent)?.RadAbsorb == true)
         {
@@ -205,3 +210,9 @@ public sealed class VgRadiationSystem : EntitySystem
         _damageable.TryChangeDamage(uid, spec, true, false);
     }
 }
+
+/// <summary>
+///     Raised on a mob each Life() tick to collect the radiation its surroundings give it (vg13 radon_effects()).
+/// </summary>
+[ByRefEvent]
+public record struct VgAmbientRadiationEvent(float Rads);
