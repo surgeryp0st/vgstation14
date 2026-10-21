@@ -62,17 +62,18 @@
   products:
     FoamingAgent: 2
 
-- type: reaction
-  id: PolytrinicAcid
-  reactants:
-    SulfuricAcid:
-      amount: 1
-    Plasma:
-      amount: 1
-    Potassium:
-      amount: 1
-  products:
-    PolytrinicAcid: 3
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: PolytrinicAcid
+#   reactants:
+#     SulfuricAcid:
+#       amount: 1
+#     Plasma:
+#       amount: 1
+#     Potassium:
+#       amount: 1
+#   products:
+#     PolytrinicAcid: 3
 
 - type: reaction
   id: SulfuricAcid
@@ -86,19 +87,20 @@
   products:
     SulfuricAcid: 3
 
-- type: reaction
-  id: FluorosulfuricAcid
-  reactants:
-    Fluorine:
-      amount: 1
-    Hydrogen:
-      amount: 1
-    Potassium:
-      amount: 1
-    SulfuricAcid:
-      amount: 1
-  products:
-    FluorosulfuricAcid: 4
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: FluorosulfuricAcid
+#   reactants:
+#     Fluorine:
+#       amount: 1
+#     Hydrogen:
+#       amount: 1
+#     Potassium:
+#       amount: 1
+#     SulfuricAcid:
+#       amount: 1
+#   products:
+#     FluorosulfuricAcid: 4
 
 - type: reaction
   id: PotassiumExplosion
@@ -255,17 +257,18 @@
   products:
     Thermite: 3
 
-- type: reaction
-  id: UnstableMutagen
-  reactants:
-    Radium:
-      amount: 1
-    Phosphorus:
-      amount: 1
-    Chlorine:
-      amount: 1
-  products:
-    UnstableMutagen: 3
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: UnstableMutagen
+#   reactants:
+#     Radium:
+#       amount: 1
+#     Phosphorus:
+#       amount: 1
+#     Chlorine:
+#       amount: 1
+#   products:
+#     UnstableMutagen: 3
 
 - type: reaction
   id: Oil
@@ -292,90 +295,96 @@
   products:
     Fluorosurfactant: 5
 
-- type: reaction
-  id: Desoxyephedrine
-  impact: Medium
-  minTemp: 370
-  reactants:
-    Ephedrine:
-      amount: 1
-    Carbon:
-      amount: 1
-    Iodine:
-      amount: 1
-    Phosphorus:
-     amount: 1
-  products:
-    Desoxyephedrine: 4 #I kinda remember having to heat this up, and if you heated it up too much, it went boom, I can't remember the specific values tho.
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: Desoxyephedrine
+#   impact: Medium
+#   minTemp: 370
+#   reactants:
+#     Ephedrine:
+#       amount: 1
+#     Carbon:
+#       amount: 1
+#     Iodine:
+#       amount: 1
+#     Phosphorus:
+#      amount: 1
+#   products:
+#     Desoxyephedrine: 4 #I kinda remember having to heat this up, and if you heated it up too much, it went boom, I can't remember the specific values tho.
 
-- type: reaction
-  id: Stimulants
-  impact: Medium
-  minTemp: 370
-  reactants:
-    Ephedrine:
-      amount: 1
-    Vestine:
-      amount: 1
-    Oxygen:
-      amount: 2
-  products:
-    Stimulants: 2
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: Stimulants
+#   impact: Medium
+#   minTemp: 370
+#   reactants:
+#     Ephedrine:
+#       amount: 1
+#     Vestine:
+#       amount: 1
+#     Oxygen:
+#       amount: 2
+#   products:
+#     Stimulants: 2
 
-- type: reaction
-  id: Ephedrine
-  impact: Medium
-  reactants:
-    Oil:
-      amount: 1
-    Hydrogen:
-      amount: 1
-    Sugar:
-      amount: 1
-    Diethylamine:
-     amount: 1
-  products:
-    Ephedrine: 4
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: Ephedrine
+#   impact: Medium
+#   reactants:
+#     Oil:
+#       amount: 1
+#     Hydrogen:
+#       amount: 1
+#     Sugar:
+#       amount: 1
+#     Diethylamine:
+#      amount: 1
+#   products:
+#     Ephedrine: 4
 
-- type: reaction
-  id: MuteToxin
-  impact: Medium
-  minTemp: 370
-  reactants:
-    Uranium:
-      amount: 1
-    Vestine:
-      amount: 2
-    SpaceGlue:
-      amount: 2
-  products:
-    MuteToxin: 2
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: MuteToxin
+#   impact: Medium
+#   minTemp: 370
+#   reactants:
+#     Uranium:
+#       amount: 1
+#     Vestine:
+#       amount: 2
+#     SpaceGlue:
+#       amount: 2
+#   products:
+#     MuteToxin: 2
 
-- type: reaction
-  id: ChloralHydrate
-  impact: Medium
-  reactants:
-    Chlorine:
-      amount: 3
-    Ethanol:
-      amount: 1
-    Water:
-      amount: 1
-  products:
-    ChloralHydrate: 1
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: ChloralHydrate
+#   impact: Medium
+#   reactants:
+#     Chlorine:
+#       amount: 3
+#     Ethanol:
+#       amount: 1
+#     Water:
+#       amount: 1
+#   products:
+#     ChloralHydrate: 1
 
-- type: reaction
-  id: Pax
-  impact: Medium
-  reactants:
-    MindbreakerToxin:
-      amount: 1
-    Synaptizine:
-      amount: 1
-    Water:
-      amount: 1
-  products:
-    Pax: 3
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: Pax
+#   impact: Medium
+#   reactants:
+#     MindbreakerToxin:
+#       amount: 1
+#     Synaptizine:
+#       amount: 1
+#     Water:
+#       amount: 1
+#   products:
+#     Pax: 3
 
 - type: reaction
   id: Charcoal
@@ -387,40 +396,43 @@
   products:
     Charcoal: 1
 
-- type: reaction
-  id: NorepinephricAcid
-  impact: Medium
-  reactants:
-    Uranium:
-      amount: 1
-    Epinephrine:
-      amount: 1
-  products:
-    NorepinephricAcid: 2
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: NorepinephricAcid
+#   impact: Medium
+#   reactants:
+#     Uranium:
+#       amount: 1
+#     Epinephrine:
+#       amount: 1
+#   products:
+#     NorepinephricAcid: 2
 
-- type: reaction
-  id: Ethyloxyephedrine
-  impact: Medium
-  reactants:
-    Desoxyephedrine:
-      amount: 1
-    Stellibinin:
-      amount: 1
-  products:
-    Ethyloxyephedrine: 2
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: Ethyloxyephedrine
+#   impact: Medium
+#   reactants:
+#     Desoxyephedrine:
+#       amount: 1
+#     Stellibinin:
+#       amount: 1
+#   products:
+#     Ethyloxyephedrine: 2
 
-- type: reaction
-  id: Diphenylmethylamine
-  impact: Medium
-  reactants:
-    Ethyloxyephedrine:
-      amount: 1
-    SodiumCarbonate:
-      amount: 1
-    Coffee:
-      amount: 1
-  products:
-    Diphenylmethylamine: 3
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: Diphenylmethylamine
+#   impact: Medium
+#   reactants:
+#     Ethyloxyephedrine:
+#       amount: 1
+#     SodiumCarbonate:
+#       amount: 1
+#     Coffee:
+#       amount: 1
+#   products:
+#     Diphenylmethylamine: 3
 
 - type: reaction
   id: SodiumCarbonate
@@ -494,25 +506,26 @@
   products:
     SodiumPolyacrylate: 4
 
-- type: reaction
-  id: Nocturine
-  impact: High
-  reactants:
-    Impedrezene:
-      amount: 2
-    Vestine:
-      amount: 1
-  products:
-    Nocturine: 1
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: Nocturine
+#   impact: High
+#   reactants:
+#     Impedrezene:
+#       amount: 2
+#     Vestine:
+#       amount: 1
+#   products:
+#     Nocturine: 1
 
-- type: reaction
-  id: Tazinide
-  impact: Medium
-  reactants:
-    Licoxide:
-      amount: 1
-    Vestine:
-      amount: 1
-  products:
-    Tazinide: 1
-
+# VG: disabled, vg13 replaces SS14 chemistry (see docs/_VG/port-decisions.md)
+# - type: reaction
+#   id: Tazinide
+#   impact: Medium
+#   reactants:
+#     Licoxide:
+#       amount: 1
+#     Vestine:
+#       amount: 1
+#   products:
+#     Tazinide: 1
