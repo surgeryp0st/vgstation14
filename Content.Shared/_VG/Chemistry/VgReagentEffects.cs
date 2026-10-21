@@ -203,3 +203,45 @@ public sealed partial class VgSpeedShockRecovery : VgReagentEffect
             status.AdjustShockStage(args.Target, -1);
     }
 }
+
+public enum VgStatusKind
+{
+    Jitter,
+    Druggy,
+    Drowsiness,
+}
+
+/// <summary>
+///     vg13 <c>M.Jitter(x)</c>, <c>M.druggy = max(M.druggy, x)</c> and <c>M.drowsyness = max(M.drowsyness, x)</c>:
+///     the status lasts at least <see cref="Ticks"/> Life() ticks. With <see cref="Add"/> the ticks are added instead
+///     (negative to take them away).
+/// </summary>
+public sealed partial class VgStatusEffect : VgReagentEffect
+{
+    [DataField(required: true)]
+    public VgStatusKind Kind;
+
+    [DataField(required: true)]
+    public float Ticks;
+
+    [DataField]
+    public bool Add;
+
+    public override void Apply(VgReagentArgs args)
+    {
+        var status = args.System<VgStatusSystem>();
+        switch (Kind)
+        {
+            case VgStatusKind.Jitter:
+                status.Jitter(args.Target, Ticks);
+                break;
+            case VgStatusKind.Druggy:
+                status.Druggy(args.Target, Ticks);
+                break;
+            case VgStatusKind.Drowsiness:
+                var current = args.EntityManager.GetComponentOrNull<VgStatusComponent>(args.Target)?.Drowsiness ?? 0;
+                status.AdjustDrowsiness(args.Target, Add ? (int) Ticks : Math.Max(0, (int) Ticks - current));
+                break;
+        }
+    }
+}

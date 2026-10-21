@@ -174,3 +174,28 @@
       amount: 1
   products:
     synthocarisol: 2
+
+# Drug recipes (Chemistry-Recipes.dm) for the drugs both games have.
+- type: reaction
+  id: VgSpaceDrugs
+  reactants:
+    Mercury:
+      amount: 1
+    Sugar:
+      amount: 1
+    Lithium:
+      amount: 1
+  products:
+    SpaceDrugs: 3
+
+- type: reaction
+  id: VgImpedrezene
+  reactants:
+    Mercury:
+      amount: 1
+    Oxygen:
+      amount: 1
+    Sugar:
+      amount: 1
+  products:
+    Impedrezene: 2

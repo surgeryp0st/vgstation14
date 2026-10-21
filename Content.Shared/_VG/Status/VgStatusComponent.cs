@@ -43,6 +43,12 @@ public sealed partial class VgStatusComponent : Component
     public int LoseBreath;
 
     /// <summary>
+    ///     vg13 drowsyness: Life() ticks of blurry, sleepy eyes with a 5% chance each tick of dropping off.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int Drowsiness;
+
+    /// <summary>
     ///     vg13 BASE_CARBON_PAIN_RESIST.
     /// </summary>
     [DataField]

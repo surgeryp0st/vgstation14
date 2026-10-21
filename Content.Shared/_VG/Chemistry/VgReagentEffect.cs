@@ -20,6 +20,12 @@ public abstract partial class VgReagentEffect
     [DataField]
     public int MaxTick;
 
+    /// <summary>
+    ///     vg13 <c>if(prob(x))</c>: percent chance the effect happens on a given tick.
+    /// </summary>
+    [DataField]
+    public float Chance = 100;
+
     public bool InTickRange(int tick)
     {
         return tick >= MinTick && (MaxTick <= 0 || tick <= MaxTick);

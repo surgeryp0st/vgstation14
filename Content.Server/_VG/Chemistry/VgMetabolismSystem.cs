@@ -10,6 +10,7 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server._VG.Chemistry;
 
@@ -20,6 +21,7 @@ namespace Content.Server._VG.Chemistry;
 public sealed class VgMetabolismSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private readonly VgNutritionSystem _nutrition = default!;
@@ -78,7 +80,7 @@ public sealed class VgMetabolismSystem : EntitySystem
 
                 foreach (var effect in vg.Effects)
                 {
-                    if (effect.InTickRange(tick))
+                    if (effect.InTickRange(tick) && (effect.Chance >= 100 || _random.Prob(effect.Chance / 100)))
                         effect.Apply(args2);
                 }
 
@@ -92,7 +94,8 @@ public sealed class VgMetabolismSystem : EntitySystem
 
                     foreach (var effect in vg.OverdoseEffects)
                     {
-                        effect.Apply(args2);
+                        if (effect.Chance >= 100 || _random.Prob(effect.Chance / 100))
+                            effect.Apply(args2);
                     }
                 }
             }

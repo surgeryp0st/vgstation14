@@ -1,0 +1,51 @@
+# vg13 drugs (reagents_drug.dm). Drugs both games have keep SS14's id and get vg13 behaviour through a vgReagent of the
+# same id (their SS14 recipes are disabled and replaced with vg13's in medicine_reactions.yml); vg13-only ones are new reagents. Left out
+# for now: space drugs' random stumbling and emotes, which wait for emotes and confusion.
+
+- type: vgReagent
+  id: SpaceDrugs
+  metabolism: 0.5
+  overdoseAmount: 30
+  effects:
+  - !type:VgStatusEffect
+    kind: Druggy
+    ticks: 15
+  - !type:VgStatusEffect
+    kind: Druggy
+    ticks: 25
+    minTick: 10
+    maxTick: 20
+  - !type:VgStatusEffect
+    kind: Druggy
+    ticks: 35
+    minTick: 21
+
+- type: vgReagent
+  id: Impedrezene
+  overdoseAmount: 30
+  effects:
+  - !type:VgAdjustBrainLoss
+    amount: 5
+    chance: 80
+  - !type:VgStatusEffect
+    kind: Drowsiness
+    ticks: 3
+    chance: 50
+
+- type: reagent
+  id: caffeine
+  name: reagent-name-vg-caffeine
+  group: Narcotics
+  desc: reagent-desc-vg-caffeine
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: bitter
+  color: "#E8E8E8"
+
+- type: vgReagent
+  id: caffeine
+  metabolism: 0.1
+  nutrimentFactor: -1
+  effects:
+  - !type:VgStatusEffect
+    kind: Jitter
+    ticks: 10

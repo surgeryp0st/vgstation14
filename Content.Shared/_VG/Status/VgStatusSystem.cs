@@ -7,8 +7,10 @@ using Content.Shared.Bed.Sleep;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Eye.Blinding.Components;
+using Content.Shared.Drugs;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Jittering;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
@@ -33,6 +35,7 @@ public sealed class VgStatusSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
     [Dependency] private readonly SharedStutteringSystem _stutter = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly VgPopupSystem _popup = default!;
@@ -134,6 +137,38 @@ public sealed class VgStatusSystem : EntitySystem
         var time = ticks * LifeTick;
         if (Longer(uid, "TemporaryBlindness", time))
             _statusEffects.TryAddStatusEffect<TemporaryBlindnessComponent>(uid, "TemporaryBlindness", time, true);
+    }
+
+    /// <summary>
+    ///     vg13 Jitter(): shaking for at least this many Life() ticks.
+    /// </summary>
+    public void Jitter(EntityUid uid, float ticks)
+    {
+        var time = ticks * LifeTick;
+        if (Longer(uid, "Jitter", time))
+            _jitter.DoJitter(uid, time, true);
+    }
+
+    /// <summary>
+    ///     vg13 druggy: seeing things for at least this many Life() ticks.
+    /// </summary>
+    public void Druggy(EntityUid uid, float ticks)
+    {
+        var time = ticks * LifeTick;
+        if (Longer(uid, "SeeingRainbows", time))
+            _statusEffects.TryAddStatusEffect<SeeingRainbowsComponent>(uid, "SeeingRainbows", time, true);
+    }
+
+    /// <summary>
+    ///     vg13 drowsyness += ticks, which the Life() tick works off.
+    /// </summary>
+    public void AdjustDrowsiness(Entity<VgStatusComponent?> ent, int ticks)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        ent.Comp.Drowsiness = Math.Max(0, ent.Comp.Drowsiness + ticks);
+        Dirty(ent);
     }
 
     public int GetLoseBreath(EntityUid uid)
@@ -274,6 +309,14 @@ public sealed class VgStatusSystem : EntitySystem
 
         if (ent.Comp.PainNumb > 0)
             ent.Comp.PainNumb--;
+
+        // vg13: drowsy eyes, and now and then you nod off.
+        if (ent.Comp.Drowsiness > 0)
+        {
+            ent.Comp.Drowsiness--;
+            if (random.Prob(5))
+                Paralyse(ent, 5);
+        }
 
         HandleHalloss(ent);
         HandleShock(ent, args.LifeTick, random);
