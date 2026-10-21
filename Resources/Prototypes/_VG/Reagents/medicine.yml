@@ -267,3 +267,53 @@
   painResistance: 80
   effects:
   - !type:VgSpeedShockRecovery
+
+- type: reagent
+  id: synthocarisol
+  name: reagent-name-vg-synthocarisol
+  group: Medicine
+  desc: reagent-desc-vg-synthocarisol
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#580082"
+
+- type: vgReagent
+  id: synthocarisol
+  overdoseAmount: 30
+  effects:
+  - !type:VgHealOrgan
+    brute: 2
+
+# The face repair at tick 16+ waits for disfigurement. Its recipe (carpotoxin, cryptobiolin, copper) waits for those.
+- type: reagent
+  id: rezadone
+  name: reagent-name-vg-rezadone
+  group: Medicine
+  desc: reagent-desc-vg-rezadone
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: bitter
+  color: "#669900"
+
+- type: vgReagent
+  id: rezadone
+  overdoseAmount: 30
+  overdoseTick: 35
+  effects:
+  - !type:VgAdjustDamage
+    type: Clone
+    amount: -1
+    maxTick: 15
+  - !type:VgHealOrgan
+    brute: 1
+    burn: 1
+    maxTick: 15
+  - !type:VgAdjustDamage
+    type: Clone
+    amount: -2
+    minTick: 16
+    maxTick: 35
+  - !type:VgHealOrgan
+    brute: 2
+    burn: 1
+    minTick: 16
+    maxTick: 35

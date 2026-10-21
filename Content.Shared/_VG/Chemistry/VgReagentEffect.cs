@@ -8,6 +8,23 @@ namespace Content.Shared._VG.Chemistry;
 [ImplicitDataDefinitionForInheritors]
 public abstract partial class VgReagentEffect
 {
+    /// <summary>
+    ///     Only applies from this Life() tick the reagent has been in the body (vg13's <c>switch(tick)</c> ranges).
+    /// </summary>
+    [DataField]
+    public int MinTick;
+
+    /// <summary>
+    ///     Only applies up to this tick. 0 for no limit.
+    /// </summary>
+    [DataField]
+    public int MaxTick;
+
+    public bool InTickRange(int tick)
+    {
+        return tick >= MinTick && (MaxTick <= 0 || tick <= MaxTick);
+    }
+
     public abstract void Apply(VgReagentArgs args);
 }
 

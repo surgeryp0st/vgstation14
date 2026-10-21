@@ -74,7 +74,8 @@ public sealed class VgMetabolismSystem : EntitySystem
 
                 foreach (var effect in vg.Effects)
                 {
-                    effect.Apply(args2);
+                    if (effect.InTickRange(tick))
+                        effect.Apply(args2);
                 }
 
                 var overdosing = vg.OverdoseAmount > 0 && volume.Float() >= vg.OverdoseAmount ||

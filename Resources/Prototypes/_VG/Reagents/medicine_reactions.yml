@@ -163,3 +163,14 @@
       amount: 1
   products:
     oxycodone: 3
+
+- type: reaction
+  id: VgSynthocarisol
+  minTemp: 350.15
+  reactants:
+    bicaridine:
+      amount: 1
+    inaprovaline:
+      amount: 1
+  products:
+    synthocarisol: 2

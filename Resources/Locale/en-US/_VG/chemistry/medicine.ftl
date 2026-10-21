@@ -28,3 +28,7 @@ reagent-name-vg-oxycodone = oxycodone
 reagent-desc-vg-oxycodone = An effective and very addictive painkiller.
 reagent-name-vg-tramadol = tramadol
 reagent-desc-vg-tramadol = A simple, yet effective painkiller.
+reagent-name-vg-synthocarisol = synthocarisol
+reagent-desc-vg-synthocarisol = Synthocarisol is a synthetic version of Carisol, a powerful analgesic that used to be found in traditional medicines made from the horn of the now-extinct Space African Rhino. Tragically, the horns also contained an equal amount of Anticarisol, which led to the medical community dismissing the remedies as nothing more than placebo and overlooking this reagent for several centuries.
+reagent-name-vg-rezadone = rezadone
+reagent-desc-vg-rezadone = A powder derived from fish toxin, this substance can effectively treat genetic damage in humanoids, though excessive consumption has side effects.
