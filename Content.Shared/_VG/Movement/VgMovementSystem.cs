@@ -3,6 +3,7 @@ using Content.Shared._VG.Body;
 using Content.Shared._VG.Clothing;
 using Content.Shared._VG.Combat;
 using Content.Shared._VG.Life;
+using Content.Shared._VG.Nutrition;
 using Content.Shared._VG.Status;
 using Content.Shared.Damage;
 using Content.Shared.Hands.EntitySystems;
@@ -30,6 +31,7 @@ public sealed class VgMovementSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly VgClothingSystem _clothing = default!;
+    [Dependency] private readonly VgNutritionSystem _nutrition = default!;
     [Dependency] private readonly VgStatusSystem _status = default!;
 
     // vg13 MOB_RUN_TALLY and MOB_WALK_TALLY, in deciseconds per tile.
@@ -118,7 +120,12 @@ public sealed class VgMovementSystem : EntitySystem
         if (HasComp<VgGrabberComponent>(ent))
             tally += GrabTally;
 
-        // TODO VG: hunger, hypothermia, drowsiness and painkillers come with digestion, temperature and chemistry.
+        // vg13: below 400 nutrition you start to slow down (80 at the default level, 100 when overfed).
+        var hungry = (500 - _nutrition.GetNutrition(ent)) / 5;
+        if (hungry >= 70)
+            tally += hungry / 50;
+
+        // TODO VG: hypothermia, drowsiness and painkillers come with temperature and chemistry.
         // vg13 carbon: being badly hurt slows you down.
         if (TryComp<DamageableComponent>(ent, out var damageable))
         {

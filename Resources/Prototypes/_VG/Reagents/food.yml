@@ -1,0 +1,92 @@
+# vg13 nutriment_factor for the food and drink reagents both games have (reagents_food.dm, reagents_drink.dm,
+# reagents_ethanol.dm; factor * REAGENTS_METABOLISM), attached to SS14's reagent ids. SS14 has Protein, Fat and
+# Vitamin where vg13 only has nutriment, so they feed like nutriment does. Reagents vg13 has under other names
+# (the juices, sauces, ...) are still to be matched up.
+
+- type: vgReagent
+  id: BananaHonk
+  nutrimentFactor: 0.2
+
+- type: vgReagent
+  id: Beer
+  nutrimentFactor: 0.4
+
+- type: vgReagent
+  id: Cornoil
+  nutrimentFactor: 4.0
+
+- type: vgReagent
+  id: Cream
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: DoctorsDelight
+  nutrimentFactor: 0.6
+
+- type: vgReagent
+  id: DriestMartini
+  nutrimentFactor: 0.2
+
+- type: vgReagent
+  id: DryRamen
+  nutrimentFactor: 0.2
+
+- type: vgReagent
+  id: Flour
+  nutrimentFactor: 0.2
+
+- type: vgReagent
+  id: Grenadine
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: HotRamen
+  nutrimentFactor: 1.0
+
+- type: vgReagent
+  id: Ketchup
+  nutrimentFactor: 1.0
+
+- type: vgReagent
+  id: Mayo
+  nutrimentFactor: 0.8
+
+- type: vgReagent
+  id: Milk
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: Mustard
+  nutrimentFactor: 0.6
+
+- type: vgReagent
+  id: Nutriment
+  nutrimentFactor: 3.0
+
+- type: vgReagent
+  id: Rice
+  nutrimentFactor: 0.2
+
+- type: vgReagent
+  id: Silencer
+  nutrimentFactor: 0.2
+
+- type: vgReagent
+  id: Soysauce
+  nutrimentFactor: 0.4
+
+- type: vgReagent
+  id: Sugar
+  nutrimentFactor: 0.5
+
+- type: vgReagent
+  id: Protein
+  nutrimentFactor: 3
+
+- type: vgReagent
+  id: Vitamin
+  nutrimentFactor: 3
+
+- type: vgReagent
+  id: Fat
+  nutrimentFactor: 3

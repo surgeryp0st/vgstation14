@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Body.Components;
 using Content.Server.Temperature.Components;
 using Content.Shared._VG.Body;
+using Content.Shared._VG.Nutrition;
 using Content.Shared._VG.Chemistry;
 using Content.Shared._VG.Life;
 using Content.Shared._VG.Status;
@@ -21,6 +22,7 @@ public sealed class VgMetabolismSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private readonly VgNutritionSystem _nutrition = default!;
     [Dependency] private readonly VgStatusSystem _status = default!;
 
     private readonly List<string> _present = new();
@@ -68,6 +70,8 @@ public sealed class VgMetabolismSystem : EntitySystem
             {
                 metabolism = vg.Metabolism;
                 painResistance += vg.PainResistance;
+                if (vg.NutrimentFactor != 0)
+                    _nutrition.AddNutrition(ent, vg.NutrimentFactor);
                 var volume = quantity.Quantity;
                 var args2 = new VgReagentArgs(EntityManager, ent, id, volume, tick, (reagent, amount) =>
                     _solutions.RemoveReagent(bloodstream.ChemicalSolution!.Value, reagent, FixedPoint2.New(amount)));

@@ -43,6 +43,12 @@ public sealed partial class VgReagentPrototype : IPrototype
     public float PainResistance;
 
     /// <summary>
+    ///     vg13 nutriment_factor: nutrition added every Life() tick the reagent is in the body.
+    /// </summary>
+    [DataField]
+    public float NutrimentFactor;
+
+    /// <summary>
     ///     vg13 on_mob_life(), every Life() tick the reagent is in the body.
     /// </summary>
     [DataField]
