@@ -40,3 +40,27 @@
   molecularWeight: 0.86
   fuelOxRatio: 0.0128205
   flameTemperature: 1173.15
+
+# vg13 possible_fuels, by SS14 reagent id (glycerol, which SS14 doesn't have, comes with the vg13 reagents).
+- type: vgFuel
+  id: Plasma
+  maxTemperature: 4500
+  thermalEnergyTransfer: 27000
+  consumptionRate: 0.02
+  oxygenConsumption: 0.01
+
+- type: vgFuel
+  id: WeldingFuel
+  maxTemperature: 3480
+  thermalEnergyTransfer: 16200
+  consumptionRate: 0.1
+  oxygenConsumption: 0.2
+  carbonDioxideConsumption: -0.2
+
+- type: vgFuel
+  id: Ethanol
+  maxTemperature: 1833.15
+  thermalEnergyTransfer: 11700
+  consumptionRate: 0.1
+  oxygenConsumption: 0.08
+  carbonDioxideConsumption: -0.04

@@ -134,4 +134,46 @@ public sealed class VgFireTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task SpiltFuelBurns()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var mapLoader = entMan.System<MapLoaderSystem>();
+        var mapSys = entMan.System<SharedMapSystem>();
+
+        EntityUid grid = default;
+        EntityUid beaker = default;
+        await server.WaitPost(() =>
+        {
+            mapSys.CreateMap(out var mapId);
+            Assert.That(mapLoader.TryLoad(mapId, "Maps/Test/Breathing/3by3-20oxy-80nit.yml", out var roots));
+            grid = roots.First(x => entMan.HasComponent<MapGridComponent>(x));
+            beaker = entMan.SpawnEntity("Beaker", new EntityCoordinates(grid, new Vector2(0.5f, 0.5f)));
+
+            var solutions = entMan.System<Content.Shared.Chemistry.EntitySystems.SharedSolutionContainerSystem>();
+            Assert.That(solutions.TryGetSolution(beaker, "beaker", out var soln));
+            solutions.TryAddSolution(soln!.Value, new Content.Shared.Chemistry.Components.Solution("WeldingFuel", 30));
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var ev = new VgHotspotExposeEvent(grid, new Vector2i(0, 0), 700, Atmospherics.CellVolume);
+            entMan.EventBus.RaiseEvent(EventSource.Local, ref ev);
+            Assert.That(entMan.EntityQuery<VgFireComponent>().Count(), Is.GreaterThan(0), "fuel caught fire");
+        });
+
+        await server.WaitRunTicks(60 * 4);
+
+        await server.WaitAssertion(() =>
+        {
+            var solutions = entMan.System<Content.Shared.Chemistry.EntitySystems.SharedSolutionContainerSystem>();
+            Assert.That(solutions.TryGetSolution(beaker, "beaker", out _, out var solution));
+            Assert.That(solution!.GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.LessThan(30), "the fuel burnt");
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

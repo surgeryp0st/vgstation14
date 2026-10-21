@@ -4,7 +4,11 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Shared._VG.Fire;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Chemistry.Components.SolutionManager;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
+using Content.Shared.Mobs.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -28,6 +32,9 @@ public sealed class VgFireSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly SharedPointLightSystem _light = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly VgBurnableSystem _burnable = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
@@ -281,6 +288,81 @@ public sealed class VgFireSystem : EntitySystem
 
     #endregion
 
+    #region Liquid fuel
+
+    /// <summary>
+    ///     vg13 has_liquid_fuel(): is anything flammable in a container or puddle here?
+    /// </summary>
+    private bool HasLiquidFuel(EntityUid uid)
+    {
+        if (!TryComp<SolutionContainerManagerComponent>(uid, out var manager) || HasComp<MobStateComponent>(uid))
+            return false;
+
+        foreach (var (_, solution) in _solutions.EnumerateSolutions((uid, manager)))
+        {
+            foreach (var reagent in solution.Comp.Solution.Contents)
+            {
+                if (_proto.HasIndex<VgFuelPrototype>(reagent.Reagent.Prototype))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///     vg13 burnLiquidFuel(): burns the fuel in a container or puddle, giving heat to the fire. Reagents that aren't
+    ///     fuel evaporate one unit at a time while it burns.
+    /// </summary>
+    private BurnProducts? BurnLiquidFuel(EntityUid uid)
+    {
+        if (!TryComp<SolutionContainerManagerComponent>(uid, out var manager) || HasComp<MobStateComponent>(uid))
+            return null;
+
+        var heat = 0f;
+        var oxygen = 0f;
+        var carbon = 0f;
+        var maxTemperature = 0f;
+        var hasFuel = false;
+        var any = false;
+
+        foreach (var (_, solution) in _solutions.EnumerateSolutions((uid, manager)).ToArray())
+        {
+            if (solution.Comp.Solution.Volume <= 0)
+                continue;
+
+            any = true;
+            var solutionFuel = false;
+            foreach (var reagent in solution.Comp.Solution.Contents.ToArray())
+            {
+                if (!_proto.TryIndex<VgFuelPrototype>(reagent.Reagent.Prototype, out var fuel))
+                    continue;
+
+                solutionFuel = hasFuel = true;
+                maxTemperature = MathF.Max(maxTemperature, fuel.MaxTemperature);
+                heat += fuel.ThermalEnergyTransfer;
+                oxygen += fuel.OxygenConsumption;
+                carbon += -fuel.CarbonDioxideConsumption;
+                _solutions.RemoveReagent(solution, reagent.Reagent, FixedPoint2.New(fuel.ConsumptionRate));
+            }
+
+            if (!solutionFuel)
+            {
+                foreach (var reagent in solution.Comp.Solution.Contents.ToArray())
+                {
+                    _solutions.RemoveReagent(solution, reagent.Reagent, FixedPoint2.New(1));
+                }
+            }
+        }
+
+        if (!any || !hasFuel)
+            return null;
+
+        return new BurnProducts(heat, oxygen, carbon, maxTemperature);
+    }
+
+    #endregion
+
     #region Fire on a tile
 
     private GasMixture? Mixture(EntityUid grid, Vector2i tile, bool excite = false)
@@ -288,7 +370,7 @@ public sealed class VgFireSystem : EntitySystem
         return _atmos.GetTileMixture(new Entity<GridAtmosphereComponent?, GasTileOverlayComponent?>(grid, null, null), null, tile, excite);
     }
 
-    private void GetTileBurnables(EntityUid grid, Vector2i tile, List<Entity<VgBurnableComponent>> into)
+    private void GetTileBurnables(EntityUid grid, Vector2i tile, List<Entity<VgBurnableComponent>> into, List<EntityUid>? liquids = null)
     {
         _tileEntities.Clear();
         _lookup.GetLocalEntitiesIntersecting(grid, tile, _tileEntities, 0f);
@@ -296,16 +378,22 @@ public sealed class VgFireSystem : EntitySystem
         {
             if (TryComp<VgBurnableComponent>(uid, out var burnable) && Transform(uid).ParentUid == grid)
                 into.Add((uid, burnable));
+
+            if (liquids != null && HasLiquidFuel(uid))
+                liquids.Add(uid);
         }
     }
 
     /// <summary>
     ///     vg13 check_recombustability(): 2 while there's gas fuel, 1 while something on the tile can still burn, else 0.
     /// </summary>
-    private int Recombustability(GasMixture air, List<Entity<VgBurnableComponent>> burnables)
+    private int Recombustability(GasMixture air, List<Entity<VgBurnableComponent>> burnables, List<EntityUid>? liquids = null)
     {
         if (GasCombustability(air) == 2)
             return 2;
+
+        if (liquids is { Count: > 0 })
+            return 1;
 
         foreach (var burnable in burnables)
         {
@@ -319,10 +407,13 @@ public sealed class VgFireSystem : EntitySystem
     /// <summary>
     ///     vg13 check_combustability(): can anything here burn?
     /// </summary>
-    private int Combustability(GasMixture air, List<Entity<VgBurnableComponent>> burnables)
+    private int Combustability(GasMixture air, List<Entity<VgBurnableComponent>> burnables, List<EntityUid>? liquids = null)
     {
         if (GasCombustability(air) == 2)
             return 2;
+
+        if (liquids is { Count: > 0 })
+            return 1;
 
         foreach (var burnable in burnables)
         {
@@ -368,9 +459,10 @@ public sealed class VgFireSystem : EntitySystem
             return;
 
         var burnables = new List<Entity<VgBurnableComponent>>();
-        GetTileBurnables(args.Grid, args.Tile, burnables);
+        var liquids = new List<EntityUid>();
+        GetTileBurnables(args.Grid, args.Tile, burnables, liquids);
 
-        var combustability = Combustability(air, burnables);
+        var combustability = Combustability(air, burnables, liquids);
         if (combustability == 0)
             return;
 
@@ -378,6 +470,10 @@ public sealed class VgFireSystem : EntitySystem
         var igniting = false;
 
         if (combustability == 2 && _random.Prob(chance / 100))
+            igniting = true;
+
+        // Spilt fuel always catches.
+        if (liquids.Count > 0)
             igniting = true;
 
         foreach (var burnable in burnables)
@@ -472,10 +568,11 @@ public sealed class VgFireSystem : EntitySystem
         }
 
         var burnables = new List<Entity<VgBurnableComponent>>();
-        GetTileBurnables(grid, tile, burnables);
+        var liquids = new List<EntityUid>();
+        GetTileBurnables(grid, tile, burnables, liquids);
 
         // Is there anything left to burn?
-        var recombustability = Recombustability(air, burnables);
+        var recombustability = Recombustability(air, burnables, liquids);
         if (recombustability == 0)
         {
             Extinguish(uid, grid, tile);
@@ -495,6 +592,7 @@ public sealed class VgFireSystem : EntitySystem
 
         var firelevel = CalculateFirelevel(air, recombustability != 0);
         fire.FireLevel = firelevel;
+        SetSize(uid, firelevel);
 
         BurnThingsOnTile(grid, tile, air, firelevel);
         Spread((uid, fire), grid, gridComp, tile, firelevel);
@@ -510,11 +608,28 @@ public sealed class VgFireSystem : EntitySystem
                 burning.Add(products);
         }
 
+        foreach (var liquid in liquids)
+        {
+            if (BurnLiquidFuel(liquid) is { } liquidProducts)
+                burning.Add(liquidProducts);
+        }
+
         var flow = air.RemoveVolume(ConsumptionRate * Atmospherics.CellVolume);
-        ZBurn(flow, Recombustability(flow, burnables) != 0, burning, true);
+        ZBurn(flow, Recombustability(flow, burnables, liquids) != 0, burning, true);
         _atmos.Merge(air, flow);
 
         fire.BurnDuration++;
+    }
+
+    /// <summary>
+    ///     vg13 setfirelight(): bigger flames and a brighter light as the firelevel goes up.
+    /// </summary>
+    private void SetSize(EntityUid uid, float firelevel)
+    {
+        var (size, radius, energy) = firelevel > 6 ? (3, 7f, 3f) : firelevel > 2.5f ? (2, 5f, 2f) : (1, 3f, 1f);
+        _appearance.SetData(uid, VgFireVisuals.Size, size);
+        _light.SetRadius(uid, radius);
+        _light.SetEnergy(uid, energy);
     }
 
     private static void TidyResidue(GasMixture air, Gas gas)
@@ -565,12 +680,13 @@ public sealed class VgFireSystem : EntitySystem
                 continue;
 
             var burnables = new List<Entity<VgBurnableComponent>>();
-            GetTileBurnables(grid, other, burnables);
-            if (Combustability(neighbourAir, burnables) == 0)
+            var liquids = new List<EntityUid>();
+            GetTileBurnables(grid, other, burnables, liquids);
+            if (Combustability(neighbourAir, burnables, liquids) == 0)
                 continue;
 
             var chance = SpreadChance * MathF.Round(fire.Comp.BurnDuration / 5f) * MathF.Sqrt(neighbourAir.Temperature / Atmospherics.T20C)
-                         + 25 * firelevel;
+                         + 25 * firelevel + (liquids.Count > 0 ? 50 : 0);
             if (_random.Prob(Math.Clamp(chance, 0, 100) / 100))
                 EnsureFire(grid, other);
         }
