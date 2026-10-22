@@ -49,3 +49,16 @@
   effects:
   - !type:VgAdjustRadiation
     amount: 2
+
+# Water poisons and burns a Grey as it metabolises (vg13 ACID4WATER: REM of toxin and burn a tick (amounts are in REMs)).
+- type: vgReagent
+  id: Water
+  effects:
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: 1
+    onlySpecies: [ Grey ]
+  - !type:VgAdjustDamage
+    type: Burn
+    amount: 1
+    onlySpecies: [ Grey ]

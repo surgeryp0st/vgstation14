@@ -130,6 +130,22 @@
   # VG: vg13 species numbers.
   - type: VgSpecies
     species: Grey
+  # VG: water splashed on a Grey burns (vg13 ACID4WATER). The first reaction is SS14's, repeated because a child's
+  # reactions replace its parent's.
+  - type: Reactive
+    groups:
+      Flammable: [ Touch ]
+      Extinguish: [ Touch ]
+      Acidic: [ Touch, Ingestion ]
+    reactions:
+    - reagents: [ Water, SpaceCleaner ]
+      methods: [ Touch ]
+      effects:
+      - !type:WashCreamPieReaction
+    - reagents: [ Water ]
+      methods: [ Touch ]
+      effects:
+      - !type:VgGreyWaterSplash
 
 - type: entity
   save: false
