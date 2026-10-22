@@ -65,6 +65,7 @@ entities:
       fixtures: {}
     - type: Gravity
       enabled: true
+      inherent: true
     - type: DecalGrid
     - type: OccluderTree
     - type: Shuttle

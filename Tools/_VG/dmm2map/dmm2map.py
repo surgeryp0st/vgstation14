@@ -182,8 +182,10 @@ def atmosphere_lines(tiles, size=4):
     return out
 
 
-def write_map(dst, tilemap, tiles, placed, station=None):
-    """Writes an SS14 map: tilemap {name: id}, tiles {(x, y): id}, placed {proto: [(x, y, rot)]}."""
+def write_map(dst, tilemap, tiles, placed, station=None, inherent_gravity=False):
+    """Writes an SS14 map: tilemap {name: id}, tiles {(x, y): id}, placed {proto: [(x, y, rot)]}.
+
+    inherent_gravity gives the grid gravity without a gravity generator."""
     out = ["meta:", "  format: 6", "  postmapinit: false", "tilemap:"]
     for name, i in sorted(tilemap.items(), key=lambda kv: kv[1]):
         out.append(f"  {i}: {name}")
@@ -205,7 +207,7 @@ def write_map(dst, tilemap, tiles, placed, station=None):
                 "          version: 6"]
     out += ["    - type: Broadphase", "    - type: Physics", "      bodyStatus: InAir", "      angularDamping: 0.05",
             "      linearDamping: 0.05", "      fixedRotation: False", "      bodyType: Dynamic", "    - type: Fixtures",
-            "      fixtures: {}", "    - type: Gravity", "      enabled: true", "    - type: DecalGrid", "    - type: OccluderTree",
+            "      fixtures: {}", "    - type: Gravity", "      enabled: true", *(["      inherent: true"] if inherent_gravity else []), "    - type: DecalGrid", "    - type: OccluderTree",
             "    - type: Shuttle", "    - type: RadiationGridResistance", "    - type: GridAtmosphere", "      version: 2", *atmosphere_lines(tiles),
             "    - type: GasTileOverlay", "    - type: SpreaderGrid", "    - type: GridPathfinding", "    - type: NavMap",
             *(["    - type: BecomesStation", f"      id: {station}"] if station else []),

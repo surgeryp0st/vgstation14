@@ -202,7 +202,8 @@ def main():
     b.put("VendingMachineVendomat", x0 + 3, y0 + 1)
 
     dest = os.path.join(ROOT, "Resources", "Maps", "_VG", "vg_test.yml")
-    n = dmm2map.write_map(dest, b.tilemap, b.tiles, b.placed, station="VgTest")
+    # No gravity generator: the test grid has gravity of its own, so it doesn't depend on power.
+    n = dmm2map.write_map(dest, b.tilemap, b.tiles, b.placed, station="VgTest", inherent_gravity=True)
     print(f"{dest}: {len(b.tiles)} tiles, {n} entities; {len(pills)} test pills")
 
 
