@@ -160,6 +160,17 @@ atoms:
   /obj/structure/disposalpipe/broken: {drop: true}
   # vg13's outlet sits on a trunk, and an SS14 trunk already throws out whatever reaches the end of the line.
   /obj/structure/disposaloutlet: {drop: true}
+  # Engine machines both games have; SS14 behaviour. Not mapped: the particle accelerator (SS14 builds it from port/fore/
+  # starboard emitters around a control box), the thermoelectric generator and the antimatter engine (different layouts).
+  # SS14's emitter takes MV and its radiation collector HV, so on the converted maps they may sit on the wrong tier.
+  /obj/machinery/power/rad_collector: {proto: RadiationCollector}
+  /obj/machinery/power/emitter: {proto: Emitter, rot: dir}
+  /obj/machinery/field_generator: {proto: ContainmentFieldGenerator}
+  /obj/machinery/the_singularitygen: {proto: SingularityGenerator}
+  /obj/machinery/power/solar_assembly: {proto: SolarAssembly}
+  /obj/machinery/power/solar/control: {proto: ComputerSolarControl, rot: dir}
+  /obj/machinery/computer/powermonitor: {proto: ComputerPowerMonitoring, rot: dir}
+  /obj/machinery/power/port_gen/pacman: {proto: PortableGeneratorPacman}
   /obj/machinery/disposal: {proto: DisposalUnit}
   /obj/machinery/newscaster: {drop: true}
   /obj/machinery/status_display: {drop: true}

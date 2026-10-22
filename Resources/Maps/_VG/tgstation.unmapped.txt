@@ -18,14 +18,12 @@
 24	/obj/machinery/portable_atmospherics/canister/oxygen
 24	/obj/item/stack/sheet/metal
 24	/obj/item/stack/package_wrap
-22	/obj/machinery/power/rad_collector
 19	/obj/item/weapon/folder/red
 19	/obj/machinery/space_heater/air_conditioner
 19	/obj/item/stack/cable_coil
 17	/obj/machinery/shower
 17	/obj/item/device/multitool
 16	/obj/item/tool/crowbar
-16	/obj/machinery/field_generator
 16	/obj/item/weapon/stool/bar
 15	/obj/item/tool/wrench
 15	/obj/item/weapon/storage/toolbox/mechanical
@@ -40,7 +38,6 @@
 13	/obj/machinery/space_heater
 13	/obj/structure/bookcase
 13	/obj/item/clothing/glasses/scanner/meson
-13	/obj/machinery/power/solar_assembly
 12	/obj/machinery/suit_storage_unit/standard_unit
 12	/obj/item/stack/sheet/glass/glass
 12	/obj/structure/mirror
@@ -64,7 +61,6 @@
 11	/obj/item/weapon/camera_assembly
 11	/obj/item/clothing/glasses/scanner/science
 11	/obj/machinery/portable_atmospherics/canister/nitrogen
-11	/obj/machinery/power/emitter
 10	/obj/item/weapon/storage/firstaid/regular
 10	/obj/machinery/vending/snack
 10	/obj/item/device/flashlight/lamp/green
@@ -190,7 +186,6 @@
 4	/obj/machinery/vending/discount
 4	/obj/item/weapon/folder
 4	/obj/structure/wc/urinal
-4	/obj/machinery/power/solar/control
 4	/obj/item/weapon/reagent_containers/glass/beaker/large
 4	/obj/machinery/r_n_d/fabricator/circuit_imprinter
 4	/obj/structure/wc/sink/kitchen
@@ -200,7 +195,6 @@
 4	/obj/item/tool/weldingtool
 4	/mob/living/simple_animal/mouse/common
 4	/obj/item/weapon/storage/fancy/crayons
-4	/obj/machinery/computer/powermonitor
 4	/obj/item/weapon/circuitboard/power_control
 4	/obj/item/weapon/paper_bin/orange
 4	/obj/item/weapon/storage/bag/clipboard
@@ -418,7 +412,6 @@
 2	/obj/item/weapon/circuitboard/telecomms/bus
 2	/obj/item/weapon/book/manual/chef_recipes
 2	/obj/machinery/prism
-2	/obj/machinery/the_singularitygen
 2	/obj/item/weapon/reagent_containers/food/condiment/enzyme
 2	/obj/item/weapon/minihoe
 2	/obj/item/device/analyzer/plant_analyzer
@@ -725,7 +718,6 @@
 1	/obj/item/weapon/circuitboard/stationalert
 1	/obj/item/weapon/circuitboard/atmos_alert
 1	/obj/item/weapon/circuitboard/supermatter
-1	/obj/machinery/power/port_gen/pacman
 1	/obj/item/weapon/tank/plasma
 1	/obj/item/clothing/head/hardhat
 1	/obj/item/weapon/storage/lockbox/secway

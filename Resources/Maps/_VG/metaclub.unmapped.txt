@@ -24,7 +24,6 @@
 23	/obj/item/trash/cigbutt
 22	/obj/item/device/flashlight
 22	/obj/machinery/portable_atmospherics/hydroponics
-22	/obj/machinery/power/rad_collector
 21	/obj/machinery/media/receiver/boombox/wallmount/muzak
 20	/obj/item/device/radio
 20	/obj/item/stack/sheet/glass/glass
@@ -54,8 +53,6 @@
 13	/obj/machinery/vending/coffee
 13	/obj/machinery/computer/security/telescreen
 13	/obj/machinery/ai_status_display
-13	/obj/machinery/power/emitter
-13	/obj/machinery/power/solar_assembly
 12	/obj/machinery/vending/cigarette
 12	/obj/item/clothing/glasses/scanner/science
 12	/obj/item/weapon/reagent_containers/glass/beaker
@@ -68,7 +65,6 @@
 12	/obj/item/stack/rods
 12	/obj/structure/noticeboard
 12	/obj/item/weapon/storage/toolbox/mechanical
-12	/obj/machinery/field_generator
 12	/obj/item/device/am_shielding_container
 11	/obj/machinery/light_construct/small
 11	/obj/item/weapon/reagent_containers/dropper
@@ -173,7 +169,6 @@
 6	/obj/machinery/portable_atmospherics/canister/sleeping_agent
 5	/obj/item/device/gps/planetary
 5	/obj/item/clothing/head/hardhat/red
-5	/obj/machinery/power/solar/control
 5	/obj/item/tool/crowbar/red
 5	/obj/item/clothing/mask/breath
 5	/obj/item/device/camera_film
@@ -321,7 +316,6 @@
 3	/obj/machinery/computer/security_alerts
 3	/obj/machinery/flasher/portable
 3	/obj/item/weapon/bedsheet/orange
-3	/obj/machinery/computer/powermonitor
 3	/obj/item/trash/cigbutt/cigarbutt
 3	/obj/item/weapon/gun/energy/gun
 3	/obj/item/weapon/gun/energy/laser
@@ -521,12 +515,10 @@
 2	/obj/item/clothing/head/greenbandana
 2	/obj/item/weapon/circuitboard/arcade
 2	/obj/machinery/computer/shuttle_control/research
-2	/obj/machinery/power/port_gen/pacman
 2	/obj/item/weapon/circuitboard/telecomms/processor
 2	/obj/item/weapon/circuitboard/telecomms/server
 2	/obj/item/weapon/circuitboard/telecomms/bus
 2	/obj/item/weapon/stock_parts/subspace/transmitter
-2	/obj/machinery/the_singularitygen
 2	/obj/machinery/shield_capacitor
 2	/obj/machinery/shield_gen
 2	/obj/machinery/computer/general_air_control/atmos_automation

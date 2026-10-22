@@ -24,7 +24,6 @@
 24	/obj/item/device/radio
 24	/obj/machinery/portable_atmospherics/hydroponics
 23	/obj/item/weapon/cell/high
-22	/obj/machinery/power/rad_collector
 21	/obj/machinery/portable_atmospherics/canister/oxygen
 20	/obj/structure/wc/toilet
 20	/obj/item/tool/wrench
@@ -43,7 +42,6 @@
 17	/obj/machinery/recharge_station
 16	/obj/item/trash/cigbutt
 16	/obj/item/tool/screwdriver
-16	/obj/machinery/field_generator
 15	/obj/item/weapon/shard
 15	/obj/item/stack/rods
 15	/obj/item/clothing/glasses/scanner/meson
@@ -70,8 +68,6 @@
 13	/obj/item/tool/wirecutters
 13	/obj/machinery/computer/security/telescreen
 13	/obj/machinery/turret
-13	/obj/machinery/power/emitter
-13	/obj/machinery/power/solar_assembly
 12	/obj/machinery/vending
 12	/obj/item/weapon/storage/firstaid/regular
 12	/obj/structure/window/barricade/full
@@ -232,7 +228,6 @@
 4	/obj/machinery/portable_atmospherics/hydroponics/soil
 4	/obj/structure/hanging_lantern
 4	/obj/machinery/vending/groans
-4	/obj/machinery/power/solar/control
 4	/obj/machinery/computer/pda_terminal
 4	/obj/structure/curtain/open/shower/right
 4	/obj/item/weapon/bedsheet/hos
@@ -269,7 +264,6 @@
 4	/obj/item/weapon/tank/emergency_oxygen/engi
 4	/obj/item/clothing/suit/storage/hazardvest
 4	/obj/item/weapon/folder/yellow
-4	/obj/machinery/computer/powermonitor
 4	/obj/machinery/shieldgen
 4	/obj/item/weapon/stock_parts/micro_laser/high
 4	/obj/item/weapon/am_containment
@@ -559,7 +553,6 @@
 2	/obj/machinery/vending/tool
 2	/obj/structure/reagent_dispensers/degreaser
 2	/obj/item/device/silicate_sprayer
-2	/obj/machinery/the_singularitygen
 2	/obj/machinery/prism
 2	/obj/item/weapon/book/manual/engineering_singularity_safety
 2	/obj/item/weapon/circuitboard/telecomms/server
@@ -570,7 +563,6 @@
 2	/obj/item/weapon/reagent_containers/food/snacks/pie
 2	/obj/item/weapon/stock_parts/subspace/transmitter
 2	/obj/machinery/shield_capacitor
-2	/obj/machinery/power/port_gen/pacman
 2	/obj/machinery/shield_gen
 2	/obj/item/trash/chips
 2	/obj/item/trash/candy
