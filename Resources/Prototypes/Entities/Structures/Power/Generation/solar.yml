@@ -58,9 +58,10 @@
   description: A solar panel that generates power.
   components:
   - type: PowerSupplier
-    supplyRampTolerance: 500
-    supplyRampRate: 500
+    supplyRampTolerance: 1500 # VG
+    supplyRampRate: 1500 # VG
   - type: SolarPanel
+    maxSupply: 1500 # VG: SOLARGENRATE
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Metallic

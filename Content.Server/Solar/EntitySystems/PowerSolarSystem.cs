@@ -39,7 +39,7 @@ namespace Content.Server.Solar.EntitySystems
         /// The distance before the sun is considered to have been 'visible anyway'.
         /// This value, like the occlusion semantics, is borrowed from all the other SS13 stations with solars.
         /// </summary>
-        public float SunOcclusionCheckDistance = 20;
+        public float SunOcclusionCheckDistance = 256; // VG: vg13 traces up to 256 tiles (was 20)
 
         /// <summary>
         /// TODO: *Should be moved into the solar tracker when powernet allows for it.*
@@ -83,7 +83,8 @@ namespace Content.Server.Solar.EntitySystems
         {
             // Initialize the sun to something random
             TowardsSun = MathHelper.TwoPi * _robustRandom.NextDouble();
-            SunAngularVelocity = Angle.FromDegrees(0.1 + ((_robustRandom.NextDouble() - 0.5) * 0.05));
+            // VG: vg13's sun turns rotationRate degrees per 10 s, rotationRate being 0.85-1.15 either way round
+            SunAngularVelocity = Angle.FromDegrees((_robustRandom.NextDouble() < 0.5 ? -1 : 1) * 0.1 * (0.85 + _robustRandom.NextDouble() * 0.3));
         }
 
         private void OnMapInit(EntityUid uid, SolarPanelComponent component, MapInitEvent args)
@@ -149,7 +150,9 @@ namespace Content.Server.Solar.EntitySystems
             //
             // as for when it goes negative, it only does that when (abs(theta) > pi)
             // and that's expected behavior.
-            float coverage = (float)Math.Max(0, Math.Cos(panelRelativeToSun));
+            // VG: vg13's sunfrac is cos squared of the angle to the sun, and zero past 90 degrees
+            var cosine = Math.Cos(panelRelativeToSun);
+            float coverage = cosine > 0 ? (float)(cosine * cosine) : 0;
 
             if (coverage > 0)
             {
