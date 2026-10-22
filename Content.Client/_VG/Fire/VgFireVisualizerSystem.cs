@@ -4,7 +4,7 @@ using Robust.Client.GameObjects;
 namespace Content.Client._VG.Fire;
 
 /// <summary>
-///     Picks the flame sprite (vg13 fire.dmi key1 to key3) from how big the fire is.
+///     Picks the flame sprite (vg13 fire.dmi key1 to key3) from how big the fire is, coloured by its heat.
 /// </summary>
 public sealed class VgFireVisualizerSystem : VisualizerSystem<VgFireComponent>
 {
@@ -14,5 +14,8 @@ public sealed class VgFireVisualizerSystem : VisualizerSystem<VgFireComponent>
             return;
 
         args.Sprite.LayerSetState(0, $"key{Math.Clamp(size, 1, 3)}");
+
+        if (AppearanceSystem.TryGetData<Color>(uid, VgFireVisuals.Color, out var color, args.Component))
+            args.Sprite.Color = color;
     }
 }

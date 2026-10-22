@@ -700,7 +700,7 @@ public sealed class VgFireSystem : EntitySystem
 
         var firelevel = CalculateFirelevel(air, recombustability != 0);
         fire.FireLevel = firelevel;
-        SetSize(uid, firelevel);
+        SetVisuals(uid, fire, firelevel, air.Temperature);
 
         BurnThingsOnTile(grid, tile, air, firelevel);
         Spread((uid, fire), grid, gridComp, tile, firelevel);
@@ -732,12 +732,24 @@ public sealed class VgFireSystem : EntitySystem
     /// <summary>
     ///     vg13 setfirelight(): bigger flames and a brighter light as the firelevel goes up.
     /// </summary>
-    private void SetSize(EntityUid uid, float firelevel)
+    /// <summary>
+    ///     vg13 setfirelight(): flame size, light and colour, refreshed every 10 +/- 2 seconds.
+    /// </summary>
+    private void SetVisuals(EntityUid uid, VgFireComponent fire, float firelevel, float temperature)
     {
+        var now = _timing.CurTime;
+        if (now < fire.NextVisualRefresh)
+            return;
+
+        fire.NextVisualRefresh = now + TimeSpan.FromSeconds(10 + _random.Next(-2, 3));
+
         var (size, radius, energy) = firelevel > 6 ? (3, 7f, 3f) : firelevel > 2.5f ? (2, 5f, 2f) : (1, 3f, 1f);
+        var color = VgHeatColor.FromTemperature(temperature);
         _appearance.SetData(uid, VgFireVisuals.Size, size);
+        _appearance.SetData(uid, VgFireVisuals.Color, color);
         _light.SetRadius(uid, radius);
         _light.SetEnergy(uid, energy);
+        _light.SetColor(uid, color);
     }
 
     private static void TidyResidue(GasMixture air, Gas gas)

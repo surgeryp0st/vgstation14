@@ -19,6 +19,12 @@ public sealed partial class VgFireComponent : Component
     /// </summary>
     [ViewVariables]
     public float FireLevel;
+
+    /// <summary>
+    ///     vg13 last_vis_refresh: its size and colour only change every 10 seconds or so.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan NextVisualRefresh;
 }
 
 [Serializable, NetSerializable]
@@ -28,4 +34,9 @@ public enum VgFireVisuals : byte
     ///     1, 2 or 3 (vg13 fire.dmi key1 to key3): the bigger the firelevel, the bigger the flames.
     /// </summary>
     Size,
+
+    /// <summary>
+    ///     vg13 heat2color() of the air's temperature: what colour the flames and their light are.
+    /// </summary>
+    Color,
 }

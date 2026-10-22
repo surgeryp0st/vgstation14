@@ -317,6 +317,11 @@ public sealed class VgFireTest
         {
             Assert.That(fires.IsBurning(grid, target), "still burning before the spray");
 
+            // vg13 setfirelight(): the flames take the colour of the air's heat.
+            var fire = entMan.EntityQuery<VgFireComponent>().Single().Owner;
+            Assert.That(entMan.System<SharedAppearanceSystem>().TryGetData<Color>(fire, VgFireVisuals.Color, out var color), "fire has a heat colour");
+            Assert.That(color.RByte, Is.EqualTo(255), "flames are red-orange");
+
             var user = entMan.SpawnEntity("MobHuman", new EntityCoordinates(grid, 0.5f, 0.5f));
             var extinguisher = entMan.SpawnEntity("FireExtinguisher", new EntityCoordinates(grid, 0.5f, 0.5f));
             entMan.System<Content.Shared.Item.ItemToggle.ItemToggleSystem>().TryActivate(extinguisher);
