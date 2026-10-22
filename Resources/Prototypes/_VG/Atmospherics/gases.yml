@@ -1,6 +1,8 @@
 # vg13's gases that SS14 doesn't have (code/modules/ZAS/XGM_gases.dm). Ids continue after SS14's 0-8; the Gas enum
 # in Atmospherics.cs has the same four. Specific heat and molar mass are vg13's (molar mass in g/mol here).
-# TODO VG: gas overlay sprites (cryotheum has six levels in vg13's tile_effects.dmi).
+# Visible gases use vg13's tile_effects.dmi sprites and show all at once past vg13's overlay_limit (gasVisbilityFactor
+# 1.01 leaves almost no fade). vg13 picks one of several variants per tile; only the first is used here.
+# Volatile fuel, oxygen agent B and radon are invisible, as in vg13.
 
 - type: gas
   id: 9
@@ -23,6 +25,10 @@
   name: gases-vg-cryotheum
   specificHeat: 10
   molarMass: 32
+  gasOverlaySprite: /Textures/_VG/effects/tile_effects.rsi
+  gasOverlayState: cryotheum
+  gasMolesVisible: 0.7
+  gasVisbilityFactor: 1.01
   color: 9de3ff
   pricePerMole: 0
 

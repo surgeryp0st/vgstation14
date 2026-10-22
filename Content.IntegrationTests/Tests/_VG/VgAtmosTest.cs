@@ -92,4 +92,42 @@ public sealed class VgAtmosTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task GasOverlaysFollowVg13()
+    {
+        // vg13 shows plasma and cryotheum above 0.7 mol in a tile and N2O above 1, fully and at once; the rest of its
+        // gases never show.
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var overlay = server.System<GasTileOverlaySystem>();
+            byte Opacity(Gas gas, float moles)
+            {
+                var air = new GasMixture(Atmospherics.CellVolume);
+                air.AdjustMoles(gas, moles);
+                var index = System.Array.IndexOf(overlay.VisibleGasId, (int) gas);
+                return index < 0 ? (byte) 0 : overlay.GetOverlayData(air).Opacity[index];
+            }
+
+            Assert.Multiple(() =>
+            {
+                foreach (var (gas, limit) in new[] { (Gas.Plasma, 0.7f), (Gas.Cryotheum, 0.7f), (Gas.NitrousOxide, 1f) })
+                {
+                    Assert.That(overlay.VisibleGasId, Does.Contain((int) gas), $"{gas} has an overlay");
+                    Assert.That(Opacity(gas, limit * 0.9f), Is.Zero, $"{gas} below the limit");
+                    Assert.That(Opacity(gas, limit * 1.05f), Is.EqualTo(byte.MaxValue), $"{gas} just past the limit");
+                }
+
+                foreach (var gas in new[] { Gas.VolatileFuel, Gas.OxygenAgentB, Gas.Radon })
+                {
+                    Assert.That(overlay.VisibleGasId, Does.Not.Contain((int) gas), $"{gas} is invisible");
+                }
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

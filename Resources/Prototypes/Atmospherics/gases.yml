@@ -34,8 +34,10 @@
   specificHeat: 200
   heatCapacityRatio: 1.7
   molarMass: 405 # VG: vg13
-  gasOverlaySprite: /Textures/Effects/atmospherics.rsi
+  gasOverlaySprite: /Textures/_VG/effects/tile_effects.rsi # VG: vg13's overlay, shown above 0.7 mol with no fade
   gasOverlayState: plasma
+  gasMolesVisible: 0.7 # VG
+  gasVisbilityFactor: 1.01 # VG
   color: FF3300
   reagent: Plasma
   pricePerMole: 0
@@ -84,6 +86,10 @@
   specificHeat: 40
   heatCapacityRatio: 1.3
   molarMass: 44
+  gasOverlaySprite: /Textures/_VG/effects/tile_effects.rsi # VG: vg13 shows sleeping agent above 1 mol
+  gasOverlayState: sleeping_agent
+  gasMolesVisible: 1 # VG
+  gasVisbilityFactor: 1.01 # VG
   color: 8F00FF
   reagent: NitrousOxide
   pricePerMole: 0.1
