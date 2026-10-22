@@ -176,4 +176,36 @@ public sealed class VgFireTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task ClientSeesMobAlreadyOnFire()
+    {
+        // A mob the client first sees while it is burning (joining mid-round next to a burning
+        // plasmaman) must not spawn its fire light before the mob has finished initialising.
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+        var sEntMan = server.EntMan;
+
+        EntityUid human = default;
+        await server.WaitPost(() =>
+        {
+            sEntMan.System<AtmosphereSystem>().SetMapAtmosphere(map.MapUid, false, Air(21.824779f, 82.10312f));
+            human = sEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            sEntMan.System<FlammableSystem>().AdjustFireStacks(human, 5, ignite: true);
+        });
+
+        await pair.RunTicksSync(10);
+
+        await client.WaitAssertion(() =>
+        {
+            var cEntMan = client.EntMan;
+            var clientHuman = cEntMan.GetEntity(sEntMan.GetNetEntity(human));
+            var visuals = cEntMan.GetComponent<Content.Client.Atmos.Components.FireVisualsComponent>(clientHuman);
+            Assert.That(visuals.LightEntity, Is.Not.Null, "burning mob has its fire light");
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

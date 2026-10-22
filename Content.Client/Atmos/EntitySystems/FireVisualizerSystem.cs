@@ -17,7 +17,17 @@ public sealed class FireVisualizerSystem : VisualizerSystem<FireVisualsComponent
         base.Initialize();
 
         SubscribeLocalEvent<FireVisualsComponent, ComponentInit>(OnComponentInit);
+        SubscribeLocalEvent<FireVisualsComponent, ComponentStartup>(OnStartup); // VG
         SubscribeLocalEvent<FireVisualsComponent, ComponentShutdown>(OnShutdown);
+    }
+
+    // VG: the first appearance update can spawn the fire light as a child of this entity, which the
+    // engine only allows once the entity is initialised (a mob the client first sees already burning
+    // crashed in ComponentInit), so it runs at startup instead.
+    private void OnStartup(EntityUid uid, FireVisualsComponent component, ComponentStartup args)
+    {
+        if (TryComp<SpriteComponent>(uid, out var sprite) && TryComp(uid, out AppearanceComponent? appearance))
+            UpdateAppearance(uid, component, sprite, appearance);
     }
 
     private void OnShutdown(EntityUid uid, FireVisualsComponent component, ComponentShutdown args)
@@ -47,8 +57,7 @@ public sealed class FireVisualizerSystem : VisualizerSystem<FireVisualsComponent
         sprite.LayerSetShader(FireVisualLayers.Fire, "unshaded");
         if (component.Sprite != null)
             sprite.LayerSetRSI(FireVisualLayers.Fire, component.Sprite);
-
-        UpdateAppearance(uid, component, sprite, appearance);
+        // VG: UpdateAppearance moved to OnStartup
     }
 
     protected override void OnAppearanceChange(EntityUid uid, FireVisualsComponent component, ref AppearanceChangeEvent args)
