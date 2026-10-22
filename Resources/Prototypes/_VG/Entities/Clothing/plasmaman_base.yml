@@ -19,10 +19,14 @@
 
 - type: entity
   abstract: true
-  parent: ClothingHeadHardsuitWithLightBase
+  # The hardsuit helmet for its seal, protection and cell-free light; ClothingHeadBase makes it an item you can
+  # hold and pick up, as in vg13 (SS14's hardsuit helmets aren't items, they live in the suit).
+  parent: [ ClothingHeadHardsuitWithLightBase, ClothingHeadBase ]
   id: VgPlasmamanHelmetBase
   name: plasmaman helmet
   description: A special containment helmet designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies.
   categories: [ ]
   components:
+  - type: Item
+    size: Normal
   - type: VgPlasmaContainment

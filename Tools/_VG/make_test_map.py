@@ -105,10 +105,11 @@ def main():
         x0 = i * W
         rooms[("N", i)] = (x0, 4, x0 + W, 12)
         rooms[("S", i)] = (x0, -8, x0 + W, 0)
+    DOOR = 3  # each room's door is this many tiles in from its west wall; keep that column clear inside
     for (side, i), (x0, y0, x1, y1) in rooms.items():
         b.room(x0, y0, x1, y1)
         door_y = 4 if side == "N" else 0
-        b.door(x0 + 3, door_y, "AirlockGlass")
+        b.door(x0 + DOOR, door_y, "AirlockGlass")
 
     def inner(side, i):
         x0, y0, x1, y1 = rooms[(side, i)]
@@ -130,7 +131,10 @@ def main():
         b.cable("CableApcExtension", [(x, y) for x in range(ix0, ix1 + 1) for y in range(iy0, iy1 + 1)])
         for lx in (ix0 + 2, ix1 - 2):
             b.put("PoweredlightLED", lx, iy1 if side == "N" else iy0, SOUTH if side == "N" else NORTH)
-    b.cable("CableApcExtension", [(x, y) for x in range(1, length) for y in range(1, 4)])
+    # The corridor is its own area: an APC on its north wall, west of the rooms, and LV along its whole length.
+    b.cable("CableMV", [(-2, 2), (-2, 3)])
+    b.put("APCBasic", -2, 3, NORTH)
+    b.cable("CableApcExtension", [(x, y) for x in range(-7, length) for y in range(1, 4)])
     for x in range(4, length, 8):
         b.put("PoweredlightLED", x, 3, SOUTH)
 
@@ -178,11 +182,11 @@ def main():
     for i, key in enumerate([("S", 0), ("S", 1)]):
         x0, y0, x1, y1 = inner(*key)
         chunk = pills[i * 30:(i + 1) * 30] if len(pills) > 30 else (pills if i == 0 else [])
-        width = x1 - x0 + 1
+        columns = [x for x in range(x0, x1 + 1) if x != x0 - 1 + DOOR]
         for j, pill in enumerate(chunk):
-            row, col = divmod(j, width)
-            b.put("Table", x0 + col, y1 - row * 2)
-            b.put(pill, x0 + col, y1 - row * 2)
+            row, col = divmod(j, len(columns))
+            b.put("Table", columns[col], y1 - row * 2)
+            b.put(pill, columns[col], y1 - row * 2)
     if len(pills) > 60:
         print("warning: more pills than fit", len(pills))
 
@@ -197,7 +201,7 @@ def main():
 
     # --- room S3: food and drink, to watch hunger.
     x0, y0, x1, y1 = inner("S", 3)
-    b.shelf(["FoodBurgerBacon", "FoodPizzaPineapple", "FoodApple", "DrinkBeerglass", "DrinkColaCan"], x0 + 1, y1, (1, 0))
+    b.shelf(["FoodBurgerBacon", "FoodPizzaPineapple", "FoodApple", "DrinkBeerglass", "DrinkColaCan"], x0 + DOOR, y1, (1, 0))
     b.put("VendingMachineCigs", x0 + 1, y0 + 1)
     b.put("VendingMachineVendomat", x0 + 3, y0 + 1)
 

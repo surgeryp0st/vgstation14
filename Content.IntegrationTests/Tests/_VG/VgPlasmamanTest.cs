@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Systems;
@@ -105,6 +106,38 @@ public sealed class VgPlasmamanTest
             }
 
             Assert.That(checkedJobs, Is.GreaterThan(20));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HelmetsAreItems()
+    {
+        // vg13's helmets come off into your hand and can be picked up; SS14's hardsuit helmets, which they are
+        // built on, aren't items at all.
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var helmets = server.ProtoMan.EnumeratePrototypes<EntityPrototype>()
+                .Where(p => !p.Abstract && p.ID.StartsWith("VgPlasmamanHelmet"))
+                .ToList();
+            Assert.That(helmets, Is.Not.Empty);
+            foreach (var helmet in helmets)
+            {
+                Assert.That(helmet.Components.ContainsKey("Item"), Is.True, $"{helmet.ID} is not an item");
+            }
+
+            var inventory = entMan.System<InventorySystem>();
+            var hands = entMan.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>();
+            var mob = entMan.SpawnEntity("MobPlasmaman", map.GridCoords);
+            Assert.That(inventory.SpawnItemInSlot(mob, "head", "VgPlasmamanHelmet", true), Is.True);
+            Assert.That(inventory.TryUnequip(mob, "head", out var removed, force: true), Is.True);
+            Assert.That(hands.TryPickupAnyHand(mob, removed!.Value), Is.True, "picks the helmet back up");
         });
 
         await pair.CleanReturnAsync();
