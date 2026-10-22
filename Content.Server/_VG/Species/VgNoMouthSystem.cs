@@ -1,6 +1,5 @@
 using Content.Server.Body.Systems;
 using Content.Server.Nutrition.Components;
-using Content.Shared._VG.Life;
 using Content.Shared._VG.Nutrition;
 using Content.Shared._VG.Popups;
 using Content.Shared._VG.Species;
@@ -27,7 +26,6 @@ public sealed class VgNoMouthSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<VgSpeciesComponent, IngestionAttemptEvent>(OnIngestionAttempt);
-        SubscribeLocalEvent<VgSpeciesComponent, VgLifeTickEvent>(OnLifeTick);
     }
 
     private void OnIngestionAttempt(Entity<VgSpeciesComponent> ent, ref IngestionAttemptEvent args)
@@ -39,7 +37,10 @@ public sealed class VgNoMouthSystem : EntitySystem
         _popup.Self(ent, Loc.GetString("vg-no-mouth"), null);
     }
 
-    private void OnLifeTick(Entity<VgSpeciesComponent> ent, ref VgLifeTickEvent args)
+    /// <summary>
+    ///     Called from <see cref="VgPlasmamanSystem"/>'s Life() tick, since an entity event can have one handler per component.
+    /// </summary>
+    public void LifeTick(Entity<VgSpeciesComponent> ent)
     {
         if (_species.Get(ent) is not { NoMouth: true, IsPlant: true })
             return;

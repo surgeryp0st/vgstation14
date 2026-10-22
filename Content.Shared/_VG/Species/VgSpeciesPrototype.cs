@@ -101,6 +101,12 @@ public sealed partial class VgSpeciesPrototype : IPrototype
     public bool IsPlant;
 
     /// <summary>
+    ///     vg13 plasmaman: bursts into flame in air with at least 1% oxygen unless a containment suit and helmet are worn.
+    /// </summary>
+    [DataField]
+    public bool IgnitesInOxygen;
+
+    /// <summary>
     ///     vg13 NO_BLOOD.
     /// </summary>
     [DataField]

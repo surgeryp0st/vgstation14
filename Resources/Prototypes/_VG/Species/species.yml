@@ -92,6 +92,7 @@
 - type: vgSpecies
   id: Plasmaman
   noBlood: true
+  ignitesInOxygen: true
   bruteMod: 1.5
   burnMod: 0.5
   heatLevel1: 350
