@@ -215,4 +215,38 @@ public sealed class VgStatusTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task SlurringIsDrunkSpeech()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var status = entMan.System<VgStatusSystem>();
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            status.AdjustHalloss(human, 50);
+            var sober = status.GetPainLevel(human);
+
+            status.Slur(human, 5);
+            Assert.Multiple(() =>
+            {
+                Assert.That(status.IsSlurring(human));
+                Assert.That(entMan.HasComponent<Content.Server.Speech.Components.SlurredAccentComponent>(human), "SS14's slurred accent");
+                // vg13 shock: being drunk dulls the pain by 20.
+                Assert.That(status.GetPainLevel(human), Is.EqualTo(sober - 20).Within(0.01f));
+            });
+
+            // max(slurring, n): a shorter slur doesn't cut a longer one short.
+            entMan.System<StatusEffectsSystem>().TryGetTime(human, "SlurredSpeech", out var before);
+            status.Slur(human, 1);
+            entMan.System<StatusEffectsSystem>().TryGetTime(human, "SlurredSpeech", out var after);
+            Assert.That(after!.Value.Item2, Is.EqualTo(before!.Value.Item2));
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

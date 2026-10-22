@@ -35,6 +35,7 @@ namespace Content.Shared._VG.Status;
 public sealed class VgStatusSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly Robust.Shared.Network.INetManager _net = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
@@ -54,6 +55,7 @@ public sealed class VgStatusSystem : EntitySystem
     private const string StunKey = "Stun";
     private const string KnockdownKey = "KnockedDown";
     private const string SleepKey = "ForcedSleep";
+    private const string SlurKey = "SlurredSpeech";
 
 
     // Salts for VgPredictedRandom.
@@ -126,6 +128,25 @@ public sealed class VgStatusSystem : EntitySystem
         var time = ticks * LifeTick;
         if (Longer(uid, "Stutter", time))
             _stutter.DoStutter(uid, time, true);
+    }
+
+    /// <summary>
+    ///     vg13 slurring: drunken speech for at least this many Life() ticks, through SS14's slurred speech. Speech is
+    ///     server-side, and so is the accent.
+    /// </summary>
+    public void Slur(EntityUid uid, float ticks)
+    {
+        if (_net.IsClient)
+            return;
+
+        var time = ticks * LifeTick;
+        if (Longer(uid, SlurKey, time))
+            _statusEffects.TryAddStatusEffect(uid, SlurKey, time, true, "SlurredAccent");
+    }
+
+    public bool IsSlurring(EntityUid uid)
+    {
+        return _statusEffects.HasStatusEffect(uid, SlurKey);
     }
 
     /// <summary>
@@ -462,7 +483,10 @@ public sealed class VgStatusSystem : EntitySystem
             }
         }
 
-        // TODO VG: being drunk (slurring) dulls this by 20, once vg13 alcohol is in.
+        // Being drunk dulls the pain a bit.
+        if (IsSlurring(uid))
+            pain -= 20;
+
         return MathF.Max(0, pain - comp.PainResistance);
     }
 
