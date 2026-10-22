@@ -1,0 +1,52 @@
+# vg13 idle_power_usage (see VgPowerUsePrototype). The comment is the vg13 type it comes from.
+- type: vgPowerUse
+  id: BaseComputer
+  idle: 300 # computer.dm
+
+- type: vgPowerUse
+  id: ArcadeBase
+  idle: 300 # an arcade machine is a computer
+
+- type: vgPowerUse
+  id: ComputerCrewMonitoring
+  idle: 250 # computer/crew
+
+- type: vgPowerUse
+  id: Autolathe
+  idle: 50 # autolathe
+
+- type: vgPowerUse
+  id: Protolathe
+  idle: 20 # r_n_d/fabricator
+
+- type: vgPowerUse
+  id: CircuitImprinter
+  idle: 20 # r_n_d/fabricator
+
+- type: vgPowerUse
+  id: ChemMaster
+  idle: 20 # chem_master
+
+- type: vgPowerUse
+  id: ChemDispenser
+  idle: 40 # chem_dispenser
+
+- type: vgPowerUse
+  id: FaxMachineBase
+  idle: 30 # faxmachine
+
+- type: vgPowerUse
+  id: Holopad
+  idle: 5 # hologram
+
+- type: vgPowerUse
+  id: KitchenMicrowave
+  idle: 5 # microwave
+
+- type: vgPowerUse
+  id: KitchenReagentGrinder
+  idle: 5 # reagentgrinder
+
+- type: vgPowerUse
+  id: MedicalScanner
+  idle: 125 # bodyscanner
