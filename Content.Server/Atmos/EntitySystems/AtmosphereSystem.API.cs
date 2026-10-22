@@ -259,12 +259,23 @@ public partial class AtmosphereSystem
 
     public void HotspotExtinguish(EntityUid gridUid, Vector2i tile)
     {
+        // VG: the tile's fire is a vg13 fire.
+        if (VgReplacesHotspots)
+        {
+            EntityManager.System<Content.Server._VG.Fire.VgFireSystem>().RemoveFire(gridUid, tile);
+            return;
+        }
+
         var ev = new HotspotExtinguishMethodEvent(gridUid, tile);
         RaiseLocalEvent(gridUid, ref ev);
     }
 
     public bool IsHotspotActive(EntityUid gridUid, Vector2i tile)
     {
+        // VG: the tile's fire is a vg13 fire.
+        if (VgReplacesHotspots)
+            return EntityManager.System<Content.Server._VG.Fire.VgFireSystem>().IsBurning(gridUid, tile);
+
         var ev = new IsHotspotActiveMethodEvent(gridUid, tile);
         RaiseLocalEvent(gridUid, ref ev);
 

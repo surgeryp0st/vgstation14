@@ -208,4 +208,127 @@ public sealed class VgFireTest
 
         await pair.CleanReturnAsync();
     }
+
+    /// <summary>
+    ///     A walled corridor of four floor tiles, (0, 0) to (3, 0), full of ordinary air.
+    /// </summary>
+    private static async Task<(Content.IntegrationTests.Pair.TestPair Pair, EntityUid Grid)> AirRoom()
+    {
+        var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var grid = map.Grid.Owner;
+        var plating = new Tile(server.ResolveDependency<Robust.Shared.Map.ITileDefinitionManager>()["Plating"].TileId);
+        await server.WaitPost(() =>
+        {
+            var mapSys = server.System<SharedMapSystem>();
+            for (var x = -1; x <= 4; x++)
+            for (var y = -1; y <= 1; y++)
+            {
+                mapSys.SetTile(grid, map.Grid.Comp, new Vector2i(x, y), plating);
+                if (x is -1 or 4 || y != 0)
+                    server.EntMan.SpawnEntity("WallSolid", new EntityCoordinates(grid, x + 0.5f, y + 0.5f));
+            }
+        });
+        // Let atmos see the walls before filling the room.
+        await server.WaitRunTicks(5);
+        await server.WaitPost(() =>
+        {
+            var atmos = server.System<AtmosphereSystem>();
+            for (var x = 0; x <= 3; x++)
+            {
+                var air = atmos.GetTileMixture(grid, null, new Vector2i(x, 0), true)!;
+                air.Clear();
+                air.AdjustMoles(Gas.Oxygen, 21.824779f);
+                air.AdjustMoles(Gas.Nitrogen, 82.10312f);
+                air.Temperature = Atmospherics.T20C;
+            }
+        });
+        return (pair, grid);
+    }
+
+    /// <summary>Sets the tile alight with a beaker of welding fuel, so it keeps burning.</summary>
+    private static EntityUid FuelFire(IEntityManager entMan, EntityUid grid, Vector2i tile)
+    {
+        var beaker = entMan.SpawnEntity("Beaker", new EntityCoordinates(grid, tile + new Vector2(0.5f, 0.5f)));
+        var solutions = entMan.System<Content.Shared.Chemistry.EntitySystems.SharedSolutionContainerSystem>();
+        Assert.That(solutions.TryGetSolution(beaker, "beaker", out var soln));
+        solutions.TryAddSolution(soln!.Value, new Content.Shared.Chemistry.Components.Solution("WeldingFuel", 30));
+        var ev = new VgHotspotExposeEvent(grid, tile, 700, Atmospherics.CellVolume);
+        entMan.EventBus.RaiseEvent(EventSource.Local, ref ev);
+        return beaker;
+    }
+
+    [Test]
+    public async Task WaterPutsOutFire()
+    {
+        var (pair, grid) = await AirRoom();
+        await using var _ = pair;
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var fires = entMan.System<VgFireSystem>();
+        var atmos = entMan.System<AtmosphereSystem>();
+        var tile = new Vector2i(2, 0);
+
+        EntityUid paper = default;
+        await server.WaitAssertion(() =>
+        {
+            FuelFire(entMan, grid, tile);
+            paper = entMan.SpawnEntity("Paper", new EntityCoordinates(grid, tile + new Vector2(0.5f, 0.5f)));
+            Assert.That(fires.Ignite((paper, entMan.GetComponent<VgBurnableComponent>(paper))), Is.True);
+            Assert.That(fires.IsBurning(grid, tile));
+            // SS14's extinguishing asks atmos, which now sees the vg13 fire.
+            Assert.That(atmos.IsHotspotActive(grid, tile), Is.True);
+
+            var air = atmos.GetTileMixture(grid, null, tile, true)!;
+            air.Temperature = 600;
+            var water = server.ProtoMan.Index<Content.Shared.Chemistry.Reagent.ReagentPrototype>("Water");
+            var tileRef = server.System<SharedMapSystem>().GetTileRef(grid, entMan.GetComponent<MapGridComponent>(grid), tile);
+            water.ReactionTile(tileRef, 10, entMan, null);
+
+            // vg13: the paper is out and stays out for a while, the air cools by at most half a degree.
+            var burnable = entMan.GetComponent<VgBurnableComponent>(paper);
+            Assert.That(burnable.OnFire, Is.False);
+            Assert.That(entMan.System<VgBurnableSystem>().IsFireProtected(burnable), Is.True);
+            Assert.That(air.Temperature, Is.InRange(599.5f, 599.9f));
+        });
+
+        await server.WaitRunTicks(1);
+        await server.WaitAssertion(() => Assert.That(fires.IsBurning(grid, tile), Is.False, "fire is out"));
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ExtinguisherPutsOutFire()
+    {
+        var (pair, grid) = await AirRoom();
+        await using var _ = pair;
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var fires = entMan.System<VgFireSystem>();
+        var target = new Vector2i(2, 0);
+
+        await server.WaitAssertion(() => FuelFire(entMan, grid, target));
+
+        // Left alone, it keeps burning for at least as long as the spray takes.
+        await server.WaitRunTicks(90);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(fires.IsBurning(grid, target), "still burning before the spray");
+
+            var user = entMan.SpawnEntity("MobHuman", new EntityCoordinates(grid, 0.5f, 0.5f));
+            var extinguisher = entMan.SpawnEntity("FireExtinguisher", new EntityCoordinates(grid, 0.5f, 0.5f));
+            entMan.System<Content.Shared.Item.ItemToggle.ItemToggleSystem>().TryActivate(extinguisher);
+            var spray = entMan.GetComponent<Content.Server.Fluids.Components.SprayComponent>(extinguisher);
+            var targetCoords = entMan.System<SharedTransformSystem>().ToMapCoordinates(new EntityCoordinates(grid, target + new Vector2(0.5f, 0.5f)));
+            entMan.System<Content.Server.Fluids.EntitySystems.SpraySystem>().Spray((extinguisher, spray), user, targetCoords);
+        });
+
+        // The vapour takes a moment to fly over.
+        await server.WaitRunTicks(90);
+        await server.WaitAssertion(() => Assert.That(fires.IsBurning(grid, target), Is.False, "sprayed fire is out"));
+
+        await pair.CleanReturnAsync();
+    }
 }

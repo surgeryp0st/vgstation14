@@ -707,6 +707,45 @@ public sealed class VgFireSystem : EntitySystem
         QueueDel(fire);
     }
 
+    /// <summary>
+    ///     Whether the tile has a fire. SS14's IsHotspotActive asks this (a // VG hook), so its extinguishing works.
+    /// </summary>
+    public bool IsBurning(EntityUid grid, Vector2i tile)
+    {
+        return FireAt(grid, tile) != null;
+    }
+
+    /// <summary>
+    ///     vg13 qdel(hotspot): the tile's fire goes, but what's burning on it keeps burning. SS14's HotspotExtinguish.
+    /// </summary>
+    public bool RemoveFire(EntityUid grid, Vector2i tile)
+    {
+        if (FireAt(grid, tile) is not { } fire)
+            return false;
+
+        QueueDel(fire);
+        return true;
+    }
+
+    /// <summary>
+    ///     vg13 water reaction_turf() and reaction_obj(): everything on the tile is put out (and won't catch for a
+    ///     while), and a fire there goes, cooling the air a little but not below 20 C.
+    /// </summary>
+    public void Douse(EntityUid grid, Vector2i tile)
+    {
+        var burnables = new List<Entity<VgBurnableComponent>>();
+        GetTileBurnables(grid, tile, burnables);
+        foreach (var burnable in burnables)
+        {
+            _burnable.Extinguish(burnable);
+        }
+
+        if (!RemoveFire(grid, tile) || Mixture(grid, tile) is not { } air)
+            return;
+
+        air.Temperature = MathF.Max(air.Temperature - 0.1f * _random.Next(1, 6), Atmospherics.T20C);
+    }
+
     #endregion
 }
 
