@@ -117,3 +117,24 @@ public sealed partial class VgCryotheumPlasmaReaction : IGasReactionEffect
         return ReactionResult.Reacting;
     }
 }
+
+/// <summary>
+///     vg13 react(): gas in pipes, tanks and canisters burns by itself once it's past the plasma burn temperature and
+///     has fuel and oxygen (zburn() without a tile). Gas on tiles only burns where a vg13 fire is (VgFireSystem).
+/// </summary>
+[UsedImplicitly]
+public sealed partial class VgContainedBurnReaction : IGasReactionEffect
+{
+    public ReactionResult React(GasMixture mixture, IGasMixtureHolder? holder, AtmosphereSystem atmosphereSystem, float heatScale)
+    {
+        if (holder is TileAtmosphere)
+            return ReactionResult.NoReaction;
+
+        // Not cached: each test server has its own entity manager.
+        var fire = IoCManager.Resolve<IEntityManager>().System<Content.Server._VG.Fire.VgFireSystem>();
+        var recombustible = Content.Server._VG.Fire.VgFireSystem.GasCombustability(mixture) == 2;
+        return fire.ZBurn(mixture, recombustible, Array.Empty<Content.Server._VG.Fire.VgFireSystem.BurnProducts>(), false) > 0
+            ? ReactionResult.Reacting
+            : ReactionResult.NoReaction;
+    }
+}

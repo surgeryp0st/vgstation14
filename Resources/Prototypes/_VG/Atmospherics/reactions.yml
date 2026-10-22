@@ -56,3 +56,14 @@
   - 0.01  # cryotheum
   effects:
   - !type:VgCryotheumPlasmaReaction {}
+
+# vg13 react(): plasma or volatile fuel burning with oxygen inside pipes, tanks and canisters, above 100 C
+# (PLASMA_MINIMUM_BURN_TEMPERATURE). The reaction checks for fuel itself, since either one will do.
+- type: gasReaction
+  id: VgContainedBurn
+  priority: 2
+  minimumTemperature: 373.15
+  minimumRequirements:
+  - 0.01  # oxygen
+  effects:
+  - !type:VgContainedBurnReaction {}

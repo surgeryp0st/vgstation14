@@ -511,4 +511,45 @@ public sealed class VgFireTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task HotPlasmaBurnsInCanisters()
+    {
+        // vg13 react(): plasma and oxygen past 100 C burn by themselves in a canister, but on a floor only with a fire.
+        var (pair, grid) = await AirRoom();
+        await using var _ = pair;
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var atmos = entMan.System<AtmosphereSystem>();
+        var floor = new Vector2i(3, 0);
+
+        Content.Server.Atmos.Piping.Unary.Components.GasCanisterComponent canister = default!;
+        await server.WaitPost(() =>
+        {
+            var uid = entMan.SpawnEntity("StorageCanister", new EntityCoordinates(grid, 0.5f, 0.5f));
+            canister = entMan.GetComponent<Content.Server.Atmos.Piping.Unary.Components.GasCanisterComponent>(uid);
+            canister.Air.Clear();
+            canister.Air.AdjustMoles(Gas.Plasma, 10);
+            canister.Air.AdjustMoles(Gas.Oxygen, 20);
+            canister.Air.Temperature = 400;
+
+            var tileAir = atmos.GetTileMixture(grid, null, floor, true)!;
+            tileAir.AdjustMoles(Gas.Plasma, 10);
+            tileAir.Temperature = 400;
+        });
+
+        await server.WaitRunTicks(60);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(canister.Air.GetMoles(Gas.Plasma), Is.LessThan(10), "plasma burnt in the canister");
+            Assert.That(canister.Air.GetMoles(Gas.CarbonDioxide), Is.GreaterThan(0), "into CO2");
+            Assert.That(canister.Air.Temperature, Is.GreaterThan(400), "and heated it");
+
+            var tileAir = atmos.GetTileMixture(grid, null, floor, false)!;
+            Assert.That(tileAir.GetMoles(Gas.CarbonDioxide), Is.Zero, "hot plasma on a floor needs a fire to burn");
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }
