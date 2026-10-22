@@ -16,13 +16,14 @@ public sealed class VgTelepathyBoundUserInterface(EntityUid owner, Enum uiKey) :
         base.Open();
         _window = this.CreateWindow<VgTelepathyWindow>();
         _window.OnSend += (target, message) => SendMessage(new VgTelepathySendMessage(target, message));
+        _window.OnSetTargets += (target, mode) => SendMessage(new VgTelepathySetTargetsMessage(target, mode));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
         if (state is VgTelepathyBuiState telepathy)
-            _window?.SetNames(telepathy.Names);
+            _window?.SetNames(telepathy.Names, telepathy.SetTargetsOnly);
     }
 }
 
@@ -31,9 +32,15 @@ public sealed class VgTelepathyWindow : DefaultWindow
     private readonly OptionButton _targets = new();
     private readonly LineEdit _message = new() { HorizontalExpand = true };
     private readonly Label _none = new();
-    private List<string> _names = new();
+    private readonly Button _send = new();
+    private readonly BoxContainer _row = new() { Orientation = BoxContainer.LayoutOrientation.Horizontal };
+
+    // What each entry of the dropdown stands for: a name, or one of the groups.
+    private List<(string? Name, VgTelepathyMode Mode)> _entries = new();
+    private bool _setTargetsOnly;
 
     public event Action<string?, string>? OnSend;
+    public event Action<string?, VgTelepathyMode>? OnSetTargets;
 
     public VgTelepathyWindow()
     {
@@ -43,46 +50,73 @@ public sealed class VgTelepathyWindow : DefaultWindow
         _message.PlaceHolder = Loc.GetString("vg-telepathy-message-placeholder");
         _message.OnTextEntered += _ => Send();
         _none.Text = Loc.GetString("vg-telepathy-none");
+        _send.OnPressed += _ => Send();
 
-        var send = new Button { Text = Loc.GetString("vg-telepathy-send") };
-        send.OnPressed += _ => Send();
-
-        var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
-        row.AddChild(_message);
-        row.AddChild(send);
+        _row.AddChild(_message);
+        _row.AddChild(_send);
 
         var box = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, Margin = new Thickness(8) };
         box.AddChild(_targets);
         box.AddChild(_none);
-        box.AddChild(row);
+        box.AddChild(_row);
         ContentsContainer.AddChild(box);
+
+        _targets.OnItemSelected += args =>
+        {
+            _targets.SelectId(args.Id);
+            if (_setTargetsOnly)
+                Send();
+        };
     }
 
-    public void SetNames(List<string> names)
+    public void SetNames(List<string> names, bool setTargetsOnly)
     {
         // Keep the choice while the list refreshes.
-        var selected = _targets.SelectedId >= 1 && _targets.SelectedId <= _names.Count ? _names[_targets.SelectedId - 1] : null;
-        _names = names;
+        var selected = _targets.SelectedId >= 0 && _targets.SelectedId < _entries.Count ? _entries[_targets.SelectedId] : default;
+        _setTargetsOnly = setTargetsOnly;
+        _entries = new();
         _targets.Clear();
-        _targets.AddItem(Loc.GetString("vg-telepathy-target-all"), 0);
-        for (var i = 0; i < names.Count; i++)
+
+        if (setTargetsOnly)
+            Add(Loc.GetString("vg-telepathy-target-local"), null, VgTelepathyMode.Local);
+
+        Add(Loc.GetString("vg-telepathy-target-all"), null, VgTelepathyMode.Global);
+        foreach (var name in names)
         {
-            _targets.AddItem(names[i], i + 1);
+            Add(name, name, VgTelepathyMode.Specific);
         }
 
-        var index = selected == null ? -1 : names.IndexOf(selected);
-        _targets.SelectId(index + 1);
+        var index = _entries.IndexOf(selected);
+        _targets.SelectId(index < 0 ? 0 : index);
         _none.Visible = names.Count == 0;
+        _message.Visible = !setTargetsOnly;
+        _send.Text = Loc.GetString(setTargetsOnly ? "vg-telepathy-set-targets" : "vg-telepathy-send");
+    }
+
+    private void Add(string label, string? name, VgTelepathyMode mode)
+    {
+        _targets.AddItem(label, _entries.Count);
+        _entries.Add((name, mode));
     }
 
     private void Send()
     {
+        var id = _targets.SelectedId;
+        if (id < 0 || id >= _entries.Count)
+            return;
+
+        var (name, mode) = _entries[id];
+        if (_setTargetsOnly)
+        {
+            OnSetTargets?.Invoke(name, mode);
+            return;
+        }
+
         var text = _message.Text.Trim();
         if (text.Length == 0)
             return;
 
-        var id = _targets.SelectedId;
-        OnSend?.Invoke(id >= 1 && id <= _names.Count ? _names[id - 1] : null, text);
+        OnSend?.Invoke(name, text);
         _message.Clear();
     }
 }

@@ -12,3 +12,9 @@ vg-telepathy-hear-named = [color=#5f9ea0]You hear {$name}'s voice:[/color] [bold
 vg-telepathy-projected = [color=#5f9ea0]Projected to[/color] [bold]{$targets}[/bold]: [bold]"{$message}"[/bold]
 vg-action-telepathy-name = Telepathy
 vg-action-telepathy-description = Speak into the minds of others. You must either hear them speak or examine them to make contact.
+vg-telepathy-target-local = Everyone you've heard nearby
+vg-telepathy-set-targets = Set target
+vg-telepathy-targets-set = You will now speak to your chosen target.
+vg-telepathy-mushroom-hear = [color=#b07acc]You feel [bold]{$name}[/bold]'s thoughts:[/color] [color=#b07acc]{$message}[/color]
+vg-telepathy-must-be-alive = You must be alive to do this!
+vg-telepathy-must-be-conscious = You must be conscious to do this!

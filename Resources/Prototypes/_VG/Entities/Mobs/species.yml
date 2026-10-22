@@ -306,6 +306,13 @@
   # VG: vg13 species numbers.
   - type: VgSpecies
     species: Mushroom
+  # VG: vg13 Fungal Telepathy: a mushroom person's speech goes to chosen targets.
+  - type: VgTelepathy
+    redirectSpeech: true
+  - type: UserInterface
+    interfaces:
+      enum.VgTelepathyUiKey.Key:
+        type: VgTelepathyBoundUserInterface
 
 - type: entity
   save: false

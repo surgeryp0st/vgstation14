@@ -60,4 +60,48 @@ public sealed class VgTelepathyTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task MushroomPeopleSpeakByTelepathy()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var minds = entMan.System<SharedMindSystem>();
+            var system = entMan.System<VgTelepathySystem>();
+            var mushroom = entMan.SpawnEntity("MobMushroom", map.GridCoords);
+            var grey = entMan.SpawnEntity("MobGrey", map.GridCoords);
+            var listener = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.System<MetaDataSystem>().SetEntityName(listener, "Listener");
+            minds.TransferTo(minds.CreateMind(null), listener);
+
+            Assert.That(system.TryRedirectSpeech(mushroom, "hello"), Is.True, "a mushroom's speech is taken");
+            Assert.That(system.TryRedirectSpeech(grey, "hello"), Is.False, "a Grey speaks aloud");
+            Assert.That(system.TryRedirectSpeech(listener, "hello"), Is.False, "so does a human");
+
+            entMan.EventBus.RaiseLocalEvent(mushroom, new ListenEvent("hi", listener));
+            var telepathy = entMan.GetComponent<VgTelepathyComponent>(mushroom);
+            Assert.That(telepathy.HeardBefore.Values, Is.EquivalentTo(new[] { listener }));
+
+            // choose one person, then a group
+            entMan.EventBus.RaiseLocalEvent(mushroom, new VgTelepathySetTargetsMessage("Listener", VgTelepathyMode.Specific));
+            Assert.That(telepathy.Mode, Is.EqualTo(VgTelepathyMode.Specific));
+            Assert.That(telepathy.Targets, Is.EquivalentTo(new[] { listener }));
+            Assert.That(system.TryRedirectSpeech(mushroom, "hello"), Is.True);
+
+            entMan.EventBus.RaiseLocalEvent(mushroom, new VgTelepathySetTargetsMessage(null, VgTelepathyMode.Global));
+            Assert.That(telepathy.Mode, Is.EqualTo(VgTelepathyMode.Global));
+            Assert.That(telepathy.Targets, Is.Empty);
+
+            // a Grey can't set speech targets, and a mushroom person can't project a typed message
+            entMan.EventBus.RaiseLocalEvent(grey, new VgTelepathySetTargetsMessage(null, VgTelepathyMode.Global));
+            Assert.That(entMan.GetComponent<VgTelepathyComponent>(grey).Mode, Is.EqualTo(VgTelepathyMode.Local));
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }
