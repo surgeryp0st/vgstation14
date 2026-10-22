@@ -459,3 +459,117 @@
     amount: 1
     flat: true
     chance: 60
+
+- type: reagent
+  id: methylin
+  name: reagent-name-vg-methylin
+  group: Medicine
+  desc: reagent-desc-vg-methylin
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#CC1122"
+
+# Left out: the random twitch/blink/shiver emote, which waits for emotes.
+- type: vgReagent
+  id: methylin
+  metabolism: 0.03
+  overdoseAmount: 15
+  overdoseEffects:
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: 1
+    flat: true
+  - !type:VgAdjustBrainLoss
+    amount: 2
+
+- type: reagent
+  id: phalanximine
+  name: reagent-name-vg-phalanximine
+  group: Medicine
+  desc: reagent-desc-vg-phalanximine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#1A1A1A"
+
+- type: vgReagent
+  id: phalanximine
+  effects:
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: -2
+  - !type:VgAdjustRadiation
+    amount: 4
+
+- type: reagent
+  id: priaxate
+  name: reagent-name-vg-priaxate
+  group: Medicine
+  desc: reagent-desc-vg-priaxate
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#CD8471"
+
+- type: vgReagent
+  id: priaxate
+  metabolism: 0.4
+  effects:
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: -3
+  - !type:VgHealOrgan
+    brute: 3
+    burn: 3
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: -3
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: -2
+    onlySpecies: [Vox]
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: -2
+    onlySpecies: [Vox]
+
+- type: reagent
+  id: trinitrine
+  name: reagent-name-vg-trinitrine
+  group: Medicine
+  desc: reagent-desc-vg-trinitrine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#CED7D5"
+
+# Left out: the 5% "pain in your head" message, which waits on a pain message effect.
+- type: vgReagent
+  id: trinitrine
+  overdoseTick: 50
+  effects:
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: 1
+    chance: 10
+  - !type:VgHealInternalOrgans
+    organ: heart
+    amount: 0.2
+    skipRobotic: true
+    chance: 50
+  - !type:VgStatusEffect
+    kind: Drowsiness
+    ticks: 2
+    chance: 10
+
+- type: reagent
+  id: lipozine
+  name: reagent-name-vg-lipozine
+  group: Medicine
+  desc: reagent-desc-vg-lipozine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#BBEDA4"
+
+- type: vgReagent
+  id: lipozine
+  nutrimentFactor: -2
+  effects:
+  - !type:VgResetOvereat {}

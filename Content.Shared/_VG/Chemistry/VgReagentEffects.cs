@@ -1,4 +1,5 @@
 using Content.Shared._VG.Body;
+using Content.Shared._VG.Nutrition;
 using Content.Shared._VG.Radiation;
 using Content.Shared._VG.Status;
 using Content.Shared.Damage;
@@ -383,5 +384,16 @@ public sealed partial class VgMoveBodyTemperature : VgReagentEffect
     {
         var ev = new VgMoveBodyTemperatureEvent(Target, Rate);
         args.EntityManager.EventBus.RaiseLocalEvent(args.Target, ref ev);
+    }
+}
+
+/// <summary>
+///     Lipozine's <c>M.overeatduration = 0</c>.
+/// </summary>
+public sealed partial class VgResetOvereat : VgReagentEffect
+{
+    public override void Apply(VgReagentArgs args)
+    {
+        args.System<VgNutritionSystem>().ResetOvereat(args.Target);
     }
 }

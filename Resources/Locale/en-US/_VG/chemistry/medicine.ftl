@@ -47,3 +47,14 @@ reagent-name-vg-leporazine = leporazine
 reagent-desc-vg-leporazine = Leporazine can be used to stabilize an individual's body temperature.
 reagent-name-vg-synaptizine = synaptizine
 reagent-desc-vg-synaptizine = Synaptizine is used to treat various diseases.
+
+reagent-name-vg-methylin = methylin
+reagent-desc-vg-methylin = Methylin is a stimulant used to treat attention disorders. Overdosing damages the brain.
+reagent-name-vg-phalanximine = phalanximine
+reagent-desc-vg-phalanximine = Cleans toxins out of the body, at the cost of a dose of radiation.
+reagent-name-vg-priaxate = priaxate
+reagent-desc-vg-priaxate = A fast-acting general healing agent that is processed very quickly.
+reagent-name-vg-trinitrine = trinitrine
+reagent-desc-vg-trinitrine = Helps a damaged heart recover, but can make you drowsy and short of breath.
+reagent-name-vg-lipozine = lipozine
+reagent-desc-vg-lipozine = Lipozine burns off fat and makes you hungry.

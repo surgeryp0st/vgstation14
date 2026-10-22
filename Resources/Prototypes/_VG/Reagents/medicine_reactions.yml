@@ -277,3 +277,30 @@
       amount: 2
   products:
     charcoal: 1
+
+- type: reaction
+  id: VgMethylin
+  reactants:
+    Hydrogen:
+      amount: 1
+    Chlorine:
+      amount: 1
+    Ethanol:
+      amount: 1
+    Fluorine:
+      amount: 5
+      catalyst: true
+  products:
+    methylin: 1
+
+- type: reaction
+  id: VgLipozine
+  reactants:
+    TableSalt:
+      amount: 1
+    Ethanol:
+      amount: 1
+    Radium:
+      amount: 1
+  products:
+    lipozine: 3

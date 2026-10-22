@@ -110,6 +110,18 @@ public sealed class VgNutritionSystem : EntitySystem
         UpdateAlert((uid, comp));
     }
 
+    /// <summary>
+    ///     vg13 <c>overeatduration = 0</c>.
+    /// </summary>
+    public void ResetOvereat(EntityUid uid, VgNutritionComponent? comp = null)
+    {
+        if (!Resolve(uid, ref comp, false) || comp.OverEatDuration == 0)
+            return;
+
+        comp.OverEatDuration = 0;
+        Dirty(uid, comp);
+    }
+
     public float GetNutrition(EntityUid uid)
     {
         return TryComp<VgNutritionComponent>(uid, out var comp) ? comp.Nutrition : 400;
