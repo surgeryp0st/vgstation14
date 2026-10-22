@@ -36,9 +36,18 @@ public abstract partial class SharedVgBodySystem
         if (limb.Wounds.Any(IsInternal))
             return;
 
-        limb.Wounds.Add(NewWound(InternalBleedingWound, 15));
-        limb.InternallyBleeding = true;
+        OpenVein(ent, limb, 15);
         CustomPain(ent, Loc.GetString("vg-limb-internal-bleeding-rip", ("limb", Loc.GetString(limb.Name))));
+    }
+
+    /// <summary>
+    ///     vg13 <c>wounds += new /datum/wound/internal_bleeding(damage)</c>: a bleeding vein, even beside another.
+    /// </summary>
+    public void OpenVein(Entity<VgBodyComponent> ent, VgLimb limb, float damage)
+    {
+        limb.Wounds.Add(NewWound(InternalBleedingWound, damage));
+        limb.InternallyBleeding = true;
+        Dirty(ent);
     }
 
     /// <summary>

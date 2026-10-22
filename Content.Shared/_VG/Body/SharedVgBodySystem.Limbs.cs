@@ -63,6 +63,15 @@ public abstract partial class SharedVgBodySystem
     }
 
     /// <summary>
+    ///     vg13 mutate(): the limb grows wrong and is no use any more.
+    /// </summary>
+    public void Mutate(Entity<VgBodyComponent> ent, VgLimb limb)
+    {
+        limb.Status |= VgLimbStatus.Mutated;
+        Dirty(ent);
+    }
+
+    /// <summary>
     ///     vg13 fracture().
     /// </summary>
     public void Fracture(Entity<VgBodyComponent> ent, VgLimb limb)

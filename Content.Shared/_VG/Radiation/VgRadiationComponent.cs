@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._VG.Radiation;
 
@@ -7,7 +8,7 @@ namespace Content.Shared._VG.Radiation;
 ///     over time while hurting the mob, and builds <see cref="RadTick"/> (how long it has been irradiated), which brings
 ///     the long-term symptoms. Replaces SS14's instant radiation damage on this mob.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(VgRadiationSystem))]
 public sealed partial class VgRadiationComponent : Component
 {
@@ -22,4 +23,10 @@ public sealed partial class VgRadiationComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public int RadTick;
+
+    /// <summary>
+    ///     vg13 NEARSIGHTED from radiation-bruised eyes, which lasts 10 seconds and holds off the next bout.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan NearsightedUntil;
 }

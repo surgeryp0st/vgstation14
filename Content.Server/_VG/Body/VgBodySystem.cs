@@ -30,6 +30,19 @@ public sealed partial class VgBodySystem : SharedVgBodySystem
         base.Initialize();
 
         SubscribeLocalEvent<VgBodyComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<VgBodyComponent, Content.Shared._VG.Radiation.VgNosebleedEvent>(OnNosebleed);
+    }
+
+    /// <summary>
+    ///     vg13 drip(1): a drop of blood, if there's any to lose.
+    /// </summary>
+    private void OnNosebleed(Entity<VgBodyComponent> ent, ref Content.Shared._VG.Radiation.VgNosebleedEvent args)
+    {
+        if (!ent.Comp.HasBlood || !TryComp<BloodstreamComponent>(ent, out var bloodstream) || _bloodstream.GetBloodLevelPercentage(ent, bloodstream) <= 0)
+            return;
+
+        RemoveBlood(ent, 1);
+        _vgPopup.Self(ent, Loc.GetString("vg-radiation-nosebleed"), null, Content.Shared.Popups.PopupType.MediumCaution);
     }
 
     private void OnStartup(Entity<VgBodyComponent> ent, ref ComponentStartup args)
