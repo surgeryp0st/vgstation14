@@ -1,0 +1,75 @@
+# vg13 type -> SS14 prototype. Longest matching path prefix wins ("/obj/structure/window/reinforced" beats
+# "/obj/structure"). `drop: true` discards the atom without a warning; atoms with no rule are dropped and listed in the
+# converter's report.
+#
+# rot: "dir" turns the atom to its BYOND dir var (1 north, 2 south, 4 east, 8 west).
+
+tiles:
+  /turf/space: {tile: Space}
+  /turf/simulated/floor: {tile: FloorSteel}
+  /turf/simulated/floor/plating: {tile: Plating}
+  /turf/simulated/floor/airless: {tile: FloorSteel}
+  /turf/simulated/floor/plating/airless: {tile: Plating}
+  /turf/simulated/floor/engine: {tile: FloorReinforced}
+  /turf/simulated/floor/bluegrid: {tile: FloorBlueCircuit}
+  /turf/simulated/floor/wood: {tile: FloorWood}
+  /turf/simulated/floor/carpet: {tile: FloorCarpetOffice}
+  /turf/simulated/floor/grass: {tile: FloorGrass}
+  /turf/simulated/floor/shuttle: {tile: FloorShuttleWhite}
+  /turf/simulated/floor/shuttle/plating: {tile: Plating}
+  /turf/simulated/floor/glass: {tile: FloorGlass}
+  /turf/simulated/floor/arcade: {tile: FloorArcadeBlue}
+  /turf/simulated/wall: {tile: Plating, proto: WallSolid}
+  /turf/simulated/wall/r_wall: {tile: Plating, proto: WallReinforced}
+  /turf/simulated/wall/shuttle: {tile: Plating, proto: WallShuttle}
+
+atoms:
+  /area: {drop: true}
+  /obj/effect/decal: {drop: true}
+  /obj/effect/landmark: {drop: true}
+  /obj/abstract: {drop: true}
+  /obj/structure/sign: {drop: true}
+
+  /obj/structure/grille: {proto: Grille}
+  /obj/structure/lattice: {tile: Lattice}
+  /obj/structure/catwalk: {proto: Catwalk}
+  /obj/structure/window/reinforced: {proto: WindowReinforcedDirectional, rot: dir}
+  /obj/structure/window/reinforced/plasma: {proto: PlasmaReinforcedWindowDirectional, rot: dir}
+  /obj/structure/window/full/reinforced: {proto: ReinforcedWindow}
+  /obj/structure/window/full/reinforced/plasma: {proto: ReinforcedPlasmaWindow}
+  /obj/structure/window/full/reinforced/tinted: {proto: ReinforcedWindow}
+
+  /obj/structure/table: {proto: Table}
+  /obj/structure/table/woodentable: {proto: TableWood}
+  /obj/structure/table/reinforced: {proto: TableReinforced}
+  /obj/structure/table/glass: {proto: TableGlass}
+  /obj/structure/rack: {proto: Rack}
+  /obj/structure/bed: {proto: Bed}
+  /obj/structure/bed/chair: {proto: Chair, rot: dir}
+  /obj/structure/bed/chair/comfy: {proto: ChairOfficeDark, rot: dir}
+  /obj/structure/bed/chair/office: {proto: ChairOfficeLight, rot: dir}
+  /obj/structure/closet: {proto: ClosetSteelBase}
+  /obj/structure/closet/emcloset: {proto: ClosetEmergency}
+  /obj/structure/flora/pottedplant: {proto: PottedPlantRandom}
+  /obj/structure/extinguisher_cabinet: {proto: ExtinguisherCabinetFilled, rot: dir}
+
+  /obj/machinery/door/airlock: {proto: Airlock}
+  /obj/machinery/door/airlock/glass: {proto: AirlockGlass}
+  /obj/machinery/door/airlock/maintenance: {proto: AirlockMaintLocked}
+  /obj/machinery/door/airlock/external: {proto: AirlockExternal}
+  /obj/machinery/door/firedoor/border_only: {proto: FirelockGlass, rot: dir}
+  /obj/machinery/door/poddoor: {proto: BlastDoor}
+
+  /obj/machinery/light: {proto: PoweredlightLED, rot: dir}
+  /obj/machinery/light/small: {proto: SmallLight, rot: dir}
+  /obj/machinery/camera: {proto: SurveillanceCameraGeneral, rot: dir}
+  /obj/machinery/alarm: {proto: AirAlarm, rot: dir}
+  /obj/machinery/firealarm: {proto: FireAlarm, rot: dir}
+  /obj/machinery/power/apc: {proto: APCBasic, rot: dir}
+  /obj/machinery/power/solar/panel: {proto: SolarPanel}
+  /obj/machinery/disposal: {proto: DisposalUnit}
+  /obj/machinery/newscaster: {drop: true}
+  /obj/machinery/status_display: {drop: true}
+  /obj/machinery/light_switch: {drop: true}
+  /obj/machinery/hologram/holopad: {drop: true}
+  /obj/item/device/radio/intercom: {proto: IntercomCommon, rot: dir}

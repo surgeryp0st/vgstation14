@@ -2,7 +2,7 @@
 # Straight in-game baby
 lobbyenabled = false
 # Dev map for faster loading & convenience
-map = "Dev"
+map = "VgTest" # VG: the vg port test map (Tools/_VG/make_test_map.py)
 role_timers = false
 
 [ghost]
