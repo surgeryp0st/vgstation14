@@ -422,4 +422,93 @@ public sealed class VgFireTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task PlasmaWallsGoUp()
+    {
+        var (pair, grid) = await AirRoom();
+        await using var _ = pair;
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var mapSys = server.System<SharedMapSystem>();
+        var gridComp = entMan.GetComponent<MapGridComponent>(grid);
+        var plating = new Tile(server.ResolveDependency<Robust.Shared.Map.ITileDefinitionManager>()["Plating"].TileId);
+
+        // Two plasma walls in the corridor's north wall, two tiles apart, and one six tiles off.
+        EntityUid near = default, chained = default, far = default;
+        await server.WaitPost(() =>
+        {
+            EntityUid Replace(Vector2i tile)
+            {
+                foreach (var old in mapSys.GetAnchoredEntities(grid, gridComp, tile).ToList())
+                {
+                    entMan.DeleteEntity(old);
+                }
+                return entMan.SpawnEntity("WallPlasma", new EntityCoordinates(grid, tile.X + 0.5f, tile.Y + 0.5f));
+            }
+
+            near = Replace(new Vector2i(0, 1));
+            chained = Replace(new Vector2i(2, 1));
+            mapSys.SetTile(grid, gridComp, new Vector2i(0, -5), plating);
+            far = Replace(new Vector2i(0, -5));
+        });
+        await server.WaitRunTicks(5);
+
+        var plasmaBurn = entMan.System<Content.Server._VG.Fire.VgPlasmaBurnSystem>();
+        await server.WaitAssertion(() =>
+        {
+            var comp = entMan.GetComponent<VgPlasmaBurnComponent>(near);
+            Assert.That(plasmaBurn.Ignite((near, comp), 290), Is.False, "too cool to set it off");
+            Assert.That(plasmaBurn.Ignite((near, comp), Content.Server._VG.Fire.VgPlasmaBurnSystem.WelderTemperature), Is.True);
+        });
+        await server.WaitRunTicks(30);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entMan.Deleted(near), "the lit wall went up");
+            Assert.That(entMan.Deleted(chained), "a plasma wall two tiles away went with it");
+            Assert.That(entMan.Deleted(far), Is.False, "six tiles away is out of range");
+
+            var girders = 0;
+            foreach (var tile in new[] { new Vector2i(0, 1), new Vector2i(2, 1) })
+            {
+                girders += mapSys.GetAnchoredEntities(grid, gridComp, tile)
+                    .Count(e => entMan.GetComponent<MetaDataComponent>(e).EntityPrototype?.ID == "Girder");
+            }
+            Assert.That(girders, Is.EqualTo(2), "each left its girder");
+
+            // Its plasma is in the room (or already burnt to CO2).
+            var atmos = entMan.System<AtmosphereSystem>();
+            var released = 0f;
+            for (var x = -1; x <= 4; x++)
+            for (var y = -1; y <= 1; y++)
+            {
+                if (atmos.GetTileMixture(grid, null, new Vector2i(x, y), false) is { } air)
+                    released += air.GetMoles(Gas.Plasma) + air.GetMoles(Gas.CarbonDioxide);
+            }
+            Assert.That(released, Is.GreaterThan(1), "plasma came out");
+
+            // A beam sets one off by itself.
+            var beam = new Content.Shared.Weapons.Ranged.Events.HitScanReflectAttemptEvent(null, far, Content.Shared.Weapons.Reflect.ReflectType.None, Vector2.UnitX, false);
+            entMan.EventBus.RaiseLocalEvent(far, ref beam);
+        });
+        await server.WaitRunTicks(1);
+        await server.WaitAssertion(() => Assert.That(entMan.Deleted(far), "shot with a beam, it went up"));
+
+        // Someone takes a lit welder to one.
+        EntityUid wall = default;
+        await server.WaitAssertion(() =>
+        {
+            wall = entMan.SpawnEntity("WallPlasma", new EntityCoordinates(grid, 0.5f, -4.5f));
+            var user = entMan.SpawnEntity("MobHuman", new EntityCoordinates(grid, 3.5f, 0.5f));
+            var welder = entMan.SpawnEntity("Welder", new EntityCoordinates(grid, 3.5f, 0.5f));
+            Assert.That(entMan.System<Content.Shared.Item.ItemToggle.ItemToggleSystem>().TryActivate(welder, user), "welder lights");
+            entMan.System<Content.Shared.Interaction.SharedInteractionSystem>().InteractUsing(user, welder, wall,
+                entMan.GetComponent<TransformComponent>(wall).Coordinates, checkCanInteract: false, checkCanUse: false);
+        });
+        await server.WaitRunTicks(1);
+        await server.WaitAssertion(() => Assert.That(entMan.Deleted(wall), "a lit welder set it off"));
+
+        await pair.CleanReturnAsync();
+    }
 }

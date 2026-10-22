@@ -359,6 +359,7 @@
   id: WallPlasma
   name: plasma wall
   components:
+  - type: VgPlasmaBurn # VG: vg13 PlasmaBurn(): hot items and beams set it off
   - type: Tag
     tags:
       - Wall
