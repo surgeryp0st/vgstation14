@@ -29,6 +29,19 @@ public abstract partial class SharedVgBodySystem
     private static readonly ProtoId<VgWoundPrototype> InternalBleedingWound = "InternalBleeding";
 
     /// <summary>
+    ///     Opens a vein in the limb unless one already is.
+    /// </summary>
+    public void AddInternalBleeding(Entity<VgBodyComponent> ent, VgLimb limb)
+    {
+        if (limb.Wounds.Any(IsInternal))
+            return;
+
+        limb.Wounds.Add(NewWound(InternalBleedingWound, 15));
+        limb.InternallyBleeding = true;
+        CustomPain(ent, Loc.GetString("vg-limb-internal-bleeding-rip", ("limb", Loc.GetString(limb.Name))));
+    }
+
+    /// <summary>
     ///     vg13 createwound().
     /// </summary>
     private void CreateWound(Entity<VgBodyComponent> ent, VgLimb limb, VgWoundType type, float damage)
@@ -57,12 +70,7 @@ public abstract partial class SharedVgBodySystem
         var localDamage = limb.Health + damage;
         if (damage > 10 && type != VgWoundType.Burn && localDamage > 20 && Prob(damage) && limb.IsOrganic && ent.Comp.HasBlood)
         {
-            if (!limb.Wounds.Any(IsInternal))
-            {
-                limb.Wounds.Add(NewWound(InternalBleedingWound, 15));
-                limb.InternallyBleeding = true;
-                CustomPain(ent, Loc.GetString("vg-limb-internal-bleeding-rip", ("limb", Loc.GetString(limb.Name))));
-            }
+            AddInternalBleeding(ent, limb);
         }
 
         // Wounds that look the same are counted as one.

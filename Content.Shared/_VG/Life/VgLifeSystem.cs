@@ -39,11 +39,19 @@ public sealed class VgLifeSystem : EntitySystem
                 continue;
 
             life.NextTick += life.Interval;
-            life.LifeTick++;
-            Dirty(uid, life);
-
-            var ev = new VgLifeTickEvent(life.LifeTick);
-            RaiseLocalEvent(uid, ref ev);
+            RunTick((uid, life));
         }
+    }
+
+    /// <summary>
+    ///     Runs one Life() tick now, without moving the schedule (the debug verbs use this).
+    /// </summary>
+    public void RunTick(Entity<VgLifeComponent> ent)
+    {
+        ent.Comp.LifeTick++;
+        Dirty(ent);
+
+        var ev = new VgLifeTickEvent(ent.Comp.LifeTick);
+        RaiseLocalEvent(ent, ref ev);
     }
 }

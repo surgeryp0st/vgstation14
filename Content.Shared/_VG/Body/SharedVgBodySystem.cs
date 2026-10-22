@@ -192,6 +192,14 @@ public abstract partial class SharedVgBodySystem : EntitySystem
         PredictingUser = user;
     }
 
+    /// <summary>
+    ///     Starts an operation nobody predicts (admin debug verbs), so everyone gets its popups and sounds.
+    /// </summary>
+    public void BeginUnpredicted(EntityUid uid)
+    {
+        BeginPrediction(uid, null, 0);
+    }
+
     private System.Random CreatePredictedRandom(EntityUid uid, int salt)
     {
         return VgPredictedRandom.Create(Timing.CurTick, GetNetEntity(uid).Id, salt);
