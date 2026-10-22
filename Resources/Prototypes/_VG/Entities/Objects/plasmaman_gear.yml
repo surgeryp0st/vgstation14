@@ -1,0 +1,35 @@
+# vg13 tank/plasma/plasmaman: the plasmaman's internals, plus the emergency tank in their survival box.
+- type: entity
+  parent: PlasmaTankFilled
+  id: VgPlasmamanTankFilled
+  name: plasma tank
+  description: The lifeblood of plasmamen. Warning, extremely flammable, do not inhale (unless you're a plasmaman).
+
+- type: entity
+  parent: EmergencyNitrogenTankFilled
+  id: VgEmergencyPlasmaTankFilled
+  name: emergency plasma tank
+  description: Used for emergencies. Contains very little plasma, so try to conserve it until you actually need it.
+  components:
+  - type: GasTank
+    air:
+      volume: 0.66
+      moles:
+        - 0 # oxygen
+        - 0 # nitrogen
+        - 0 # CO2
+        - 0.270782035 # plasma
+      temperature: 293.15
+
+- type: entity
+  parent: BoxSurvival
+  id: VgBoxSurvivalPlasmaman
+  suffix: Plasmaman
+  components:
+  - type: StorageFill
+    contents:
+    - id: ClothingMaskBreath
+    - id: VgEmergencyPlasmaTankFilled
+    - id: Flare
+    - id: FoodSnackNutribrick
+    - id: DrinkWaterBottleFull

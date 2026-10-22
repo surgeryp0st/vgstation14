@@ -1,0 +1,349 @@
+# vg13's plasmaman job outfits (code/datums/outfit/*.dm, the /datum/species/plasmaman lists): the job's containment suit
+# and helmet, a breath mask, the plasma tank on internals, and a plasmaman survival box. SS14 jobs map to the closest vg13 job.
+# Not abstract: StartingGearPrototype's abstract flag can't be set from YAML, and children of an abstract gear don't load.
+- type: startingGear
+  id: VgPlasmamanGearBase
+  equipment:
+    mask: ClothingMaskBreath
+    suitstorage: VgPlasmamanTankFilled
+  storage:
+    back:
+    - VgBoxSurvivalPlasmaman
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearGeneric
+  species: Plasmaman
+  default: true
+  gear: VgPlasmamanGearGenericStarting
+
+- type: startingGear
+  id: VgPlasmamanGearGenericStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmet
+    outerClothing: VgPlasmamanSuit
+
+- type: startingGear
+  id: VgPlasmamanGearAssistantStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetAssistant
+    outerClothing: VgPlasmamanSuitAssistant
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearAssistant
+  species: Plasmaman
+  jobs: [ Passenger, Visitor, Reporter, Boxer ]
+  gear: VgPlasmamanGearAssistantStarting
+
+- type: startingGear
+  id: VgPlasmamanGearServiceStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetService
+    outerClothing: VgPlasmamanSuitService
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearService
+  species: Plasmaman
+  jobs: [ Bartender, Chef, ServiceWorker, Musician, Zookeeper ]
+  gear: VgPlasmamanGearServiceStarting
+
+- type: startingGear
+  id: VgPlasmamanGearBotanistStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetBotanist
+    outerClothing: VgPlasmamanSuitBotanist
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearBotanist
+  species: Plasmaman
+  jobs: [ Botanist ]
+  gear: VgPlasmamanGearBotanistStarting
+
+- type: startingGear
+  id: VgPlasmamanGearChaplainStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetChaplain
+    outerClothing: VgPlasmamanSuitChaplain
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearChaplain
+  species: Plasmaman
+  jobs: [ Chaplain, ERTChaplain ]
+  gear: VgPlasmamanGearChaplainStarting
+
+- type: startingGear
+  id: VgPlasmamanGearClownStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetClown
+    outerClothing: VgPlasmamanSuitClown
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearClown
+  species: Plasmaman
+  jobs: [ Clown ]
+  gear: VgPlasmamanGearClownStarting
+
+- type: startingGear
+  id: VgPlasmamanGearJanitorStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetJanitor
+    outerClothing: VgPlasmamanSuitJanitor
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearJanitor
+  species: Plasmaman
+  jobs: [ Janitor, ERTJanitor ]
+  gear: VgPlasmamanGearJanitorStarting
+
+- type: startingGear
+  id: VgPlasmamanGearLawyerStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetLawyer
+    outerClothing: VgPlasmamanSuitLawyer
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearLawyer
+  species: Plasmaman
+  jobs: [ Lawyer ]
+  gear: VgPlasmamanGearLawyerStarting
+
+- type: startingGear
+  id: VgPlasmamanGearLibrarianStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetLibrarian
+    outerClothing: VgPlasmamanSuitLibrarian
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearLibrarian
+  species: Plasmaman
+  jobs: [ Librarian ]
+  gear: VgPlasmamanGearLibrarianStarting
+
+- type: startingGear
+  id: VgPlasmamanGearMimeStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetMime
+    outerClothing: VgPlasmamanSuitMime
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearMime
+  species: Plasmaman
+  jobs: [ Mime ]
+  gear: VgPlasmamanGearMimeStarting
+
+- type: startingGear
+  id: VgPlasmamanGearCaptainStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetCaptain
+    outerClothing: VgPlasmamanSuitCaptain
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearCaptain
+  species: Plasmaman
+  jobs: [ Captain ]
+  gear: VgPlasmamanGearCaptainStarting
+
+- type: startingGear
+  id: VgPlasmamanGearHopStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetHop
+    outerClothing: VgPlasmamanSuitHop
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearHop
+  species: Plasmaman
+  jobs: [ HeadOfPersonnel ]
+  gear: VgPlasmamanGearHopStarting
+
+- type: startingGear
+  id: VgPlasmamanGearAtmostechStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetAtmostech
+    outerClothing: VgPlasmamanSuitAtmostech
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearAtmostech
+  species: Plasmaman
+  jobs: [ AtmosphericTechnician ]
+  gear: VgPlasmamanGearAtmostechStarting
+
+- type: startingGear
+  id: VgPlasmamanGearCeStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetCe
+    outerClothing: VgPlasmamanSuitCe
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearCe
+  species: Plasmaman
+  jobs: [ ChiefEngineer ]
+  gear: VgPlasmamanGearCeStarting
+
+- type: startingGear
+  id: VgPlasmamanGearEngineerStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetEngineer
+    outerClothing: VgPlasmamanSuitEngineer
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearEngineer
+  species: Plasmaman
+  jobs: [ StationEngineer, TechnicalAssistant, ERTEngineer ]
+  gear: VgPlasmamanGearEngineerStarting
+
+- type: startingGear
+  id: VgPlasmamanGearCargoStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetCargo
+    outerClothing: VgPlasmamanSuitCargo
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearCargo
+  species: Plasmaman
+  jobs: [ CargoTechnician, Quartermaster ]
+  gear: VgPlasmamanGearCargoStarting
+
+- type: startingGear
+  id: VgPlasmamanGearMinerStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetMiner
+    outerClothing: VgPlasmamanSuitMiner
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearMiner
+  species: Plasmaman
+  jobs: [ SalvageSpecialist ]
+  gear: VgPlasmamanGearMinerStarting
+
+- type: startingGear
+  id: VgPlasmamanGearChemistStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetChemist
+    outerClothing: VgPlasmamanSuitChemist
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearChemist
+  species: Plasmaman
+  jobs: [ Chemist ]
+  gear: VgPlasmamanGearChemistStarting
+
+- type: startingGear
+  id: VgPlasmamanGearCmoStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetCmo
+    outerClothing: VgPlasmamanSuitCmo
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearCmo
+  species: Plasmaman
+  jobs: [ ChiefMedicalOfficer ]
+  gear: VgPlasmamanGearCmoStarting
+
+- type: startingGear
+  id: VgPlasmamanGearMedicalStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetMedical
+    outerClothing: VgPlasmamanSuitMedical
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearMedical
+  species: Plasmaman
+  jobs: [ MedicalDoctor, MedicalIntern, Psychologist, ERTMedical ]
+  gear: VgPlasmamanGearMedicalStarting
+
+- type: startingGear
+  id: VgPlasmamanGearParamedicStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetParamedic
+    outerClothing: VgPlasmamanSuitParamedic
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearParamedic
+  species: Plasmaman
+  jobs: [ Paramedic ]
+  gear: VgPlasmamanGearParamedicStarting
+
+- type: startingGear
+  id: VgPlasmamanGearScienceStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetScience
+    outerClothing: VgPlasmamanSuitScience
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearScience
+  species: Plasmaman
+  jobs: [ Scientist, ResearchAssistant ]
+  gear: VgPlasmamanGearScienceStarting
+
+- type: startingGear
+  id: VgPlasmamanGearRdStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetRd
+    outerClothing: VgPlasmamanSuitRd
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearRd
+  species: Plasmaman
+  jobs: [ ResearchDirector ]
+  gear: VgPlasmamanGearRdStarting
+
+- type: startingGear
+  id: VgPlasmamanGearDetectiveStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetDetective
+    outerClothing: VgPlasmamanSuitDetective
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearDetective
+  species: Plasmaman
+  jobs: [ Detective ]
+  gear: VgPlasmamanGearDetectiveStarting
+
+- type: startingGear
+  id: VgPlasmamanGearHosStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetHos
+    outerClothing: VgPlasmamanSuitHos
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearHos
+  species: Plasmaman
+  jobs: [ HeadOfSecurity ]
+  gear: VgPlasmamanGearHosStarting
+
+- type: startingGear
+  id: VgPlasmamanGearSecurityStarting
+  parent: VgPlasmamanGearBase
+  equipment:
+    head: VgPlasmamanHelmetSecurity
+    outerClothing: VgPlasmamanSuitSecurity
+
+- type: vgSpeciesGear
+  id: VgPlasmamanGearSecurity
+  species: Plasmaman
+  jobs: [ SecurityOfficer, SecurityCadet, Warden, ERTSecurity ]
+  gear: VgPlasmamanGearSecurityStarting

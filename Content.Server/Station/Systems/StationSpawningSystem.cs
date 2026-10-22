@@ -37,6 +37,7 @@ namespace Content.Server.Station.Systems;
 [PublicAPI]
 public sealed class StationSpawningSystem : SharedStationSpawningSystem
 {
+    [Dependency] private readonly Content.Server._VG.Species.VgSpeciesGearSystem _vgSpeciesGear = default!; // VG
     [Dependency] private readonly SharedAccessSystem _accessSystem = default!;
     [Dependency] private readonly ActorSystem _actors = default!;
     [Dependency] private readonly ArrivalsSystem _arrivalsSystem = default!;
@@ -176,6 +177,8 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
             var startingGear = _prototypeManager.Index<StartingGearPrototype>(prototype.StartingGear);
             EquipStartingGear(entity.Value, startingGear, raiseEvent: false);
         }
+
+        _vgSpeciesGear.Equip(entity.Value, job); // VG: the species' own job outfit
 
         var gearEquippedEv = new StartingGearEquippedEvent(entity.Value);
         RaiseLocalEvent(entity.Value, ref gearEquippedEv);
