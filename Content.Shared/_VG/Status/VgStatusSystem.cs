@@ -46,6 +46,7 @@ public sealed class VgStatusSystem : EntitySystem
     [Dependency] private readonly VgSpeciesSystem _species = default!;
     [Dependency] private readonly BlurryVisionSystem _blurry = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly Content.Shared.Standing.StandingStateSystem _standing = default!;
 
     /// <summary>
     ///     vg13 counts stuns in Life() ticks, which come every 2 seconds.
@@ -57,9 +58,14 @@ public sealed class VgStatusSystem : EntitySystem
     private const string SleepKey = "ForcedSleep";
     private const string SlurKey = "SlurredSpeech";
 
+    /// <summary>
+    ///     How long one confused step lasts, s: roughly vg13's running move delay.
+    /// </summary>
+    private const double ConfusedStep = 0.25;
 
     // Salts for VgPredictedRandom.
     private const int SaltLife = 10;
+    private const int SaltConfused = 11;
 
     public override void Initialize()
     {
@@ -68,6 +74,7 @@ public sealed class VgStatusSystem : EntitySystem
         SubscribeLocalEvent<VgStatusComponent, VgLifeTickEvent>(OnLifeTick);
         SubscribeLocalEvent<VgStatusComponent, RejuvenateEvent>(OnRejuvenate);
         SubscribeLocalEvent<VgStatusComponent, GetBlurEvent>(OnGetBlur);
+        SubscribeLocalEvent<VgStatusComponent, VgMoveDirectionEvent>(OnMoveDirection);
         SubscribeLocalEvent<VgStunOnCollideComponent, ProjectileHitEvent>(OnProjectileHit);
     }
 
@@ -77,6 +84,8 @@ public sealed class VgStatusSystem : EntitySystem
         ent.Comp.ShockStage = 0;
         ent.Comp.LoseBreath = 0;
         ent.Comp.EyeBlurry = 0;
+        ent.Comp.Dizziness = 0;
+        ent.Comp.Confused = 0;
         Dirty(ent);
         _blurry.UpdateBlurMagnitude(ent.Owner);
     }
@@ -332,8 +341,19 @@ public sealed class VgStatusSystem : EntitySystem
 
     private void OnLifeTick(Entity<VgStatusComponent> ent, ref VgLifeTickEvent args)
     {
+        // vg13 handle_chemicals_in_body(): remove_confused(1), dead or not.
+        if (ent.Comp.Confused > 0)
+            ent.Comp.Confused = MathF.Max(0, ent.Comp.Confused - 1);
+
         if (_mobState.IsDead(ent))
+        {
+            Dirty(ent);
             return;
+        }
+
+        // vg13 handle_dizziness(): resting settles it five times as fast.
+        if (ent.Comp.Dizziness > 0)
+            ent.Comp.Dizziness = MathF.Max(0, ent.Comp.Dizziness - (_standing.IsDown(ent) ? 5 : 1));
 
         var random = VgPredictedRandom.Create(_timing.CurTick, GetNetEntity(ent).Id, SaltLife);
 
@@ -387,6 +407,70 @@ public sealed class VgStatusSystem : EntitySystem
     {
         if (ent.Comp.EyeBlurry > 0)
             args.Blur += Math.Clamp(ent.Comp.EyeBlurry / 10, 0.7f, 1.1f) * 3;
+    }
+
+    /// <summary>
+    ///     vg13 Dizzy(): at least this dizzy.
+    /// </summary>
+    public void Dizzy(EntityUid uid, float amount)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp) || comp.Dizziness >= amount)
+            return;
+
+        comp.Dizziness = amount;
+        Dirty(uid, comp);
+    }
+
+    /// <summary>
+    ///     vg13 <c>dizziness = amount</c> and <c>confused = amount</c>, as standing in a fire does.
+    /// </summary>
+    public void SetDizzyAndConfused(EntityUid uid, float dizziness, float confused)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return;
+
+        comp.Dizziness = dizziness;
+        comp.Confused = confused;
+        Dirty(uid, comp);
+    }
+
+    /// <summary>
+    ///     At least this many Life() ticks of confusion.
+    /// </summary>
+    public void Confuse(EntityUid uid, float ticks)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp) || comp.Confused >= ticks)
+            return;
+
+        comp.Confused = ticks;
+        Dirty(uid, comp);
+    }
+
+    public float GetDizziness(EntityUid uid)
+    {
+        return CompOrNull<VgStatusComponent>(uid)?.Dizziness ?? 0;
+    }
+
+    public float GetConfused(EntityUid uid)
+    {
+        return CompOrNull<VgStatusComponent>(uid)?.Confused ?? 0;
+    }
+
+    /// <summary>
+    ///     vg13 process_confused(): each step goes diagonally to one side or the other of where you meant (a straight
+    ///     step becomes a diagonal, a diagonal one straight), a fresh pick every step. Here a step is a quarter second,
+    ///     picked the same way on the server and the predicting client.
+    /// </summary>
+    private void OnMoveDirection(Entity<VgStatusComponent> ent, ref VgMoveDirectionEvent args)
+    {
+        if (ent.Comp.Confused <= 0)
+            return;
+
+        var step = (uint) (_timing.CurTime.TotalSeconds / ConfusedStep);
+        var random = VgPredictedRandom.Create(new GameTick(step), GetNetEntity(ent).Id, SaltConfused);
+        var angle = new Angle(random.Next(2) == 0 ? Math.PI / 4 : -Math.PI / 4);
+        args.Walk = angle.RotateVec(args.Walk);
+        args.Sprint = angle.RotateVec(args.Sprint);
     }
 
     /// <summary>

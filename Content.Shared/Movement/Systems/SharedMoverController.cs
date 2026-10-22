@@ -170,6 +170,13 @@ public abstract partial class SharedMoverController : VirtualController
         // Specifically don't use mover.Owner because that may be different to the actual physics body being moved.
         var weightless = _gravity.IsWeightless(physicsUid, physicsComponent, xform);
         var (walkDir, sprintDir) = GetVelocityInput(mover);
+        // VG: vg13 effects on where you step (confusion).
+        if (walkDir != Vector2.Zero || sprintDir != Vector2.Zero)
+        {
+            var vgMove = new Content.Shared._VG.Status.VgMoveDirectionEvent(walkDir, sprintDir);
+            RaiseLocalEvent(uid, ref vgMove);
+            (walkDir, sprintDir) = (vgMove.Walk, vgMove.Sprint);
+        }
         var touching = false;
 
         // Handle wall-pushes.

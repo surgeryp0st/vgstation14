@@ -56,6 +56,18 @@ public sealed partial class VgStatusComponent : Component
     public float EyeBlurry;
 
     /// <summary>
+    ///     vg13 dizziness: the view sways, more the dizzier you are. Wears off one a Life() tick, five lying down.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float Dizziness;
+
+    /// <summary>
+    ///     vg13 confused: Life() ticks of stepping diagonally to one side or the other of where you meant to go.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float Confused;
+
+    /// <summary>
     ///     vg13 BASE_CARBON_PAIN_RESIST.
     /// </summary>
     [DataField]

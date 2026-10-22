@@ -39,6 +39,7 @@ public sealed class VgFireSystem : EntitySystem
     [Dependency] private readonly VgBurnableSystem _burnable = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefs = default!;
+    [Dependency] private readonly Content.Shared._VG.Status.VgStatusSystem _status = default!;
 
     private const string FirePrototype = "VgFire";
     private const string FloorFuelPrototype = "VgFloorFuel";
@@ -780,6 +781,9 @@ public sealed class VgFireSystem : EntitySystem
                 var damage = new DamageSpecifier();
                 damage.DamageDict["Burn"] = 2.5f * multiplier;
                 _damageable.TryChangeDamage(other, damage, origin: null);
+
+                // ...and it leaves you reeling.
+                _status.SetDizzyAndConfused(other, 5, 5);
             }
         }
     }

@@ -249,4 +249,78 @@ public sealed class VgStatusTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task DizzinessAndConfusion()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+        var grid = map.Grid.Owner;
+        var plating = new Robust.Shared.Map.Tile(server.ResolveDependency<Robust.Shared.Map.ITileDefinitionManager>()["Plating"].TileId);
+
+        EntityUid steady = default, confused = default;
+        await server.WaitAssertion(() =>
+        {
+            var mapSys = entMan.System<Robust.Shared.GameObjects.SharedMapSystem>();
+            for (var x = 0; x < 9; x++)
+            for (var y = 0; y < 12; y++)
+            {
+                mapSys.SetTile(grid, map.Grid.Comp, new Robust.Shared.Maths.Vector2i(x, y), plating);
+            }
+            var gravity = entMan.EnsureComponent<Content.Shared.Gravity.GravityComponent>(grid);
+            gravity.Inherent = true;
+            gravity.Enabled = true;
+
+            var status = entMan.System<VgStatusSystem>();
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+
+            Assert.Multiple(() =>
+            {
+                // Dizziness: one a Life() tick, five lying down.
+                status.Dizzy(human, 20);
+                status.Dizzy(human, 3);
+                Assert.That(status.GetDizziness(human), Is.EqualTo(20));
+                LifeTick(entMan, human);
+                Assert.That(status.GetDizziness(human), Is.EqualTo(19));
+                entMan.System<Content.Shared.Standing.StandingStateSystem>().Down(human);
+                LifeTick(entMan, human);
+                Assert.That(status.GetDizziness(human), Is.EqualTo(14));
+
+                // Confusion: one a Life() tick.
+                status.Confuse(human, 3);
+                LifeTick(entMan, human);
+                Assert.That(status.GetConfused(human), Is.EqualTo(2));
+            });
+
+            // Two people walk north, one confused.
+            steady = entMan.SpawnEntity("MobHuman", new Robust.Shared.Map.EntityCoordinates(grid, 1.5f, 1.5f));
+            confused = entMan.SpawnEntity("MobHuman", new Robust.Shared.Map.EntityCoordinates(grid, 6.5f, 1.5f));
+            status.Confuse(confused, 100);
+            var mover = entMan.System<Content.Shared.Movement.Systems.SharedMoverController>();
+            foreach (var mob in new[] { steady, confused })
+            {
+                mover.SetVelocityDirection((mob, entMan.GetComponent<Content.Shared.Movement.Components.InputMoverComponent>(mob)), Robust.Shared.Maths.Direction.North, 0, true);
+            }
+        });
+
+        await server.WaitRunTicks(20);
+
+        await server.WaitAssertion(() =>
+        {
+            var steadyPos = entMan.GetComponent<TransformComponent>(steady).LocalPosition;
+            var confusedPos = entMan.GetComponent<TransformComponent>(confused).LocalPosition;
+            Assert.Multiple(() =>
+            {
+                Assert.That(steadyPos.Y, Is.GreaterThan(2.5f).And.LessThan(11), "walked north, not off the floor");
+                Assert.That(MathF.Abs(steadyPos.X - 1.5f), Is.LessThan(0.05f), "straight");
+                // Every step goes off at 45 degrees to one side or the other, so it gets about 71% as far north.
+                Assert.That(confusedPos.Y - 1.5f, Is.LessThan((steadyPos.Y - 1.5f) * 0.85f), "confused steps aren't straight");
+                Assert.That(confusedPos.Y - 1.5f, Is.GreaterThan((steadyPos.Y - 1.5f) * 0.55f), "but still go forwards");
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }
