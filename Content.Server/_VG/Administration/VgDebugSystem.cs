@@ -49,6 +49,9 @@ public sealed class VgDebugSystem : EntitySystem
 
     public static readonly VerbCategory Category = new("verb-categories-vg-debug", null);
 
+    private static readonly System.Text.RegularExpressions.Regex WordStart =
+        new("(?<!^)([A-Z])", System.Text.RegularExpressions.RegexOptions.Compiled);
+
     public const float HallossAmount = 50;
     public const float StunTicks = 10;
     public const float FireStacks = 5;
@@ -64,7 +67,7 @@ public sealed class VgDebugSystem : EntitySystem
     /// </summary>
     public static string Id(VgDebugAction action)
     {
-        return System.Text.RegularExpressions.Regex.Replace(action.ToString(), "(?<!^)([A-Z])", "-$1").ToLowerInvariant();
+        return WordStart.Replace(action.ToString(), "-$1").ToLowerInvariant();
     }
 
     public override void Initialize()
