@@ -298,6 +298,22 @@ def convert(src, dst, z, margin, rules):
 
     entities = write_map(dst, tilemap, tiles, placed)
 
+    # SS14 splits a grid into pieces that touch only at corners; report them, since cables and pipes do not cross.
+    todo = {t for t, i in tiles.items() if i != 0}
+    sizes = []
+    while todo:
+        stack, n = [todo.pop()], 0
+        while stack:
+            cx, cy = stack.pop()
+            n += 1
+            for nb in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
+                if nb in todo:
+                    todo.remove(nb)
+                    stack.append(nb)
+        sizes.append(n)
+    sizes.sort(reverse=True)
+    print(f"{len(sizes)} separate pieces of floor; largest {sizes[:5]}, {sum(1 for n in sizes if n < 10)} under 10 tiles")
+
     report = os.path.splitext(dst)[0] + ".unmapped.txt"
     with open(report, "w", encoding="utf-8") as f:
         for path, n in unmapped.most_common():
