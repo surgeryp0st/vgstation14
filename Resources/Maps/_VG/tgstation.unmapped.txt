@@ -1,6 +1,4 @@
-1061	/obj/structure/disposalpipe/segment
 74	/obj/machinery/door_control
-70	/obj/structure/disposalpipe/trunk
 70	/obj/machinery/door/window
 63	/obj/machinery/meter
 58	/obj/item/weapon/stool
@@ -31,14 +29,12 @@
 16	/obj/item/weapon/stool/bar
 15	/obj/item/tool/wrench
 15	/obj/item/weapon/storage/toolbox/mechanical
-15	/obj/structure/disposaloutlet
 15	/obj/item/weapon/cell/high
 15	/obj/item/weapon/storage/belt/utility
 15	/obj/item/weapon/extinguisher
 14	/obj/machinery/vending/coffee
 14	/obj/structure/plasticflaps/mining
 14	/obj/item/tool/screwdriver
-14	/obj/structure/disposalpipe/junction
 14	/obj/item/weapon/tank/oxygen
 13	/obj/machinery/media/receiver/boombox/wallmount/muzak
 13	/obj/machinery/space_heater
@@ -49,7 +45,6 @@
 12	/obj/item/stack/sheet/glass/glass
 12	/obj/structure/mirror
 12	/obj/machinery/recharger
-12	/obj/machinery/atmospherics/unary/tank/air
 12	/obj/machinery/portable_atmospherics/scrubber
 12	/obj/item/ammo_storage/magazine/m380auto
 12	/obj/item/device/am_shielding_container
@@ -419,7 +414,6 @@
 2	/obj/item/weapon/stock_parts/subspace/transmitter
 2	/obj/item/mounted/poster
 2	/obj/item/weapon/circuitboard/telecomms/processor
-2	/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom
 2	/obj/item/weapon/circuitboard/telecomms/server
 2	/obj/item/weapon/circuitboard/telecomms/bus
 2	/obj/item/weapon/book/manual/chef_recipes
@@ -569,7 +563,6 @@
 1	/obj/machinery/computer/rdconsole/mommi
 1	/obj/item/toy/gasha/shard
 1	/obj/machinery/sorting_machine/recycling
-1	/obj/structure/disposalpipe/sortjunction/Disposals
 1	/obj/machinery/vending/hatdispenser
 1	/obj/machinery/vending/suitdispenser
 1	/obj/machinery/vending/shoedispenser
@@ -598,8 +591,6 @@
 1	/obj/item/clothing/suit/simonjacket
 1	/obj/item/clothing/under/simonpants
 1	/obj/item/clothing/glasses/simonglasses
-1	/obj/structure/disposalpipe/wrapsortjunction
-1	/obj/structure/disposalpipe/sortjunction/Cargo
 1	/obj/machinery/embedded_controller/radio/advanced_airlock_controller
 1	/obj/machinery/computer/general_air_control/atmos_automation/burnchamber
 1	/obj/item/clothing/glasses/sunglasses/blindfold
@@ -609,7 +600,6 @@
 1	/obj/structure/coatrack
 1	/obj/item/weapon/reagent_containers/glass/bottle/bleach
 1	/obj/item/weapon/stamp/denied
-1	/obj/structure/disposalpipe/sortjunction/QM
 1	/obj/item/device/radio/electropack
 1	/obj/item/clothing/head/helmet/tactical/sec
 1	/obj/machinery/embedded_controller/radio/airlock_controller
@@ -625,7 +615,6 @@
 1	/obj/item/paint_roller
 1	/obj/machinery/computer/ordercomp
 1	/obj/item/device/mining_scanner
-1	/obj/machinery/atmospherics/unary/tank/toxins
 1	/obj/item/weapon/reagent_containers/syringe/antitoxin
 1	/obj/item/weapon/reagent_containers/syringe/charcoal
 1	/obj/item/weapon/storage/pill_bottle/happy
@@ -633,7 +622,6 @@
 1	/obj/structure/curtain/open
 1	/obj/machinery/vending/art
 1	/obj/structure/reagent_dispensers/corn_oil_tank
-1	/obj/machinery/atmospherics/unary/tank/oxygen
 1	/obj/item/mounted/frame/painting/custom/landscape
 1	/obj/item/painting_brush
 1	/obj/machinery/sewing_machine
@@ -642,17 +630,13 @@
 1	/obj/item/weapon/storage/toolbox/paint
 1	/obj/item/weapon/reagent_containers/glass/bottle/acetone
 1	/obj/item/weapon/reagent_containers/food/drinks/coffee
-1	/obj/structure/disposalpipe/sortjunction/Janitor
 1	/obj/item/device/destTagger
 1	/obj/item/weapon/book/manual/mailing_guide
-1	/obj/structure/disposalpipe/sortjunction/HoP
 1	/obj/item/weapon/storage/bible
 1	/obj/item/airbag
-1	/obj/structure/disposalpipe/sortjunction/Engineering
 1	/obj/item/weapon/circuitboard/telecomms/receiver
 1	/obj/item/weapon/circuitboard/telecomms/broadcaster
 1	/obj/item/weapon/storage/belt/champion
-1	/obj/machinery/atmospherics/unary/tank/toxins/coldroom
 1	/obj/item/toy/gasha/AI/malf
 1	/obj/item/toy/gasha/hoptard
 1	/obj/item/clothing/suit/ianshirt
@@ -776,13 +760,8 @@
 1	/obj/item/toy/gasha/miner
 1	/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe
 1	/obj/machinery/computer/prisoner
-1	/obj/structure/disposalpipe/sortjunction/Detective/mirrored
-1	/obj/structure/disposalpipe/sortjunction/IAA/mirrored
-1	/obj/structure/disposalpipe/sortjunction/GenSecurity/mirrored
 1	/obj/machinery/computer/bhangmeter
 1	/obj/machinery/computer/borgupload
-1	/obj/structure/disposalpipe/sortjunction/Telecomms
-1	/obj/structure/disposalpipe/sortjunction/CE
 1	/obj/machinery/particle_accelerator/control_box
 1	/obj/structure/particle_accelerator/particle_emitter/left
 1	/obj/machinery/door_control/mapped/box_armoury
@@ -802,7 +781,6 @@
 1	/obj/machinery/computer/aiupload/longrange
 1	/obj/item/weapon/beach_ball/holoball
 1	/obj/structure/particle_accelerator/particle_emitter/right
-1	/obj/structure/disposalpipe/sortjunction/Warden/mirrored
 1	/obj/item/weapon/broken_bottle
 1	/mob/living/simple_animal/mouse/Tom
 1	/obj/item/weapon/aiModule/standard/oxygen
@@ -827,7 +805,6 @@
 1	/obj/machinery/vending/engivend
 1	/obj/item/weapon/gun/energy/laser/practice
 1	/obj/item/ammo_storage/box/b380auto/practice
-1	/obj/structure/disposalpipe/sortjunction/Security
 1	/obj/machinery/suit_storage_unit/captain
 1	/obj/item/weapon/tank/jetpack/oxygen
 1	/obj/structure/displaycase/captains_laser
@@ -856,10 +833,7 @@
 1	/obj/item/weapon/pinpointer
 1	/obj/item/weapon/disk/nuclear
 1	/obj/item/weapon/melee/chainofcommand
-1	/obj/structure/disposalpipe/sortjunction/Mechanics/mirrored
-1	/obj/structure/disposalpipe/sortjunction/Atmos
 1	/obj/machinery/atmospherics/miner/nitrogen
-1	/obj/structure/disposalpipe/sortjunction/HoS
 1	/obj/machinery/pipedispenser
 1	/obj/machinery/pipedispenser/disposal
 1	/obj/docking_port/destination/pod5/station
@@ -897,8 +871,6 @@
 1	/obj/structure/piano
 1	/obj/machinery/bioprinter
 1	/obj/machinery/claw_machine
-1	/obj/structure/disposalpipe/sortjunction/Theatre
-1	/obj/structure/disposalpipe/sortjunction/Chemistry
 1	/obj/machinery/vending/lotto
 1	/obj/item/clothing/head/that
 1	/obj/item/weapon/reagent_containers/food/drinks/gromitmug
@@ -919,8 +891,6 @@
 1	/obj/docking_port/destination/elite_syndie/near_station
 1	/obj/machinery/cooking/icemachine
 1	/obj/structure/filingcabinet/medical
-1	/obj/structure/disposalpipe/sortjunction/Bar
-1	/obj/structure/disposalpipe/sortjunction/Medbay
 1	/obj/item/weapon/reagent_containers/glass/bottle/stoxin
 1	/obj/item/weapon/reagent_containers/glass/bottle/toxin
 1	/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline
@@ -933,7 +903,6 @@
 1	/obj/machinery/sleeper/mancrowave
 1	/obj/item/weapon/gun/syringe
 1	/obj/item/toy/gasha/doctor
-1	/obj/structure/disposalpipe/sortjunction/Kitchen
 1	/obj/item/clothing/accessory/storage/webbing/paramed
 1	/obj/item/weapon/reagent_containers/glass/bottle/mutagen
 1	/obj/structure/reagent_dispensers/virusfood
@@ -947,7 +916,6 @@
 1	/obj/item/clothing/under/rank/chef
 1	/obj/item/clothing/under/sundress
 1	/obj/machinery/gibber
-1	/obj/structure/disposalpipe/sortjunction/CMO
 1	/obj/machinery/cooking/foodpress
 1	/obj/machinery/computer/diseasesplicer
 1	/obj/item/weapon/paper/hydroponics
@@ -962,7 +930,6 @@
 1	/obj/machinery/disease2/centrifuge
 1	/obj/machinery/disease2/incubator
 1	/obj/item/weapon/cell/crap
-1	/obj/structure/disposalpipe/sortjunction/Hydroponics
 1	/obj/item/weapon/book/manual/medical_cloning
 1	/obj/structure/bookcase/manuals/medical
 1	/obj/item/weapon/hatchet
@@ -990,18 +957,11 @@
 1	/obj/machinery/botany/extractor
 1	/obj/machinery/botany/editor
 1	/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk
-1	/obj/structure/disposalpipe/sortjunction/Chapel
-1	/obj/structure/disposalpipe/sortjunction/Library
-1	/obj/structure/disposalpipe/sortjunction/Telescience
-1	/obj/structure/disposalpipe/sortjunction/RD
 1	/obj/item/clothing/under/owl
 1	/obj/item/clothing/mask/gas/owl_mask
 1	/obj/item/weapon/pickaxe/drill
 1	/obj/item/stack/sheet/wood
 1	/obj/machinery/bookbinder
-1	/obj/structure/disposalpipe/sortjunction/Robotics
-1	/obj/structure/disposalpipe/sortjunction/Research
-1	/obj/structure/disposalpipe/sortjunction/Genetics
 1	/mob/living/simple_animal/cockroach
 1	/obj/docking_port/destination/salvage/south
 1	/obj/machinery/sparker

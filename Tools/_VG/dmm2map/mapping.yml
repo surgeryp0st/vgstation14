@@ -19,6 +19,30 @@ tiles:
   /turf/simulated/floor/shuttle/plating: {tile: Plating}
   /turf/simulated/floor/glass: {tile: FloorGlass}
   /turf/simulated/floor/arcade: {tile: FloorArcadeBlue}
+  /turf/simulated: {tile: FloorSteel}
+  /turf/unsimulated/floor: {tile: FloorSteel}
+  /turf/unsimulated/floor/airless: {tile: FloorSteel}
+  # Planet, asteroid and snow terrain of the non-station maps (jungle, roid, snaxi, snow). Water has no tile and is left
+  # as space.
+  /turf/unsimulated/border: {tile: Space}
+  /turf/unsimulated/floor/planetary/grass: {tile: FloorGrassJungle}
+  /turf/unsimulated/floor/planetary/mud: {tile: FloorDirt}
+  /turf/unsimulated/floor/planetary/dirt: {tile: FloorDirt}
+  /turf/unsimulated/floor/planetary/path: {tile: FloorDirt}
+  /turf/unsimulated/floor/planetary/path/jungle_plated: {tile: FloorConcrete}
+  /turf/unsimulated/floor/planetary/sand: {tile: FloorAsteroidSand}
+  /turf/unsimulated/floor/planetary/concrete: {tile: FloorConcrete}
+  /turf/unsimulated/beach/sand: {tile: FloorAsteroidSand}
+  /turf/unsimulated/floor/asteroid: {tile: FloorAsteroidSand}
+  /turf/unsimulated/floor/snow: {tile: FloorSnow}
+  /turf/unsimulated/floor/snow/asphalt: {tile: FloorConcrete}
+  /turf/unsimulated/floor/snow/permafrost: {tile: FloorIce}
+  /turf/unsimulated/floor/noblizz_permafrost: {tile: FloorIce}
+  /turf/unsimulated/mineral: {tile: FloorAsteroidSand, proto: WallRock}
+  /turf/unsimulated/mineral/snow: {tile: FloorSnow, proto: WallRockSnow}
+  /turf/unsimulated/mineral/random/snow: {tile: FloorSnow, proto: WallRockSnow}
+  /turf/unsimulated/wall: {tile: Plating, proto: WallSolid}
+  /turf/unsimulated/wall/rock/ice: {tile: FloorIce, proto: WallIce}
   /turf/simulated/wall: {tile: Plating, proto: WallSolid}
   /turf/simulated/wall/r_wall: {tile: Plating, proto: WallReinforced}
   /turf/simulated/wall/shuttle: {tile: Plating, proto: WallShuttle}
@@ -78,8 +102,9 @@ atoms:
   /obj/machinery/atmospherics/pipe/simple/yellow: {pipe: simple, color: "#B77900"}
   /obj/machinery/atmospherics/pipe/simple/insulated: {pipe: simple, color: "#B4B4B4"}
   /obj/machinery/atmospherics/pipe/simple/heat_exchanging: {pipe: simple, color: "#B77900"}
-  /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered: {drop: true}
-  /obj/machinery/atmospherics/pipe/simple/supply/visible/layered: {drop: true}
+  # SS14 has no pipe layers. Where vg13 runs supply and scrubber pipes on layers of the same tile, supply is kept and the
+  # scrubber layer dropped (its vents and scrubbers stay unconnected).
+  /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered: {drop: true}
   /obj/machinery/atmospherics/pipe/simple/scrubbers/visible/layered: {drop: true}
   /obj/machinery/atmospherics/pipe/simple/general/visible/layered: {drop: true}
   /obj/machinery/atmospherics/pipe/manifold: {pipe: manifold, color: "#B4B4B4"}
@@ -112,6 +137,29 @@ atoms:
   # SMES: handled in wire_smes (substation, HV side, terminal), not placed directly.
   /obj/machinery/power/battery/smes: {proto: SMESBasic, smes: true}
   /obj/machinery/power/terminal: {proto: CableTerminal, terminal: true, rot: dir}
+  # Pressure tanks (new _VG entities); coldroom ones start at 90 K.
+  /obj/machinery/atmospherics/unary/tank: {proto: VgPipeTankEmpty, rot: dir}
+  /obj/machinery/atmospherics/unary/tank/empty: {proto: VgPipeTankEmpty, rot: dir}
+  /obj/machinery/atmospherics/unary/tank/air: {proto: VgPipeTankAir, rot: dir}
+  /obj/machinery/atmospherics/unary/tank/oxygen: {proto: VgPipeTankOxygen, rot: dir}
+  /obj/machinery/atmospherics/unary/tank/oxygen_agent_b: {proto: VgPipeTankOxygenAgentB, rot: dir}
+  /obj/machinery/atmospherics/unary/tank/nitrogen: {proto: VgPipeTankNitrogen, rot: dir}
+  /obj/machinery/atmospherics/unary/tank/nitrogen/coldroom: {proto: VgPipeTankNitrogenCold, rot: dir}
+  /obj/machinery/atmospherics/unary/tank/toxins: {proto: VgPipeTankPlasma, rot: dir}
+  /obj/machinery/atmospherics/unary/tank/toxins/coldroom: {proto: VgPipeTankPlasmaCold, rot: dir}
+  /obj/machinery/atmospherics/unary/tank/carbon_dioxide: {proto: VgPipeTankCarbonDioxide, rot: dir}
+  /obj/machinery/atmospherics/unary/tank/carbon_dioxide/coldroom: {proto: VgPipeTankCarbonDioxideCold, rot: dir}
+
+  # Disposal pipes: the shape comes from the vg13 type and icon_state, the rotation from its dir. Sort junctions become
+  # untagged routers (the sort tags are not carried over yet).
+  /obj/structure/disposalpipe/segment: {disposal: segment}
+  /obj/structure/disposalpipe/junction: {disposal: junction}
+  /obj/structure/disposalpipe/sortjunction: {disposal: sort}
+  /obj/structure/disposalpipe/wrapsortjunction: {disposal: sort}
+  /obj/structure/disposalpipe/trunk: {disposal: trunk}
+  /obj/structure/disposalpipe/broken: {drop: true}
+  # vg13's outlet sits on a trunk, and an SS14 trunk already throws out whatever reaches the end of the line.
+  /obj/structure/disposaloutlet: {drop: true}
   /obj/machinery/disposal: {proto: DisposalUnit}
   /obj/machinery/newscaster: {drop: true}
   /obj/machinery/status_display: {drop: true}

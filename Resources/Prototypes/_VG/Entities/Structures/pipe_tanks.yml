@@ -1,0 +1,160 @@
+# vg13 pressure tanks (code/game/machinery/ATMOSPHERICS/components/unary/tank.dm): 2500 L, 45 atm of one gas, one
+# pipe connection. SS14 has no pipe-connected tank, so these are new.
+- type: entity
+  id: VgPipeTank
+  abstract: true
+  name: pressure tank
+  description: A large vessel containing pressurized gas.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _VG/obj/atmospherics/pipe_tank.rsi
+    state: grey
+    noRot: true
+    drawdepth: Objects
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 5
+            max: 5
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Anchorable
+  - type: Rotatable
+  - type: AtmosUnsafeUnanchor
+  - type: PipeAppearance
+  - type: Appearance
+  - type: PipeColorVisuals
+  - type: AtmosPipeColor
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+        volume: 2500
+  - type: VgPipeTank
+
+- type: entity
+  id: VgPipeTankEmpty
+  parent: VgPipeTank
+  name: pressure tank
+  components:
+  - type: Sprite
+    state: grey
+
+- type: entity
+  id: VgPipeTankAir
+  parent: VgPipeTank
+  name: pressure tank (air)
+  components:
+  - type: Sprite
+    state: air
+  - type: VgPipeTank
+    gases:
+      Oxygen: 0.21
+      Nitrogen: 0.79
+
+- type: entity
+  id: VgPipeTankOxygen
+  parent: VgPipeTank
+  name: pressure tank (oxygen)
+  components:
+  - type: Sprite
+    state: o2
+  - type: VgPipeTank
+    gases:
+      Oxygen: 1
+
+- type: entity
+  id: VgPipeTankNitrogen
+  parent: VgPipeTank
+  name: pressure tank (nitrogen)
+  components:
+  - type: Sprite
+    state: n2
+  - type: VgPipeTank
+    gases:
+      Nitrogen: 1
+
+- type: entity
+  id: VgPipeTankNitrogenCold
+  parent: VgPipeTankNitrogen
+  suffix: coldroom
+  components:
+  - type: VgPipeTank
+    temperature: 90
+
+- type: entity
+  id: VgPipeTankPlasma
+  parent: VgPipeTank
+  name: pressure tank (plasma)
+  components:
+  - type: Sprite
+    state: plasma
+  - type: VgPipeTank
+    gases:
+      Plasma: 1
+
+- type: entity
+  id: VgPipeTankPlasmaCold
+  parent: VgPipeTankPlasma
+  suffix: coldroom
+  components:
+  - type: VgPipeTank
+    temperature: 90
+
+- type: entity
+  id: VgPipeTankCarbonDioxide
+  parent: VgPipeTank
+  name: pressure tank (carbon dioxide)
+  components:
+  - type: Sprite
+    state: co2
+  - type: VgPipeTank
+    gases:
+      CarbonDioxide: 1
+
+- type: entity
+  id: VgPipeTankCarbonDioxideCold
+  parent: VgPipeTankCarbonDioxide
+  suffix: coldroom
+  components:
+  - type: VgPipeTank
+    temperature: 90
+
+- type: entity
+  id: VgPipeTankOxygenAgentB
+  parent: VgPipeTank
+  name: pressure tank (oxygen + plasma)
+  components:
+  - type: Sprite
+    state: plasma
+  - type: VgPipeTank
+    gases:
+      OxygenAgentB: 1

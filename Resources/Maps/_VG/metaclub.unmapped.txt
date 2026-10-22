@@ -1,8 +1,6 @@
-1120	/obj/structure/disposalpipe/segment
 102	/obj/item/weapon/stool
 85	/obj/machinery/door_control
 82	/obj/machinery/door/window
-71	/obj/structure/disposalpipe/trunk
 50	/obj/machinery/conveyor
 46	/obj/structure/shuttle/diag_wall/smooth
 46	/obj/machinery/navbeacon
@@ -25,7 +23,6 @@
 24	/obj/machinery/shower
 23	/obj/item/trash/cigbutt
 22	/obj/item/device/flashlight
-22	/obj/structure/disposalpipe/junction
 22	/obj/machinery/portable_atmospherics/hydroponics
 22	/obj/machinery/power/rad_collector
 21	/obj/machinery/media/receiver/boombox/wallmount/muzak
@@ -53,7 +50,6 @@
 13	/obj/machinery/recharger
 13	/obj/item/weapon/storage/box/labels
 13	/obj/item/weapon/hand_labeler
-13	/obj/structure/disposaloutlet
 13	/obj/item/weapon/book/manual/security_space_law
 13	/obj/machinery/vending/coffee
 13	/obj/machinery/computer/security/telescreen
@@ -153,7 +149,6 @@
 6	/obj/item/weapon/storage/firstaid/regular
 6	/obj/item/device/flash
 6	/obj/machinery/computer/security
-6	/obj/machinery/atmospherics/unary/tank/air
 6	/obj/machinery/portable_atmospherics/canister/air
 6	/obj/item/weapon/folder/black
 6	/obj/item/weapon/storage/bag/clipboard
@@ -450,7 +445,6 @@
 2	/obj/machinery/computer/borgupload
 2	/obj/machinery/computer/teleporter
 2	/obj/machinery/teleport/station
-2	/obj/structure/disposalpipe/sortjunction/Atmos
 2	/obj/machinery/teleport/hub
 2	/obj/structure/fireaxecabinet
 2	/obj/item/weapon/hand_tele
@@ -583,7 +577,6 @@
 1	/obj/docking_port/destination/mining/station
 1	/obj/item/stack/sheet/wood
 1	/obj/docking_port/destination/supply/station
-1	/obj/structure/disposalpipe/wrapsortjunction
 1	/obj/machinery/computer/stacking_unit
 1	/obj/machinery/mineral/stacking_machine
 1	/obj/machinery/sorting_machine/recycling
@@ -610,14 +603,12 @@
 1	/obj/item/weapon/reagent_containers/glass/bottle/mutagen
 1	/obj/item/trash/chips
 1	/obj/machinery/vending/wallmed2
-1	/obj/structure/disposalpipe/sortjunction/Disposals
 1	/obj/item/weapon/cell
 1	/obj/machinery/crate_weigher
 1	/obj/machinery/computer/library/public
 1	/obj/item/weapon/handcuffs/cable/pink
 1	/obj/item/weapon/bucket_sensor
 1	/obj/item/weapon/toolbox_tiles/sensor
-1	/obj/structure/disposalpipe/sortjunction/QM
 1	/obj/structure/bedsheetbin
 1	/obj/item/clothing/glasses/eyepatch
 1	/obj/machinery/bioprinter/prosthetics
@@ -652,18 +643,14 @@
 1	/obj/machinery/libraryscanner
 1	/obj/structure/cult_legacy/tome
 1	/obj/item/weapon/pen/invisible
-1	/obj/structure/disposalpipe/sortjunction/Library
 1	/obj/machinery/sleeper/mancrowave
 1	/obj/structure/bookcase/manuals/medical
 1	/obj/item/weapon/nullrod
 1	/obj/docking_port/destination/deathsquad/in_station
 1	/obj/machinery/nuclearbomb
-1	/obj/structure/disposalpipe/sortjunction/Cargo
 1	/obj/machinery/computer/library/checkout/remote_gallery
 1	/obj/machinery/computer/library/checkout
 1	/obj/item/weapon/paper/intercoms
-1	/obj/structure/disposalpipe/sortjunction/Medbay
-1	/obj/structure/disposalpipe/sortjunction/Chapel
 1	/obj/item/weapon/stamp/chaplain
 1	/obj/item/clothing/under/rank/mailman
 1	/obj/item/clothing/under/rank/vice
@@ -677,15 +664,11 @@
 1	/obj/item/organ/internal/heart
 1	/obj/item/device/camera/sepia
 1	/obj/item/clothing/under/blackpants
-1	/obj/structure/disposalpipe/sortjunction/Janitor
-1	/obj/structure/disposalpipe/sortjunction/HoP
 1	/obj/item/weapon/storage/backpack/satchel_chem
 1	/obj/item/weapon/storage/box/masks
 1	/obj/item/weapon/storage/box/gloves
 1	/obj/item/ashtray/plastic
 1	/obj/machinery/smartfridge/chemistry
-1	/obj/structure/disposalpipe/sortjunction/Chemistry
-1	/obj/structure/disposalpipe/sortjunction/CMO
 1	/obj/item/weapon/soap
 1	/obj/item/weapon/reagent_containers/glass/bottle/bleach
 1	/obj/item/clothing/gloves/orange
@@ -706,7 +689,6 @@
 1	/obj/machinery/computer/cloning
 1	/obj/item/target
 1	/obj/item/weapon/book/manual/detective
-1	/obj/structure/disposalpipe/sortjunction/Detective
 1	/obj/item/weapon/reagent_containers/food/drinks/flask/detflask
 1	/obj/item/ashtray/bronze
 1	/obj/machinery/cloning/clonepod/full
@@ -758,12 +740,10 @@
 1	/obj/item/weapon/storage/box/chemimp
 1	/obj/item/weapon/disk/design_disk/ammolathe
 1	/obj/machinery/station_map/strategic
-1	/obj/structure/disposalpipe/sortjunction/IAA
 1	/obj/item/clothing/shoes/laceup
 1	/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe
 1	/obj/item/weapon/storage/box/sunglasses
 1	/obj/item/weapon/storage/box/seccarts
-1	/obj/structure/disposalpipe/sortjunction/Security
 1	/obj/item/device/deskbell/signaler/brig
 1	/obj/machinery/bot/secbot/beepsky
 1	/obj/item/weapon/cartridge/lawyer
@@ -777,7 +757,6 @@
 1	/obj/item/clothing/suit/hastur
 1	/obj/machinery/bot/secbot
 1	/obj/item/weapon/secbot_assembly
-1	/obj/structure/disposalpipe/sortjunction/Warden/mirrored
 1	/obj/item/weapon/storage/box/holobadge
 1	/obj/machinery/computer/rdconsole/robotics
 1	/obj/item/weapon/book/manual/robotics_cyborgs
@@ -788,7 +767,6 @@
 1	/obj/machinery/constructable_frame/machine_frame
 1	/obj/item/weapon/broken_bottle
 1	/obj/item/weapon/storage/belt
-1	/obj/structure/disposalpipe/sortjunction/Research
 1	/obj/machinery/suit_modifier
 1	/mob/living/simple_animal/cockroach
 1	/obj/item/toy/gasha/wizard
@@ -799,7 +777,6 @@
 1	/obj/item/weapon/tank/jetpack/oxygen
 1	/obj/machinery/suit_storage_unit/captain
 1	/obj/item/weapon/coin/plasma
-1	/obj/structure/disposalpipe/sortjunction/Robotics
 1	/obj/item/weapon/reagent_containers/food/snacks/borer_egg
 1	/obj/structure/window/barricade/full/block
 1	/obj/item/weapon/storage/secure/safe/HoS
@@ -807,7 +784,6 @@
 1	/obj/item/device/robotanalyzer
 1	/obj/item/device/mmi/posibrain
 1	/obj/item/weapon/stamp/hos
-1	/obj/structure/disposalpipe/sortjunction/HoS
 1	/obj/item/weapon/gavelblock
 1	/obj/item/weapon/gavelhammer
 1	/obj/item/weapon/pinpointer
@@ -839,7 +815,6 @@
 1	/obj/item/weapon/circuitboard/aicore
 1	/obj/item/weapon/circuitboard/teleporter
 1	/obj/machinery/smartfridge/extract
-1	/obj/structure/disposalpipe/sortjunction/RD
 1	/obj/docking_port/destination/pod3/station
 1	/obj/item/weapon/storage/firstaid/adv
 1	/obj/item/clothing/suit/jumper/christmas
@@ -924,7 +899,6 @@
 1	/obj/item/clothing/under/sl_suit
 1	/obj/item/clothing/under/color/blue
 1	/obj/item/clothing/head/soft/blue
-1	/obj/structure/disposalpipe/sortjunction/Bar
 1	/obj/machinery/chem_master/snackbar_machine
 1	/obj/item/clothing/head/chefhat
 1	/obj/item/clothing/under/rank/chef
@@ -934,7 +908,6 @@
 1	/obj/item/seeds/appleseed
 1	/obj/item/weapon/reagent_containers/food/snacks/grown/carrot
 1	/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
-1	/obj/structure/disposalpipe/sortjunction/Mechanics
 1	/obj/item/weapon/circuitboard/borgupload
 1	/obj/item/weapon/circuitboard/aiupload
 1	/obj/item/weapon/circuitboard/crew
@@ -992,11 +965,8 @@
 1	/obj/item/weapon/circuitboard/centrifuge
 1	/obj/item/weapon/circuitboard/incubator
 1	/obj/item/weapon/circuitboard/splicer
-1	/obj/structure/disposalpipe/sortjunction/Kitchen
-1	/obj/structure/disposalpipe/sortjunction/Hydroponics
 1	/obj/structure/reagent_dispensers/corn_oil_tank
 1	/obj/structure/shuttle/engine/propulsion/burst
-1	/obj/structure/disposalpipe/sortjunction/Theatre
 1	/obj/docking_port/destination/elite_syndie/near_station
 1	/obj/item/stack/rcd_ammo/ce
 1	/obj/item/device/rcd/matter/engineering/pre_loaded/adv
@@ -1016,10 +986,7 @@
 1	/obj/machinery/igniter
 1	/obj/machinery/suit_storage_unit/elite
 1	/obj/machinery/computer/atmoscontrol
-1	/obj/machinery/atmospherics/unary/tank/toxins
 1	/mob/living/simple_animal/parrot/Poly
-1	/obj/structure/disposalpipe/sortjunction/Engineering
-1	/obj/structure/disposalpipe/sortjunction/CE
 1	/obj/item/weapon/reagent_containers/food/snacks/hotdog
 1	/obj/machinery/atmospherics/trinary/tvalve/digital/mirrored
 1	/obj/machinery/computer/HolodeckControl
@@ -1047,7 +1014,6 @@
 1	/mob/living/carbon/monkey/tajara
 1	/obj/machinery/telecomms/server/presets/science
 1	/obj/machinery/telecomms/server/presets/medical
-1	/obj/machinery/atmospherics/unary/tank/carbon_dioxide/coldroom
 1	/obj/machinery/telecomms/relay/preset/station
 1	/obj/machinery/telecomms/bus/preset_two
 1	/obj/machinery/telecomms/bus/preset_one

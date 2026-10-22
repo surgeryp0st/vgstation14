@@ -78,6 +78,8 @@ class Rules:
         bad = []
         for table in (self.tiles, self.atoms):
             for k, v in table.items():
+                if "disposal" in v and v["disposal"] not in ("segment", "junction", "sort", "trunk"):
+                    bad.append(f"{k}: unknown disposal kind {v['disposal']}")
                 if "pipe" in v and v["pipe"] not in ("simple", "manifold", "manifold4w", "unary"):
                     bad.append(f"{k}: unknown pipe kind {v['pipe']}")
                 if "proto" in v and v["proto"] not in entities:
@@ -134,6 +136,20 @@ def pipe_proto(mask):
             return proto, k * math.pi / 2
         base = sum(TURN[b] for b in (P_N, P_S, P_W, P_E) if base & b)
     raise ValueError(mask)
+
+
+def disposal_proto(kind, atom):
+    """SS14 disposal prototype for a vg13 disposal pipe. Both games name the sides relative to the dir the same way: a bend
+    joins dir and the side clockwise of it, junctions are dir plus two more (j1: clockwise and back, j2: counterclockwise and
+    back, y: both sides), and a sort junction is a junction that sends tagged things out of its side."""
+    icon = atom.vars.get("icon_state", "").strip('"')
+    if kind == "segment":
+        return "DisposalBend" if icon == "pipe-c" else "DisposalPipe"
+    if kind == "junction":
+        return {"pipe-j2": "DisposalJunctionFlipped", "pipe-y": "DisposalYJunction"}.get(icon, "DisposalJunction")
+    if kind == "sort":
+        return "DisposalRouterFlipped" if icon == "pipe-j2s" or atom.path.endswith("/mirrored") else "DisposalRouter"
+    return "DisposalTrunk"
 
 
 def var_flag(atom, name):
@@ -234,7 +250,7 @@ def cable_neighbours(cable, cable_dirs):
                 yield (tile[0], tile[1], j)
 
     for d in ends:
-        if d:
+        if d in CABLE_STEP:  # up/down (multi-z) ends have no neighbour on this level
             dx, dy = CABLE_STEP[d]
             yield from on((x + dx, y + dy), opp(d))
             if d & (d - 1):  # diagonal: the two tiles around the corner
@@ -373,6 +389,9 @@ def convert(src, dst, z, margin, rules):
                 if "tile" in rule:
                     # Lattice and the like are tiles in SS14; they only apply over bare space.
                     lattice.append((gx, gy, rule["tile"]))
+                    continue
+                if "disposal" in rule:
+                    placed[disposal_proto(rule["disposal"], a)].append((gx, gy, DIR_ROT.get(dir_of(a), 0.0)))
                     continue
                 if rule.get("cable"):
                     cable_dirs[(gx, gy)].append((int(a.vars.get("d1", "0") or 0), int(a.vars.get("d2", "0") or 0)))
