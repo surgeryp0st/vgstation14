@@ -7,6 +7,8 @@
   color: "#a1000b"
   boilingPoint: 111.0
   meltingPoint: -5.0
+  tileReactions: # VG: vg13 bleach washes plasma out of things on the floor
+  - !type:VgDecontaminateTileReaction {}
   metabolisms:
     Poison:
       effects:

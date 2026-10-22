@@ -107,6 +107,12 @@ public sealed partial class VgSpeciesPrototype : IPrototype
     public bool IgnitesInOxygen;
 
     /// <summary>
+    ///     vg13 PLASMA_IMMUNE: plasma in the air and contaminated clothes don't hurt it.
+    /// </summary>
+    [DataField]
+    public bool PlasmaImmune;
+
+    /// <summary>
     ///     vg13 NO_BLOOD.
     /// </summary>
     [DataField]
