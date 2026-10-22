@@ -221,58 +221,92 @@ def write_map(dst, tilemap, tiles, placed, station=None):
 CABLE_STEP = {1: (0, 1), 2: (0, -1), 4: (1, 0), 8: (-1, 0), 5: (1, 1), 6: (1, -1), 9: (-1, 1), 10: (-1, -1)}
 
 
-def cable_neighbours(tile, cable_dirs):
-    """Tiles whose cables vg13 joins to `tile`'s: a cable end pointing at a neighbour whose cable points back."""
+def cable_neighbours(cable, cable_dirs):
+    """The cables vg13 joins to `cable` ((x, y, index)): through each end, a cable on the next tile with an end pointing
+    back, one on the same tile with the same end, and for diagonal ends the two tiles around the corner (get_connections)."""
     opp = lambda d: ((d & 1) << 1) | ((d & 2) >> 1) | ((d & 4) << 1) | ((d & 8) >> 1)
-    for d1, d2 in cable_dirs.get(tile, []):
-        for d in (d1, d2):
-            if d in CABLE_STEP:
-                nb = (tile[0] + CABLE_STEP[d][0], tile[1] + CABLE_STEP[d][1])
-                if any(opp(d) in pair for pair in cable_dirs.get(nb, [])):
-                    yield nb
+    x, y, i = cable
+    ends = cable_dirs[(x, y)][i]
+
+    def on(tile, end, skip=None):
+        for j, pair in enumerate(cable_dirs.get(tile, [])):
+            if end in pair and (tile[0], tile[1], j) != skip:
+                yield (tile[0], tile[1], j)
+
+    for d in ends:
+        if d:
+            dx, dy = CABLE_STEP[d]
+            yield from on((x + dx, y + dy), opp(d))
+            if d & (d - 1):  # diagonal: the two tiles around the corner
+                for part in (d & 3, d & 12):
+                    px, py = CABLE_STEP[part]
+                    yield from on((x + px, y + py), d ^ (3 if part == d & 3 else 12))
+        yield from on((x, y), d, skip=cable)  # same tile, same end (end 0 joins the node cables)
 
 
-def wire_smes(smes_tiles, terminals, cables, cable_dirs, placed):
+def wire_smes(smes_tiles, terminals, cables, cable_dirs, apc_tiles, placed):
     """Fits vg13's SMES wiring onto SS14's voltage tiers.
 
-    vg13: generators -> cable -> terminal -> SMES -> the cable under the SMES -> the station. SS14's SMES and generators
-    are HV and the station (APCs) is MV, so each SMES gets a substation on the first station cable beside it, and the
-    cables on the generator side of its terminal become HV. Returns (HV cable tiles, substation tiles, a summary).
+    vg13: one network on each side of an SMES (the terminal side charges it, the cable under it is the output). SS14's
+    SMES and generators are HV and APCs are MV. For each SMES the side with more APCs is the station: it stays MV and gets
+    a substation next to the SMES (or next to its terminal when the terminal side is the station), and the other side
+    becomes HV. Returns (HV cables as (x, y, index), substation tiles, a summary).
     """
     step = {1: (0, 1), 2: (0, -1), 4: (1, 0), 8: (-1, 0)}  # BYOND dir -> grid step (y grows north)
-    substations, paired, lonely = set(), [], 0
+
+    def flood(starts):
+        comp, stack = set(starts), list(starts)
+        while stack:
+            cur = stack.pop()
+            for nb in cable_neighbours(cur, cable_dirs):
+                if nb not in comp and (nb[0], nb[1]) not in smes_tiles:
+                    comp.add(nb)
+                    stack.append(nb)
+        return comp
+
+    def at(tile):
+        return [(tile[0], tile[1], i) for i in range(len(cable_dirs.get(tile, [])))]
+
+    def apcs_in(comp):
+        return len({(x, y) for x, y, _ in comp} & apc_tiles)
+
+    substations, hv, notes = set(), set(), []
+    paired = looped = 0
     for sx, sy in sorted(smes_tiles):
         term = next(((tx, ty, d) for tx, ty, d in terminals
                      if (tx + step.get(d, (0, 0))[0], ty + step.get(d, (0, 0))[1]) == (sx, sy)), None)
         if term is None:
-            lonely += 1
             continue
-        paired.append((sx, sy, term))
+        paired += 1
         placed["SMESBasic"].append((sx, sy, 0.0))
         placed["CableTerminal"].append((term[0], term[1], DIR_ROT.get(term[2], 0.0)))
-        outs = [d for d1, d2 in cable_dirs.get((sx, sy), []) for d in (d1, d2) if d in step]
-        cands = [(sx + step[d][0], sy + step[d][1]) for d in outs] + [(sx + dx, sy + dy) for dx, dy in step.values()]
-        cands = [c for c in cands if c in cables and c != (term[0], term[1]) and c not in smes_tiles]
+        tt = (term[0], term[1])
+        t_side = flood(at(tt))
+        out_starts = {nb for c in at((sx, sy)) for nb in cable_neighbours(c, cable_dirs)
+                      if (nb[0], nb[1]) not in smes_tiles and (nb[0], nb[1]) != tt}
+        o_side = flood(sorted(out_starts))
+        if t_side & o_side:
+            looped += 1  # both sides are one network (a bypass), so there is nothing to bridge
+            continue
+        terminal_is_station = (apcs_in(t_side), len(t_side)) > (apcs_in(o_side), len(o_side))
+        if terminal_is_station:
+            station, gen, anchor = t_side, o_side, tt
+            hv |= set(at(tt))
+        else:
+            station, gen, anchor = o_side, t_side, (sx, sy)
+        hv |= gen
+        stations = {(x, y) for x, y, _ in station}
+        next_to = [(anchor[0] + dx, anchor[1] + dy) for dx, dy in step.values()]
+        cands = [c for c in next_to if c in stations and c in cables and c != tt and c not in smes_tiles
+                 and not (terminal_is_station is False and c in {(x, y) for x, y, _ in gen})]
         if cands:
             substations.add(cands[0])
     for sub in substations:
         placed["SubstationBasic"].append((sub[0], sub[1], 0.0))
-
-    hv, sizes = set(), []
-    for _, _, (tx, ty, _) in paired:
-        if (tx, ty) in hv or (tx, ty) not in cables:
-            continue
-        stack, comp = [(tx, ty)], {(tx, ty)}
-        while stack:
-            cx, cy = stack.pop()
-            for nb in cable_neighbours((cx, cy), cable_dirs):
-                if nb in cables and nb not in comp and nb not in smes_tiles and nb not in substations:
-                    comp.add(nb)
-                    stack.append(nb)
-        hv |= comp
-        sizes.append(len(comp))
-    summary = (f"{len(paired)} SMES with terminal ({lonely} without), {len(substations)} substations, HV generator-side "
-               f"cable tiles per SMES {sizes} of {len(cables)}")
+    # A substation tile's own cable is on the station side.
+    hv = {c for c in hv if (c[0], c[1]) not in substations}
+    summary = (f"{paired} SMES with a terminal, {len(substations)} substations, {looped} bypassed (both sides one network), "
+               f"{len(hv)} generator-side cables of {sum(len(v) for v in cable_dirs.values())}")
     return hv, substations, summary
 
 
@@ -369,16 +403,19 @@ def convert(src, dst, z, margin, rules):
                 extra = device_state(rule, a)
                 placed[rule["proto"]].append((gx, gy, rot, extra) if extra else (gx, gy, rot))
 
-    hv, substations, grid_summary = wire_smes(smes_tiles, terminals, cables, cable_dirs, placed)
-    cables -= hv
+    hv, substations, grid_summary = wire_smes(smes_tiles, terminals, cables, cable_dirs, apc_tiles, placed)
+    hv_tiles = {(x, y) for x, y, _ in hv}
+    # A tile whose cables are all on the generator side is HV only; one that also has a station cable keeps both.
+    all_hv = {t for t in hv_tiles if all((t[0], t[1], i) in hv for i in range(len(cable_dirs[t])))}
+    cables -= all_hv
     cables -= smes_tiles
-    placed["CableHV"] = [(gx, gy, 0.0) for gx, gy in sorted(hv | smes_tiles | substations)]
+    placed["CableHV"] = [(gx, gy, 0.0) for gx, gy in sorted(hv_tiles | smes_tiles | substations)]
     # A substation tile carries both voltages.
     cables |= substations
     # An APC always sits on the MV side.
-    cables |= {t for t in apc_tiles if t in hv}
+    cables |= {t for t in apc_tiles if t in hv_tiles}
     placed["CableMV"] = [(gx, gy, 0.0) for gx, gy in sorted(cables)]
-    print(grid_summary)
+    print(grid_summary + f"; {sum(1 for t in apc_tiles if t in hv_tiles)} of {len(apc_tiles)} APCs sit on the generator side")
     # vg13 powers an APC's whole area. SS14's machines only take power from LV cable, so every floor tile of an area
     # with an APC gets LV, which makes the APC's network its area (the decision in docs/_VG/port-decisions.md).
     apc_areas = {areas[t] for t in apc_tiles if t in areas}

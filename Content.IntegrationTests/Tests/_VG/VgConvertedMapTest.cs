@@ -18,7 +18,10 @@ public sealed class VgConvertedMapTest
     private static bool Joined(Node node) => node.NodeGroup is BaseNodeGroup { NodeCount: > 1 };
 
     [Test]
-    public async Task ConvertedLineMapIsWired()
+    [TestCase("line")]
+    [TestCase("metaclub")]
+    [TestCase("tgstation")] // vg13's Box Station
+    public async Task ConvertedMapIsWired(string map)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
@@ -29,7 +32,7 @@ public sealed class VgConvertedMapTest
         await server.WaitPost(() =>
         {
             mapSys.CreateMap(out var mapId);
-            Assert.That(mapLoader.TryLoad(mapId, "Maps/_VG/line.yml", out _));
+            Assert.That(mapLoader.TryLoad(mapId, $"Maps/_VG/{map}.yml", out _));
         });
         await pair.RunTicksSync(30);
 
@@ -85,7 +88,7 @@ public sealed class VgConvertedMapTest
                 }
             }
 
-            TestContext.Out.WriteLine($"SMES {smesWired}/{smes}, substations {subsBridging}/{subs}, APCs {apcsWired}/{apcs}, " +
+            TestContext.Out.WriteLine($"{map}: SMES {smesWired}/{smes}, substations {subsBridging}/{subs}, APCs {apcsWired}/{apcs}, " +
                                       $"machines on an APC network {receiversPowered}/{receivers}, vents {ventsWired}/{vents}, " +
                                       $"pumps/valves/filters {devicesWired}/{devices}");
             Assert.Multiple(() =>
