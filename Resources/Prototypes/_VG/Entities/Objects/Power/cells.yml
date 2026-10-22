@@ -1,0 +1,22 @@
+# vg13 power cells (code/game/objects/items/weapons/power_cells.dm). A handheld cell's unit of 0.72 J makes SS14's small
+# and medium cells vg13's 500 and 1000 unit cells; the other vg13 sizes are these. (The APC and SMES stay at 500 J per
+# unit, on the power net side.)
+- type: entity
+  id: VgPowerCellSuper
+  name: super-capacity power cell
+  description: A rechargeable standardized power cell. It stores twice as much as a high-capacity one.
+  parent: PowerCellHigh
+  components:
+  - type: Battery
+    maxCharge: 14400 # 20000 units
+    startingCharge: 14400
+
+- type: entity
+  id: VgPowerCellUltra
+  name: ultra-capacity power cell
+  description: A rechargeable standardized power cell. It stores more than anything else on the station.
+  parent: PowerCellHyper
+  components:
+  - type: Battery
+    maxCharge: 36000 # 50000 units
+    startingCharge: 36000

@@ -47,8 +47,8 @@
     layers:
     - state: potato
   - type: Battery
-    maxCharge: 70
-    startingCharge: 70
+    maxCharge: 216 # VG: vg13 potato cell, 300 units of 0.72 J
+    startingCharge: 216
   - type: Tag
     tags:
       - PotatoBattery
@@ -131,7 +131,7 @@
 
 - type: entity
   name: high-capacity power cell
-  description: A rechargeable standardized power cell. This premium brand stores up to 50% more energy than the competition.
+  description: A rechargeable standardized power cell. This premium brand stores ten times as much energy as the competition.
   id: PowerCellHigh
   suffix: Full
   parent: BasePowerCell
@@ -144,8 +144,8 @@
       state: o2
       shader: unshaded
   - type: Battery
-    maxCharge: 1080
-    startingCharge: 1080
+    maxCharge: 7200 # VG: vg13 high-capacity cell, 10000 units of 0.72 J
+    startingCharge: 7200
 
 - type: entity
   id: PowerCellHighPrinted
@@ -161,7 +161,7 @@
         shader: unshaded
         visible: false
   - type: Battery
-    maxCharge: 1080
+    maxCharge: 7200 # VG
     startingCharge: 0
 
 - type: entity
@@ -179,8 +179,8 @@
       state: o2
       shader: unshaded
   - type: Battery
-    maxCharge: 1800
-    startingCharge: 1800
+    maxCharge: 21600 # VG: vg13 hyper-capacity cell, 30000 units
+    startingCharge: 21600
 
 - type: entity
   id: PowerCellHyperPrinted
@@ -196,7 +196,7 @@
         shader: unshaded
         visible: false
   - type: Battery
-    maxCharge: 1800
+    maxCharge: 21600 # VG
     startingCharge: 0
 
 - type: entity

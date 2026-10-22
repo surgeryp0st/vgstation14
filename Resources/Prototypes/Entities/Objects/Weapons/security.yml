@@ -10,7 +10,7 @@
     - state: stunbaton_off
       map: [ "enum.ToggleVisuals.Layer" ]
   - type: Stunbaton
-    energyPerUse: 50
+    energyPerUse: 72 # VG: vg13 hitcost 100 units of 0.72 J
   - type: ItemToggle
     predictable: false
     soundActivate:
