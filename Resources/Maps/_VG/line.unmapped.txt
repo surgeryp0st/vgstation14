@@ -27,7 +27,6 @@
 24	/obj/machinery/media/receiver/boombox/wallmount/muzak
 24	/obj/item/device/radio
 24	/obj/machinery/portable_atmospherics/hydroponics
-23	/obj/machinery/atmospherics/binary/pump
 23	/obj/item/weapon/cell/high
 22	/obj/machinery/power/rad_collector
 21	/obj/machinery/portable_atmospherics/canister/oxygen
@@ -85,7 +84,6 @@
 12	/obj/structure/reagent_dispensers/silicate
 12	/obj/machinery/computer/arcade
 12	/obj/item/weapon/folder/red
-12	/obj/machinery/power/terminal
 12	/obj/item/weapon/storage/box/labels
 12	/obj/item/device/flashlight/lamp/green
 12	/obj/machinery/ai_status_display
@@ -94,7 +92,6 @@
 11	/obj/item/weapon/reagent_containers/spray/cleaner
 11	/obj/item/weapon/extinguisher
 11	/obj/item/clothing/head/hardhat/red
-11	/obj/machinery/power/battery/smes
 11	/obj/item/weapon/kitchen/utensil/fork
 11	/obj/machinery/station_map
 11	/obj/item/weapon/book/manual/security_space_law
@@ -102,9 +99,6 @@
 11	/obj/item/weapon/circuitboard/airlock
 11	/obj/item/candle
 11	/obj/item/device/assembly/igniter
-11	/obj/machinery/atmospherics/trinary/filter
-11	/obj/machinery/atmospherics/binary/valve/digital
-10	/obj/machinery/atmospherics/unary/outlet_injector
 10	/obj/item/weapon/storage/toolbox/electrical
 10	/obj/machinery/portable_atmospherics/pump
 10	/obj/item/weapon/folder
@@ -125,8 +119,6 @@
 9	/obj/item/weapon/folder/blue
 9	/obj/item/device/assembly/prox_sensor
 9	/obj/item/weapon/stock_parts/capacitor
-9	/obj/machinery/atmospherics/binary/volume_pump
-9	/obj/machinery/atmospherics/unary/cold_sink/freezer
 9	/obj/structure/plasticflaps
 9	/obj/item/device/eftpos
 9	/obj/item/weapon/bedsheet/red
@@ -169,7 +161,6 @@
 6	/obj/item/weapon/lighter
 6	/obj/machinery/vending/assist
 6	/obj/machinery/shieldwallgen
-6	/obj/machinery/atmospherics/binary/dp_vent_pump/high_volume
 6	/obj/item/weapon/newspaper
 6	/obj/structure/filingcabinet/chestdrawer
 6	/obj/item/weapon/storage/firstaid/toxin
@@ -199,7 +190,6 @@
 6	/obj/machinery/computer/station_alert
 6	/obj/item/weapon/storage/box
 6	/obj/item/clothing/suit/storage/wintercoat/hydro
-5	/obj/machinery/atmospherics/unary/vent
 5	/obj/item/airbag
 5	/obj/item/weapon/paper
 5	/obj/item/device/rcd/rpd
@@ -369,7 +359,6 @@
 3	/obj/item/weapon/reagent_containers/dropper
 3	/obj/item/weapon/storage/belt/medical
 3	/obj/item/weapon/reagent_containers/glass/bottle/antitoxin
-3	/obj/machinery/atmospherics/binary/valve
 3	/obj/item/weapon/grenade/inflatable
 3	/obj/machinery/door/table/reinforced
 3	/obj/item/weapon/bedsheet
@@ -560,7 +549,6 @@
 2	/obj/item/weapon/circuitboard/autolathe
 2	/obj/machinery/ai_slipper
 2	/obj/item/device/flashlight/lantern
-2	/obj/machinery/atmospherics/unary/vent/high_volume
 2	/obj/machinery/computer/atmoscontrol
 2	/obj/item/device/radio/headset/headset_eng
 2	/obj/item/weapon/cartridge/atmos
@@ -830,7 +818,6 @@
 1	/obj/structure/disposalpipe/sortjunction/Robotics/mirrored
 1	/obj/machinery/r_n_d/server/robotics
 1	/obj/machinery/r_n_d/server/core
-1	/obj/machinery/atmospherics/unary/outlet_injector/acid_proof
 1	/obj/item/device/instrument/drum/drum_makeshift/bongos
 1	/obj/machinery/bunsen_burner
 1	/obj/structure/headpole
@@ -989,7 +976,6 @@
 1	/obj/structure/disposalpipe/sortjunction/Atmos/mirrored
 1	/obj/machinery/r_n_d/reverse_engine
 1	/obj/structure/disposalpipe/sortjunction/Engineering/mirrored
-1	/obj/machinery/atmospherics/trinary/mixer
 1	/obj/machinery/requests_console/mechanic
 1	/obj/item/weapon/paper_pack
 1	/obj/item/weapon/paper_pack/nano

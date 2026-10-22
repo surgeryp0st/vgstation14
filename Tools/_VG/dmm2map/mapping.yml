@@ -94,6 +94,24 @@ atoms:
   /obj/machinery/atmospherics/unary/vent_pump: {proto: GasVentPump, rot: dir}
   /obj/machinery/atmospherics/unary/vent_scrubber: {proto: GasVentScrubber, rot: dir}
   /obj/machinery/atmospherics/unary/portables_connector: {proto: GasPort, rot: dir}
+  # Devices that sit in a pipe line. vg13's binary devices take gas in opposite their dir and put it out along it, which
+  # is SS14's inlet/outlet orientation at rotation 0 (facing south). Pumps start off and valves closed, as in vg13.
+  /obj/machinery/atmospherics/binary/pump: {proto: GasPressurePump, rot: dir, enabled: GasPressurePump}
+  /obj/machinery/atmospherics/binary/volume_pump: {proto: GasVolumePump, rot: dir, enabled: GasVolumePump}
+  /obj/machinery/atmospherics/binary/valve: {proto: GasValve, rot: dir, valve: true}
+  /obj/machinery/atmospherics/binary/valve/digital: {proto: SignalControlledValve, rot: dir}
+  /obj/machinery/atmospherics/binary/dp_vent_pump: {proto: GasDualPortVentPump, rot: dir}
+  /obj/machinery/atmospherics/trinary/filter: {proto: GasFilter, rot: dir}
+  /obj/machinery/atmospherics/trinary/filter/mirrored: {proto: GasFilterFlipped, rot: dir}
+  /obj/machinery/atmospherics/trinary/mixer: {proto: GasMixer, rot: dir}
+  /obj/machinery/atmospherics/trinary/mixer/mirrored: {proto: GasMixerFlipped, rot: dir}
+  /obj/machinery/atmospherics/unary/outlet_injector: {proto: GasOutletInjector, rot: dir}
+  /obj/machinery/atmospherics/unary/vent: {proto: GasPassiveVent, rot: dir}
+  /obj/machinery/atmospherics/unary/cold_sink/freezer: {proto: GasThermoMachineFreezer, rot: dir}
+
+  # SMES: handled in wire_smes (substation, HV side, terminal), not placed directly.
+  /obj/machinery/power/battery/smes: {proto: SMESBasic, smes: true}
+  /obj/machinery/power/terminal: {proto: CableTerminal, terminal: true, rot: dir}
   /obj/machinery/disposal: {proto: DisposalUnit}
   /obj/machinery/newscaster: {drop: true}
   /obj/machinery/status_display: {drop: true}

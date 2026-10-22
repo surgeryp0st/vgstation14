@@ -136,6 +136,20 @@ def pipe_proto(mask):
     raise ValueError(mask)
 
 
+def var_flag(atom, name):
+    return atom.vars.get(name, "0").strip() in ("1", "TRUE")
+
+
+def device_state(rule, atom):
+    """Extra components setting a pump's or valve's initial state from the vg13 vars (vg13 starts them off/closed)."""
+    if "enabled" in rule:
+        return ["    - type: " + rule["enabled"], f"      enabled: {str(var_flag(atom, 'on')).lower()}"]
+    if rule.get("valve"):
+        is_open = atom.path.endswith("/open") or var_flag(atom, "openDuringInit") or var_flag(atom, "open")
+        return ["    - type: GasValve", f"      open: {str(is_open).lower()}"]
+    return None
+
+
 def atmosphere_lines(tiles, size=4):
     """Standard air (one unique mix) on every tile that has a floor."""
     flags = collections.defaultdict(int)
@@ -167,8 +181,9 @@ def write_map(dst, tilemap, tiles, placed, station=None):
         chunks[(gx // CHUNK, gy // CHUNK)][(gx % CHUNK, gy % CHUNK)] = t
     for (cx, cy), tl in sorted(chunks.items()):
         raw = bytearray()
-        for lx in range(CHUNK):
-            for ly in range(CHUNK):
+        # The engine reads a chunk row by row: y is the outer loop.
+        for ly in range(CHUNK):
+            for lx in range(CHUNK):
                 raw += struct.pack("<iBB", tl.get((lx, ly), 0), 0, 0)
         out += [f"        {cx},{cy}:", f"          ind: {cx},{cy}", f"          tiles: {base64.b64encode(bytes(raw)).decode()}",
                 "          version: 6"]
@@ -203,6 +218,64 @@ def write_map(dst, tilemap, tiles, placed, station=None):
 
 
 
+CABLE_STEP = {1: (0, 1), 2: (0, -1), 4: (1, 0), 8: (-1, 0), 5: (1, 1), 6: (1, -1), 9: (-1, 1), 10: (-1, -1)}
+
+
+def cable_neighbours(tile, cable_dirs):
+    """Tiles whose cables vg13 joins to `tile`'s: a cable end pointing at a neighbour whose cable points back."""
+    opp = lambda d: ((d & 1) << 1) | ((d & 2) >> 1) | ((d & 4) << 1) | ((d & 8) >> 1)
+    for d1, d2 in cable_dirs.get(tile, []):
+        for d in (d1, d2):
+            if d in CABLE_STEP:
+                nb = (tile[0] + CABLE_STEP[d][0], tile[1] + CABLE_STEP[d][1])
+                if any(opp(d) in pair for pair in cable_dirs.get(nb, [])):
+                    yield nb
+
+
+def wire_smes(smes_tiles, terminals, cables, cable_dirs, placed):
+    """Fits vg13's SMES wiring onto SS14's voltage tiers.
+
+    vg13: generators -> cable -> terminal -> SMES -> the cable under the SMES -> the station. SS14's SMES and generators
+    are HV and the station (APCs) is MV, so each SMES gets a substation on the first station cable beside it, and the
+    cables on the generator side of its terminal become HV. Returns (HV cable tiles, substation tiles, a summary).
+    """
+    step = {1: (0, 1), 2: (0, -1), 4: (1, 0), 8: (-1, 0)}  # BYOND dir -> grid step (y grows north)
+    substations, paired, lonely = set(), [], 0
+    for sx, sy in sorted(smes_tiles):
+        term = next(((tx, ty, d) for tx, ty, d in terminals
+                     if (tx + step.get(d, (0, 0))[0], ty + step.get(d, (0, 0))[1]) == (sx, sy)), None)
+        if term is None:
+            lonely += 1
+            continue
+        paired.append((sx, sy, term))
+        placed["SMESBasic"].append((sx, sy, 0.0))
+        placed["CableTerminal"].append((term[0], term[1], DIR_ROT.get(term[2], 0.0)))
+        outs = [d for d1, d2 in cable_dirs.get((sx, sy), []) for d in (d1, d2) if d in step]
+        cands = [(sx + step[d][0], sy + step[d][1]) for d in outs] + [(sx + dx, sy + dy) for dx, dy in step.values()]
+        cands = [c for c in cands if c in cables and c != (term[0], term[1]) and c not in smes_tiles]
+        if cands:
+            substations.add(cands[0])
+    for sub in substations:
+        placed["SubstationBasic"].append((sub[0], sub[1], 0.0))
+
+    hv, sizes = set(), []
+    for _, _, (tx, ty, _) in paired:
+        if (tx, ty) in hv or (tx, ty) not in cables:
+            continue
+        stack, comp = [(tx, ty)], {(tx, ty)}
+        while stack:
+            cx, cy = stack.pop()
+            for nb in cable_neighbours((cx, cy), cable_dirs):
+                if nb in cables and nb not in comp and nb not in smes_tiles and nb not in substations:
+                    comp.add(nb)
+                    stack.append(nb)
+        hv |= comp
+        sizes.append(len(comp))
+    summary = (f"{len(paired)} SMES with terminal ({lonely} without), {len(substations)} substations, HV generator-side "
+               f"cable tiles per SMES {sizes} of {len(cables)}")
+    return hv, substations, summary
+
+
 def convert(src, dst, z, margin, rules):
     defs, cells = dmm.parse(src)
     level = {(x, y): k for (x, y, zz), k in cells.items() if zz == z}
@@ -231,6 +304,9 @@ def convert(src, dst, z, margin, rules):
     cables = set()
     pipe_tiles = set()
     pipe_conflicts = 0
+    smes_tiles = set()
+    terminals = []  # (x, y, vg13 dir): the dir points at the machine the terminal feeds
+    cable_dirs = collections.defaultdict(list)
 
     def tile_id(name):
         if name not in tilemap:
@@ -265,6 +341,7 @@ def convert(src, dst, z, margin, rules):
                     lattice.append((gx, gy, rule["tile"]))
                     continue
                 if rule.get("cable"):
+                    cable_dirs[(gx, gy)].append((int(a.vars.get("d1", "0") or 0), int(a.vars.get("d2", "0") or 0)))
                     # SS14 cables join their neighbours on their own, so vg13's d1/d2 geometry is not kept; one MV cable
                     # per tile that has any.
                     cables.add((gx, gy))
@@ -283,14 +360,31 @@ def convert(src, dst, z, margin, rules):
                 rot = DIR_ROT.get(dir_of(a), 0.0) if rule.get("rot") == "dir" else 0.0
                 if rule["proto"] == "APCBasic":
                     apc_tiles.add((gx, gy))
-                placed[rule["proto"]].append((gx, gy, rot))
+                if rule.get("smes"):
+                    smes_tiles.add((gx, gy))
+                    continue
+                if rule.get("terminal"):
+                    terminals.append((gx, gy, dir_of(a)))
+                    continue
+                extra = device_state(rule, a)
+                placed[rule["proto"]].append((gx, gy, rot, extra) if extra else (gx, gy, rot))
 
+    hv, substations, grid_summary = wire_smes(smes_tiles, terminals, cables, cable_dirs, placed)
+    cables -= hv
+    cables -= smes_tiles
+    placed["CableHV"] = [(gx, gy, 0.0) for gx, gy in sorted(hv | smes_tiles | substations)]
+    # A substation tile carries both voltages.
+    cables |= substations
+    # An APC always sits on the MV side.
+    cables |= {t for t in apc_tiles if t in hv}
     placed["CableMV"] = [(gx, gy, 0.0) for gx, gy in sorted(cables)]
+    print(grid_summary)
     # vg13 powers an APC's whole area. SS14's machines only take power from LV cable, so every floor tile of an area
     # with an APC gets LV, which makes the APC's network its area (the decision in docs/_VG/port-decisions.md).
     apc_areas = {areas[t] for t in apc_tiles if t in areas}
     placed["CableApcExtension"] = [(gx, gy, 0.0) for (gx, gy), ap in sorted(areas.items())
-                                   if ap in apc_areas and tiles.get((gx, gy), 0) != 0 and (gx, gy) not in walls]
+                                   if ap in apc_areas and tiles.get((gx, gy), 0) != 0 and (gx, gy) not in walls
+                                   and (gx, gy) not in smes_tiles]
 
     for gx, gy, name in lattice:
         if tiles.get((gx, gy), 0) == 0:
