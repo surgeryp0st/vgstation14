@@ -254,4 +254,69 @@ public sealed class VgMetabolismTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task SleepToxinAndSuxameth()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var status = entMan.System<Content.Shared._VG.Status.VgStatusSystem>();
+            var sleeper = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(sleeper);
+            Inject(entMan, sleeper, "stoxin", 29);
+
+            Assert.Multiple(() =>
+            {
+                // vg13: blurry first, then drowsy, then out cold; after 8 minutes the heart suffers.
+                LifeTick(entMan, sleeper);
+                Assert.That(status.GetBlur(sleeper), Is.GreaterThanOrEqualTo(9), "blurred");
+                for (var i = 2; i <= 16; i++)
+                    LifeTick(entMan, sleeper);
+                Assert.That(entMan.GetComponent<Content.Shared._VG.Status.VgStatusComponent>(sleeper).Drowsiness, Is.GreaterThanOrEqualTo(19), "drowsy");
+                Assert.That(status.IsParalysed(sleeper), Is.False);
+                for (var i = 17; i <= 26; i++)
+                    LifeTick(entMan, sleeper);
+                Assert.That(status.IsParalysed(sleeper), "out cold");
+
+                var heart = entMan.GetComponent<Content.Shared._VG.Body.VgBodyComponent>(sleeper).Organs[Content.Shared._VG.Body.VgOrgans.Heart];
+                var before = heart.Damage;
+                for (var i = 27; i <= 241; i++)
+                    LifeTick(entMan, sleeper);
+                Assert.That(heart.Damage, Is.GreaterThan(before), "the heart wears out after 8 minutes");
+            });
+
+            var paralysed = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(paralysed);
+            Inject(entMan, paralysed, "suxameth", 25);
+            LifeTick(entMan, paralysed);
+            var oxygen = Damage(entMan, paralysed, "Oxygen");
+            LifeTick(entMan, paralysed);
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<Content.Shared.Stunnable.StunnedComponent>(paralysed), "suxameth stuns from the second tick");
+                Assert.That(Damage(entMan, paralysed, "Oxygen") - oxygen, Is.EqualTo(6).Within(0.01), "past 20 units it suffocates");
+            });
+
+            // The recipes.
+            var solutions = entMan.System<SharedSolutionContainerSystem>();
+            var beaker = entMan.SpawnEntity("LargeBeaker", map.GridCoords);
+            Assert.That(solutions.TryGetSolution(beaker, "beaker", out var soln));
+            solutions.TryAddSolution(soln!.Value, new Content.Shared.Chemistry.Components.Solution("ChloralHydrate", 1));
+            solutions.TryAddSolution(soln.Value, new Content.Shared.Chemistry.Components.Solution("Sugar", 4));
+            solutions.TryAddSolution(soln.Value, new Content.Shared.Chemistry.Components.Solution("Toxin", 1));
+            solutions.TryAddSolution(soln.Value, new Content.Shared.Chemistry.Components.Solution("Chlorine", 1));
+            Assert.Multiple(() =>
+            {
+                Assert.That(soln.Value.Comp.Solution.GetTotalPrototypeQuantity("stoxin").Float(), Is.EqualTo(5).Within(0.01));
+                Assert.That(soln.Value.Comp.Solution.GetTotalPrototypeQuantity("suxameth").Float(), Is.EqualTo(2).Within(0.01));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

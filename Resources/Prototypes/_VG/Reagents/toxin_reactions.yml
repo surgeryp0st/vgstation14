@@ -1,0 +1,23 @@
+# vgstation13 recipes (code/modules/reagents/Chemistry-Recipes.dm) for the toxins in toxins.yml.
+
+# vg13 also takes corn syrup for the sugar, which isn't here.
+- type: reaction
+  id: VgSleepToxin
+  reactants:
+    ChloralHydrate:
+      amount: 1
+    Sugar:
+      amount: 4
+  products:
+    stoxin: 5
+
+# vg13 also takes solanine for the toxin, which isn't here.
+- type: reaction
+  id: VgSuxameth
+  reactants:
+    Toxin:
+      amount: 1
+    Chlorine:
+      amount: 1
+  products:
+    suxameth: 2

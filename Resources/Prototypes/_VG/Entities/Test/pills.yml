@@ -519,3 +519,42 @@
         reagents:
         - ReagentId: potassium_hydroxide
           Quantity: 20
+
+- type: entity
+  parent: Pill
+  id: VgTestPillStoxin
+  name: test pill (stoxin)
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: stoxin
+          Quantity: 20
+
+- type: entity
+  parent: Pill
+  id: VgTestPillSuxameth
+  name: test pill (suxameth)
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: suxameth
+          Quantity: 20
+
+- type: entity
+  parent: Pill
+  id: VgTestPillHeartbreakertoxin
+  name: test pill (HeartbreakerToxin)
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: HeartbreakerToxin
+          Quantity: 20

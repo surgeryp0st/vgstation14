@@ -211,6 +211,32 @@ public enum VgStatusKind
     Jitter,
     Druggy,
     Drowsiness,
+    Blur,
+    Paralyse,
+    Stun,
+    Knockdown,
+    Dizzy,
+    Confused,
+    Slur,
+}
+
+/// <summary>
+///     vg13 <c>organ.damage += x</c> on one internal organ, without the messages (sleep toxin's heart).
+/// </summary>
+public sealed partial class VgDamageOrgan : VgReagentEffect
+{
+    [DataField(required: true)]
+    public string Organ = string.Empty;
+
+    [DataField(required: true)]
+    public float Amount;
+
+    public override void Apply(VgReagentArgs args)
+    {
+        var body = args.System<SharedVgBodySystem>();
+        if (args.EntityManager.TryGetComponent<VgBodyComponent>(args.Target, out var comp) && body.TryGetOrgan((args.Target, comp), Organ, out var organ))
+            body.TakeOrganDamage((args.Target, comp), organ, Amount, silent: true);
+    }
 }
 
 /// <summary>
@@ -243,6 +269,30 @@ public sealed partial class VgStatusEffect : VgReagentEffect
             case VgStatusKind.Drowsiness:
                 var current = args.EntityManager.GetComponentOrNull<VgStatusComponent>(args.Target)?.Drowsiness ?? 0;
                 status.AdjustDrowsiness(args.Target, Add ? (int) Ticks : Math.Max(0, (int) Ticks - current));
+                break;
+            case VgStatusKind.Blur:
+                if (Add)
+                    status.AdjustBlur(args.Target, Ticks);
+                else
+                    status.Blur(args.Target, Ticks);
+                break;
+            case VgStatusKind.Paralyse:
+                status.Paralyse(args.Target, Ticks);
+                break;
+            case VgStatusKind.Stun:
+                status.Stun(args.Target, Ticks);
+                break;
+            case VgStatusKind.Knockdown:
+                status.Knockdown(args.Target, Ticks);
+                break;
+            case VgStatusKind.Dizzy:
+                status.Dizzy(args.Target, Ticks);
+                break;
+            case VgStatusKind.Confused:
+                status.Confuse(args.Target, Ticks);
+                break;
+            case VgStatusKind.Slur:
+                status.Slur(args.Target, Ticks);
                 break;
         }
     }

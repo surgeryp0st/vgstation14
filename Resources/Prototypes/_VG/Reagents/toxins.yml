@@ -89,3 +89,82 @@
   - !type:VgAdjustDamage
     type: Burn
     amount: 1.5
+
+# vg13 sleep toxin: blurry eyes, then drowsy, then out cold for as long as it lasts; after 8 minutes it starts
+# wearing out the heart.
+- type: reagent
+  id: stoxin
+  name: reagent-name-vg-stoxin
+  group: Toxins
+  desc: reagent-desc-vg-stoxin
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: bitter
+  color: "#E895CC"
+
+- type: vgReagent
+  id: stoxin
+  metabolism: 0.1
+  overdoseAmount: 30
+  effects:
+  - !type:VgStatusEffect
+    kind: Blur
+    ticks: 10
+    minTick: 1
+    maxTick: 15
+  - !type:VgStatusEffect
+    kind: Drowsiness
+    ticks: 20
+    minTick: 16
+    maxTick: 25
+  - !type:VgStatusEffect
+    kind: Paralyse
+    ticks: 20
+    minTick: 26
+    maxTick: 240
+  - !type:VgStatusEffect
+    kind: Drowsiness
+    ticks: 30
+    minTick: 26
+    maxTick: 240
+  - !type:VgDamageOrgan
+    organ: heart
+    amount: 10
+    minTick: 241
+
+# vg13 suxameth (suxamethonium chloride): a full-body paralytic that's easy to purge; past 20 units it paralyses the
+# diaphragm too.
+- type: reagent
+  id: suxameth
+  name: reagent-name-vg-suxameth
+  group: Toxins
+  desc: reagent-desc-vg-suxameth
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: bitter
+  color: "#CFC5E9"
+
+- type: vgReagent
+  id: suxameth
+  metabolism: 1
+  overdoseAmount: 21
+  effects:
+  - !type:VgStatusEffect
+    kind: Stun
+    ticks: 2
+    minTick: 2
+  - !type:VgStatusEffect
+    kind: Knockdown
+    ticks: 2
+    minTick: 2
+  overdoseEffects:
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: 6
+    flat: true
+
+# vg13 heartbreaker toxin: suffocates. Its hallucinations wait for vg13 hallucinations.
+- type: vgReagent
+  id: HeartbreakerToxin
+  effects:
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: 4

@@ -4,3 +4,7 @@ reagent-name-vg-chloramine = chloramine
 reagent-desc-vg-chloramine = A chemical compound consisting of chlorine and ammonia. Very dangerous when inhaled.
 reagent-name-vg-potassium-hydroxide = potassium hydroxide
 reagent-desc-vg-potassium-hydroxide = A corrosive chemical used in making soap and batteries.
+reagent-name-vg-stoxin = sleep toxin
+reagent-desc-vg-stoxin = An effective hypnotic used to treat insomnia.
+reagent-name-vg-suxameth = suxameth
+reagent-desc-vg-suxameth = A name for Suxamethonium chloride. A medical full-body paralytic preferred because it is easy to purge.
