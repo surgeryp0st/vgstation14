@@ -91,7 +91,7 @@ public sealed partial class VgBodySystem
         else if (blood >= BloodVolumeBad)
         {
             ent.Comp.Pale = true;
-            // TODO VG: eye_blurry 2, once vg13 eyes are in.
+            _status.Blur(ent, 2);
             Damage(ent, OxygenDamage, oxygen < 40 ? 6 : 3);
             if (Random.Prob(0.15f))
             {
@@ -102,6 +102,7 @@ public sealed partial class VgBodySystem
         else if (blood >= BloodVolumeSurvive)
         {
             ent.Comp.Pale = true;
+            _status.Blur(ent, 4);
             Damage(ent, OxygenDamage, oxygen < 60 ? 10 : 5);
             Damage(ent, ToxinDamage, 1);
             if (Random.Prob(0.15f))

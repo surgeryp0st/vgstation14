@@ -161,8 +161,12 @@ public abstract partial class SharedVgBodySystem
         }
         else if (brain > 15 && Prob(1.5f))
         {
-            // TODO VG: eye_blurry 10, once vg13 eyes are in.
-            CustomPain(ent, Loc.GetString("vg-brain-eyeblur"));
+            // vg13 brain_eyeblur(): only when the eyes aren't blurred already.
+            if (_status.GetBlur(ent) <= 0)
+            {
+                CustomPain(ent, Loc.GetString("vg-brain-eyeblur"));
+                _status.Blur(ent, 10);
+            }
         }
         else if (Prob(2))
         {

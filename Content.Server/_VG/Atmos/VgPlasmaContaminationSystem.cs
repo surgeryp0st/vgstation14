@@ -196,7 +196,7 @@ public sealed class VgPlasmaContaminationSystem : EntitySystem
         if (eyes.Damage + 5 < eyes.MinBrokenDamage)
             _body.TakeOrganDamage(ent, eyes, 1, silent: true);
 
-        // TODO VG: eye_blurry 1.5 (max 50), once vg13 eyes are in.
+        _status.AdjustBlur(ent, 1.5f, 50);
 
         if (_random.Prob((MathF.Max(0, eyes.Damage - 15) + 1) / 100) && !_statusEffects.HasStatusEffect(ent, "TemporaryBlindness"))
         {

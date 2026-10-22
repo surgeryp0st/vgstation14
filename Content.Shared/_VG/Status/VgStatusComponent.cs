@@ -49,6 +49,13 @@ public sealed partial class VgStatusComponent : Component
     public int Drowsiness;
 
     /// <summary>
+    ///     vg13 eye_blurry: Life() ticks of blurred sight. It wears off by one a tick (three under a blindfold), and not
+    ///     while blind.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float EyeBlurry;
+
+    /// <summary>
     ///     vg13 BASE_CARBON_PAIN_RESIST.
     /// </summary>
     [DataField]

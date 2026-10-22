@@ -8,9 +8,11 @@ using Content.Shared.Bed.Sleep;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Eye.Blinding.Components;
+using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.Drugs;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Inventory;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -41,6 +43,8 @@ public sealed class VgStatusSystem : EntitySystem
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
     [Dependency] private readonly VgPopupSystem _popup = default!;
     [Dependency] private readonly VgSpeciesSystem _species = default!;
+    [Dependency] private readonly BlurryVisionSystem _blurry = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
 
     /// <summary>
     ///     vg13 counts stuns in Life() ticks, which come every 2 seconds.
@@ -61,6 +65,7 @@ public sealed class VgStatusSystem : EntitySystem
 
         SubscribeLocalEvent<VgStatusComponent, VgLifeTickEvent>(OnLifeTick);
         SubscribeLocalEvent<VgStatusComponent, RejuvenateEvent>(OnRejuvenate);
+        SubscribeLocalEvent<VgStatusComponent, GetBlurEvent>(OnGetBlur);
         SubscribeLocalEvent<VgStunOnCollideComponent, ProjectileHitEvent>(OnProjectileHit);
     }
 
@@ -69,7 +74,9 @@ public sealed class VgStatusSystem : EntitySystem
         ent.Comp.Halloss = 0;
         ent.Comp.ShockStage = 0;
         ent.Comp.LoseBreath = 0;
+        ent.Comp.EyeBlurry = 0;
         Dirty(ent);
+        _blurry.UpdateBlurMagnitude(ent.Owner);
     }
 
     #region Stuns
@@ -316,6 +323,7 @@ public sealed class VgStatusSystem : EntitySystem
         if (ent.Comp.Drowsiness > 0)
         {
             ent.Comp.Drowsiness--;
+            ent.Comp.EyeBlurry = MathF.Max(2, ent.Comp.EyeBlurry);
             if (random.Prob(5))
                 Paralyse(ent, 5);
         }
@@ -323,8 +331,72 @@ public sealed class VgStatusSystem : EntitySystem
         HandleHalloss(ent);
         HandleShock(ent, args.LifeTick, random);
         HandlePain(ent, random);
+        HandleEyeBlurry(ent);
 
         Dirty(ent);
+        _blurry.UpdateBlurMagnitude(ent.Owner);
+    }
+
+    /// <summary>
+    ///     vg13 handle_regular_status_updates() for the eyes: no eyes, no blur; blindness holds it; a blindfold rests
+    ///     the eyes three times as fast.
+    /// </summary>
+    private void HandleEyeBlurry(Entity<VgStatusComponent> ent)
+    {
+        if (ent.Comp.EyeBlurry <= 0)
+            return;
+
+        if (TryComp<VgBodyComponent>(ent, out var body) && !body.Organs.ContainsKey(VgOrgans.Eyes))
+        {
+            ent.Comp.EyeBlurry = 0;
+            return;
+        }
+
+        if (_statusEffects.HasStatusEffect(ent, "TemporaryBlindness"))
+            return;
+
+        var blindfolded = _inventory.TryGetSlotEntity(ent, "eyes", out var glasses) && HasComp<BlindfoldComponent>(glasses);
+        ent.Comp.EyeBlurry = MathF.Max(0, ent.Comp.EyeBlurry - (blindfolded ? 3 : 1));
+    }
+
+    /// <summary>
+    ///     vg13 enable_blurriness(): a blur of eye_blurry / 10, between 0.7 and 1.1, here on SS14's 0-6 blur scale.
+    /// </summary>
+    private void OnGetBlur(Entity<VgStatusComponent> ent, ref GetBlurEvent args)
+    {
+        if (ent.Comp.EyeBlurry > 0)
+            args.Blur += Math.Clamp(ent.Comp.EyeBlurry / 10, 0.7f, 1.1f) * 3;
+    }
+
+    /// <summary>
+    ///     vg13 <c>eye_blurry = max(eye_blurry, amount)</c>.
+    /// </summary>
+    public void Blur(EntityUid uid, float amount)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp) || comp.EyeBlurry >= amount)
+            return;
+
+        comp.EyeBlurry = amount;
+        Dirty(uid, comp);
+        _blurry.UpdateBlurMagnitude(uid);
+    }
+
+    /// <summary>
+    ///     vg13 <c>eye_blurry = min(eye_blurry + amount, max)</c>.
+    /// </summary>
+    public void AdjustBlur(EntityUid uid, float amount, float max = float.MaxValue)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return;
+
+        comp.EyeBlurry = Math.Clamp(comp.EyeBlurry + amount, 0, MathF.Max(max, comp.EyeBlurry));
+        Dirty(uid, comp);
+        _blurry.UpdateBlurMagnitude(uid);
+    }
+
+    public float GetBlur(EntityUid uid)
+    {
+        return CompOrNull<VgStatusComponent>(uid)?.EyeBlurry ?? 0;
     }
 
     /// <summary>
@@ -444,7 +516,7 @@ public sealed class VgStatusSystem : EntitySystem
             if (stage == 30 && conscious)
                 Visible(uid, Loc.GetString("vg-shock-eyes-others", ("target", target)), Loc.GetString("vg-shock-eyes-self"));
 
-            // TODO VG: eye_blurry 2, once vg13 eyes are in.
+            Blur(uid, 2);
             Stutter(uid, 5);
         }
 
