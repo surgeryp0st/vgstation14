@@ -89,6 +89,18 @@ public sealed partial class VgSpeciesPrototype : IPrototype
     public bool NoBreathe;
 
     /// <summary>
+    ///     vg13 SPECIES_NO_MOUTH: can't eat or drink.
+    /// </summary>
+    [DataField]
+    public bool NoMouth;
+
+    /// <summary>
+    ///     vg13 IS_PLANT. With no mouth, a plant person absorbs food it stands on.
+    /// </summary>
+    [DataField]
+    public bool IsPlant;
+
+    /// <summary>
     ///     vg13 NO_BLOOD.
     /// </summary>
     [DataField]

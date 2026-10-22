@@ -101,6 +101,8 @@
 - type: vgSpecies
   id: Mushroom
   noBreathe: true
+  noMouth: true
+  isPlant: true
   toxMod: 0.8
   bruteMod: 1.8
   burnMod: 0.6
