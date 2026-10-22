@@ -1,6 +1,6 @@
 # vg13 toxins (reagents_toxin.dm). Reagents both games have keep SS14's id and get vg13's behaviour through a
-# vgReagent of the same id; vg13-only ones are new reagents. Left out for now: cyanide's sleeping, chloramine's
-# lung damage on contact and mercury's space-drifting and emotes, which wait for the systems they need.
+# vgReagent of the same id; vg13-only ones are new reagents. Left out for now: chloramine's lung damage on contact and
+# mercury's space-drifting and emotes, which wait for the systems they need.
 
 - type: vgReagent
   id: Toxin
@@ -54,6 +54,10 @@
     type: Oxygen
     amount: 4
     flat: true
+  - !type:VgStatusEffect
+    kind: Sleep
+    ticks: 1
+    add: true
 
 - type: reagent
   id: chloramine
@@ -168,3 +172,30 @@
   - !type:VgAdjustDamage
     type: Oxygen
     amount: 4
+
+# vg13 chloral hydrate: a jolt of confusion and drowsiness, then asleep for as long as it lasts; past 80 ticks it
+# poisons harder and harder.
+- type: vgReagent
+  id: ChloralHydrate
+  effects:
+  - !type:VgStatusEffect
+    kind: Confused
+    ticks: 2
+    add: true
+    maxTick: 0
+  - !type:VgStatusEffect
+    kind: Drowsiness
+    ticks: 2
+    add: true
+    maxTick: 0
+  - !type:VgStatusEffect
+    kind: Sleep
+    ticks: 1
+    add: true
+    minTick: 1
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: -50
+    perTick: 1
+    flat: true
+    minTick: 80

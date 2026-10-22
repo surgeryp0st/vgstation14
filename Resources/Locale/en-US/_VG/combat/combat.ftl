@@ -56,3 +56,4 @@ vg-attack-verb-scratches = scratches
 vg-attack-verb-claws = claws
 vg-attack-verb-slashes = slashes
 vg-attack-verb-glomps = glomps
+vg-shake-awake = {CAPITALIZE(THE($user))} shakes {THE($target)} trying to wake {OBJECT($target)} up!

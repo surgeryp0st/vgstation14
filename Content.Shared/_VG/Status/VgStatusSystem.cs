@@ -86,6 +86,8 @@ public sealed class VgStatusSystem : EntitySystem
         ent.Comp.EyeBlurry = 0;
         ent.Comp.Dizziness = 0;
         ent.Comp.Confused = 0;
+        ent.Comp.SleepingUntil = TimeSpan.Zero;
+        ent.Comp.ParalysedUntil = TimeSpan.Zero;
         Dirty(ent);
         _blurry.UpdateBlurMagnitude(ent.Owner);
     }
@@ -121,12 +123,107 @@ public sealed class VgStatusSystem : EntitySystem
     /// </summary>
     public void Paralyse(EntityUid uid, float ticks)
     {
-        var time = ticks * LifeTick;
         Knockdown(uid, ticks);
         Stun(uid, ticks);
 
-        if (Longer(uid, SleepKey, time))
-            _statusEffects.TryAddStatusEffect<ForcedSleepingComponent>(uid, SleepKey, time, true);
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+        {
+            // Mobs without vg13 statuses still go out cold.
+            var time = ticks * LifeTick;
+            if (Longer(uid, SleepKey, time))
+                _statusEffects.TryAddStatusEffect<ForcedSleepingComponent>(uid, SleepKey, time, true);
+            return;
+        }
+
+        var until = _timing.CurTime + ticks * LifeTick;
+        if (until > comp.ParalysedUntil)
+        {
+            comp.ParalysedUntil = until;
+            Dirty(uid, comp);
+        }
+
+        RefreshSleep((uid, comp));
+    }
+
+    /// <summary>
+    ///     vg13 <c>sleeping = max(sleeping, ticks)</c>: asleep for at least this many Life() ticks.
+    /// </summary>
+    public void Sleep(EntityUid uid, float ticks)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return;
+
+        var until = _timing.CurTime + ticks * LifeTick;
+        if (until > comp.SleepingUntil)
+        {
+            comp.SleepingUntil = until;
+            Dirty(uid, comp);
+        }
+
+        RefreshSleep((uid, comp));
+    }
+
+    /// <summary>
+    ///     vg13 <c>sleeping = min(sleeping + ticks, max)</c>.
+    /// </summary>
+    public void AddSleeping(EntityUid uid, float ticks, float max = float.MaxValue)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return;
+
+        var now = _timing.CurTime;
+        var current = comp.SleepingUntil > now ? comp.SleepingUntil - now : TimeSpan.Zero;
+        var ticksNow = (float) (current / LifeTick);
+        comp.SleepingUntil = now + MathF.Max(ticksNow, MathF.Min(ticksNow + ticks, max)) * LifeTick;
+        Dirty(uid, comp);
+        RefreshSleep((uid, comp));
+    }
+
+    public bool IsAsleep(EntityUid uid)
+    {
+        return TryComp<VgStatusComponent>(uid, out var comp) && comp.SleepingUntil > _timing.CurTime;
+    }
+
+    /// <summary>
+    ///     vg13 help_shake_act() on someone lying down: ten ticks less sleep, three less paralysis, stun and knockdown.
+    /// </summary>
+    public void Shake(EntityUid uid)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return;
+
+        var now = _timing.CurTime;
+        comp.SleepingUntil = Max(now, comp.SleepingUntil - 10 * LifeTick);
+        comp.ParalysedUntil = Max(now, comp.ParalysedUntil - 3 * LifeTick);
+        Dirty(uid, comp);
+        RefreshSleep((uid, comp));
+
+        _statusEffects.TryRemoveTime(uid, StunKey, 3 * LifeTick);
+        _statusEffects.TryRemoveTime(uid, KnockdownKey, 3 * LifeTick);
+    }
+
+    private static TimeSpan Max(TimeSpan a, TimeSpan b)
+    {
+        return a > b ? a : b;
+    }
+
+    /// <summary>
+    ///     SS14's forced sleep lasts as long as the longer of vg13 sleep and paralysis.
+    /// </summary>
+    private void RefreshSleep(Entity<VgStatusComponent> ent)
+    {
+        var now = _timing.CurTime;
+        var end = Max(ent.Comp.SleepingUntil, ent.Comp.ParalysedUntil);
+        if (end <= now)
+        {
+            _statusEffects.TryRemoveStatusEffect(ent, SleepKey);
+            return;
+        }
+
+        if (_statusEffects.HasStatusEffect(ent, SleepKey))
+            _statusEffects.TrySetTime(ent, SleepKey, end - now);
+        else
+            _statusEffects.TryAddStatusEffect<ForcedSleepingComponent>(ent, SleepKey, end - now, true);
     }
 
     /// <summary>
@@ -366,7 +463,7 @@ public sealed class VgStatusSystem : EntitySystem
             ent.Comp.Drowsiness--;
             ent.Comp.EyeBlurry = MathF.Max(2, ent.Comp.EyeBlurry);
             if (random.Prob(5))
-                Paralyse(ent, 5);
+                AddSleeping(ent, 1);
         }
 
         HandleHalloss(ent);
@@ -449,6 +546,18 @@ public sealed class VgStatusSystem : EntitySystem
     public float GetDizziness(EntityUid uid)
     {
         return CompOrNull<VgStatusComponent>(uid)?.Dizziness ?? 0;
+    }
+
+    /// <summary>
+    ///     vg13 <c>confused += ticks</c>.
+    /// </summary>
+    public void AddConfused(EntityUid uid, float ticks)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return;
+
+        comp.Confused += ticks;
+        Dirty(uid, comp);
     }
 
     public float GetConfused(EntityUid uid)

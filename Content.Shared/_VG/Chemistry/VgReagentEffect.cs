@@ -9,16 +9,17 @@ namespace Content.Shared._VG.Chemistry;
 public abstract partial class VgReagentEffect
 {
     /// <summary>
-    ///     Only applies from this Life() tick the reagent has been in the body (vg13's <c>switch(tick)</c> ranges).
+    ///     Only applies from this Life() tick the reagent has been in the body (vg13's <c>switch(tick)</c> ranges,
+    ///     copied as they are: like vg13's, the first tick is 0).
     /// </summary>
     [DataField]
     public int MinTick;
 
     /// <summary>
-    ///     Only applies up to this tick. 0 for no limit.
+    ///     Only applies up to this tick; no limit when unset.
     /// </summary>
     [DataField]
-    public int MaxTick;
+    public int? MaxTick;
 
     /// <summary>
     ///     vg13 <c>if(prob(x))</c>: percent chance the effect happens on a given tick.
@@ -40,7 +41,7 @@ public abstract partial class VgReagentEffect
 
     public bool InTickRange(int tick)
     {
-        return tick >= MinTick && (MaxTick <= 0 || tick <= MaxTick);
+        return tick >= MinTick && (MaxTick == null || tick <= MaxTick);
     }
 
     public abstract void Apply(VgReagentArgs args);

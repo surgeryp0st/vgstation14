@@ -68,6 +68,19 @@ public sealed partial class VgStatusComponent : Component
     public float Confused;
 
     /// <summary>
+    ///     vg13 sleeping: asleep until then. Shaking takes ten Life() ticks off it.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan SleepingUntil;
+
+    /// <summary>
+    ///     vg13 paralysis: out cold until then. Shaking takes three Life() ticks off it. Sleep and paralysis are kept
+    ///     apart because both show as SS14's forced sleep, which lasts as long as the longer of the two.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan ParalysedUntil;
+
+    /// <summary>
     ///     vg13 BASE_CARBON_PAIN_RESIST.
     /// </summary>
     [DataField]

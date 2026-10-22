@@ -21,3 +21,15 @@
       amount: 1
   products:
     suxameth: 2
+
+- type: reaction
+  id: VgChloralHydrate
+  reactants:
+    Ethanol:
+      amount: 1
+    Chlorine:
+      amount: 3
+    Water:
+      amount: 1
+  products:
+    ChloralHydrate: 1

@@ -270,35 +270,48 @@ public sealed class VgMetabolismTest
             entMan.RemoveComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(sleeper);
             Inject(entMan, sleeper, "stoxin", 29);
 
+            // Life ticks as vg13 counts them: the first is tick 0.
+            var vgTick = -1;
+            void TickTo(int target)
+            {
+                while (vgTick < target)
+                {
+                    LifeTick(entMan, sleeper);
+                    vgTick++;
+                }
+            }
+
             Assert.Multiple(() =>
             {
-                // vg13: blurry first, then drowsy, then out cold; after 8 minutes the heart suffers.
-                LifeTick(entMan, sleeper);
+                // vg13: blurry from tick 1, then drowsy from 16, then out cold from 26; past 240 the heart suffers.
+                TickTo(0);
+                Assert.That(status.GetBlur(sleeper), Is.Zero, "nothing on tick 0");
+                TickTo(1);
                 Assert.That(status.GetBlur(sleeper), Is.GreaterThanOrEqualTo(9), "blurred");
-                for (var i = 2; i <= 16; i++)
-                    LifeTick(entMan, sleeper);
+                TickTo(16);
                 Assert.That(entMan.GetComponent<Content.Shared._VG.Status.VgStatusComponent>(sleeper).Drowsiness, Is.GreaterThanOrEqualTo(19), "drowsy");
-                Assert.That(status.IsParalysed(sleeper), Is.False);
-                for (var i = 17; i <= 26; i++)
-                    LifeTick(entMan, sleeper);
+                TickTo(26);
                 Assert.That(status.IsParalysed(sleeper), "out cold");
 
                 var heart = entMan.GetComponent<Content.Shared._VG.Body.VgBodyComponent>(sleeper).Organs[Content.Shared._VG.Body.VgOrgans.Heart];
+                TickTo(240);
                 var before = heart.Damage;
-                for (var i = 27; i <= 241; i++)
-                    LifeTick(entMan, sleeper);
+                TickTo(241);
                 Assert.That(heart.Damage, Is.GreaterThan(before), "the heart wears out after 8 minutes");
             });
 
             var paralysed = entMan.SpawnEntity("MobHuman", map.GridCoords);
             entMan.RemoveComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(paralysed);
             Inject(entMan, paralysed, "suxameth", 25);
+            // vg13 tick >= 2: the third Life() tick.
             LifeTick(entMan, paralysed);
+            LifeTick(entMan, paralysed);
+            Assert.That(entMan.HasComponent<Content.Shared.Stunnable.StunnedComponent>(paralysed), Is.False, "not stunned before tick 2");
             var oxygen = Damage(entMan, paralysed, "Oxygen");
             LifeTick(entMan, paralysed);
             Assert.Multiple(() =>
             {
-                Assert.That(entMan.HasComponent<Content.Shared.Stunnable.StunnedComponent>(paralysed), "suxameth stuns from the second tick");
+                Assert.That(entMan.HasComponent<Content.Shared.Stunnable.StunnedComponent>(paralysed), "suxameth stuns from tick 2");
                 Assert.That(Damage(entMan, paralysed, "Oxygen") - oxygen, Is.EqualTo(6).Within(0.01), "past 20 units it suffocates");
             });
 
@@ -315,6 +328,49 @@ public sealed class VgMetabolismTest
                 Assert.That(soln.Value.Comp.Solution.GetTotalPrototypeQuantity("stoxin").Float(), Is.EqualTo(5).Within(0.01));
                 Assert.That(soln.Value.Comp.Solution.GetTotalPrototypeQuantity("suxameth").Float(), Is.EqualTo(2).Within(0.01));
             });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ChloralHydratePutsYouToSleep()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var status = entMan.System<Content.Shared._VG.Status.VgStatusSystem>();
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            entMan.RemoveComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(human);
+            Inject(entMan, human, "ChloralHydrate", 30);
+
+            Assert.Multiple(() =>
+            {
+                LifeTick(entMan, human);
+                Assert.That(status.GetConfused(human), Is.GreaterThanOrEqualTo(1), "a jolt of confusion");
+                Assert.That(status.IsAsleep(human), Is.False, "not asleep on the first tick");
+                LifeTick(entMan, human);
+                Assert.That(status.IsAsleep(human), "then asleep");
+
+                for (var i = 2; i < 80; i++)
+                    LifeTick(entMan, human);
+                var toxin = Damage(entMan, human, "Toxin");
+                LifeTick(entMan, human);
+                Assert.That(Damage(entMan, human, "Toxin") - toxin, Is.EqualTo(80 - 50).Within(0.5), "past 80 ticks it poisons by tick - 50");
+            });
+
+            // vg13's recipe.
+            var solutions = entMan.System<SharedSolutionContainerSystem>();
+            var beaker = entMan.SpawnEntity("LargeBeaker", map.GridCoords);
+            Assert.That(solutions.TryGetSolution(beaker, "beaker", out var soln));
+            solutions.TryAddSolution(soln!.Value, new Content.Shared.Chemistry.Components.Solution("Ethanol", 1));
+            solutions.TryAddSolution(soln.Value, new Content.Shared.Chemistry.Components.Solution("Chlorine", 3));
+            solutions.TryAddSolution(soln.Value, new Content.Shared.Chemistry.Components.Solution("Water", 1));
+            Assert.That(soln.Value.Comp.Solution.GetTotalPrototypeQuantity("ChloralHydrate").Float(), Is.EqualTo(1).Within(0.01));
         });
 
         await pair.CleanReturnAsync();

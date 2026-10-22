@@ -64,10 +64,18 @@ public sealed partial class VgAdjustDamage : VgReagentEffect
     [DataField]
     public bool Flat;
 
+    /// <summary>
+    ///     Added to <see cref="Amount"/> for each tick the reagent has been in the body (chloral hydrate's
+    ///     <c>toxloss += tick - 50</c> is amount -50, per tick 1).
+    /// </summary>
+    [DataField]
+    public float PerTick;
+
     public override void Apply(VgReagentArgs args)
     {
+        var amount = Amount + PerTick * args.Tick;
         var spec = new DamageSpecifier();
-        spec.DamageDict[Type] = Flat ? Amount : Amount * VgChemistry.Rem;
+        spec.DamageDict[Type] = Flat ? amount : amount * VgChemistry.Rem;
         args.System<DamageableSystem>().TryChangeDamage(args.Target, spec, true, false);
     }
 }
@@ -218,6 +226,7 @@ public enum VgStatusKind
     Dizzy,
     Confused,
     Slur,
+    Sleep,
 }
 
 /// <summary>
@@ -289,7 +298,16 @@ public sealed partial class VgStatusEffect : VgReagentEffect
                 status.Dizzy(args.Target, Ticks);
                 break;
             case VgStatusKind.Confused:
-                status.Confuse(args.Target, Ticks);
+                if (Add)
+                    status.AddConfused(args.Target, Ticks);
+                else
+                    status.Confuse(args.Target, Ticks);
+                break;
+            case VgStatusKind.Sleep:
+                if (Add)
+                    status.AddSleeping(args.Target, Ticks);
+                else
+                    status.Sleep(args.Target, Ticks);
                 break;
             case VgStatusKind.Slur:
                 status.Slur(args.Target, Ticks);

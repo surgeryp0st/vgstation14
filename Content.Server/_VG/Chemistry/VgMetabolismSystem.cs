@@ -101,17 +101,19 @@ public sealed class VgMetabolismSystem : EntitySystem
                 if (vg.NutrimentFactor != 0)
                     _nutrition.AddNutrition(ent, vg.NutrimentFactor);
                 var volume = quantity.Quantity;
-                var args2 = new VgReagentArgs(EntityManager, ent, id, volume, tick, (reagent, amount) =>
+                // vg13 runs on_mob_life() before metabolize() counts the tick, so effects see 0 on the first one.
+                var vgTick = tick - 1;
+                var args2 = new VgReagentArgs(EntityManager, ent, id, volume, vgTick, (reagent, amount) =>
                     _solutions.RemoveReagent(bloodstream.ChemicalSolution!.Value, reagent, FixedPoint2.New(amount)), contents);
 
                 foreach (var effect in vg.Effects)
                 {
-                    if (effect.InTickRange(tick) && SpeciesAllows(ent, effect) && (effect.Chance >= 100 || _random.Prob(effect.Chance / 100)))
+                    if (effect.InTickRange(vgTick) && SpeciesAllows(ent, effect) && (effect.Chance >= 100 || _random.Prob(effect.Chance / 100)))
                         effect.Apply(args2);
                 }
 
                 var overdosing = vg.OverdoseAmount > 0 && volume.Float() >= vg.OverdoseAmount ||
-                                 vg.OverdoseTick > 0 && tick >= vg.OverdoseTick;
+                                 vg.OverdoseTick > 0 && vgTick >= vg.OverdoseTick;
                 if (overdosing)
                 {
                     // vg13 on_overdose() defaults to adjustToxLoss(1).

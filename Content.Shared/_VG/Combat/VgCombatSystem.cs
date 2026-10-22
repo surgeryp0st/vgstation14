@@ -226,7 +226,15 @@ public sealed class VgCombatSystem : EntitySystem
                     _melee.AttemptLightAttack(user, weaponUid, weapon, target);
                 return true;
             default:
-                return false;
+                // vg13 help_shake_act(): someone lying down (and not in crit) gets shaken awake; the rest is SS14's.
+                if (!_standing.IsDown(target) || _mobState.IsIncapacitated(target) || !HasComp<VgStatusComponent>(target))
+                    return false;
+
+                _status.Shake(target);
+                _audio.PlayPredicted(ThudSound, target, user);
+                Visible(user, target, Loc.GetString("vg-shake-awake",
+                    ("user", Identity.Entity(user, EntityManager)), ("target", Identity.Entity(target, EntityManager))));
+                return true;
         }
     }
 

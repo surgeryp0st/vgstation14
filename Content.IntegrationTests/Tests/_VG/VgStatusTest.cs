@@ -323,4 +323,52 @@ public sealed class VgStatusTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task SleepAndShakingAwake()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var status = entMan.System<VgStatusSystem>();
+            var effects = entMan.System<StatusEffectsSystem>();
+            var sleeper = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            var knockedOut = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            var helper = entMan.SpawnEntity("MobHuman", map.GridCoords);
+
+            Assert.Multiple(() =>
+            {
+                // vg13 sleeping: asleep, showing as SS14's forced sleep.
+                status.Sleep(sleeper, 5);
+                status.Paralyse(sleeper, 2);
+                Assert.That(status.IsAsleep(sleeper));
+                Assert.That(entMan.HasComponent<ForcedSleepingComponent>(sleeper));
+
+                // Shaking takes 10 ticks of sleep and 3 of paralysis: both gone.
+                status.Shake(sleeper);
+                Assert.That(status.IsAsleep(sleeper), Is.False, "shaken awake");
+                Assert.That(effects.HasStatusEffect(sleeper, "ForcedSleep"), Is.False, "no longer out cold");
+
+                // Paralysis is kept apart from sleep: a long one outlasts a shake.
+                status.Paralyse(knockedOut, 10);
+                status.Sleep(knockedOut, 1);
+                status.Shake(knockedOut);
+                Assert.That(status.IsAsleep(knockedOut), Is.False);
+                Assert.That(effects.TryGetTime(knockedOut, "ForcedSleep", out var time) && time!.Value.Item2 - server.Timing.CurTime > TimeSpan.FromSeconds(10),
+                    "7 ticks of paralysis left");
+
+                // The help intent shakes someone lying down.
+                status.Sleep(sleeper, 5);
+                entMan.System<Content.Shared._VG.Combat.VgCombatSystem>().SetIntent(helper, Content.Shared._VG.Combat.VgIntent.Help);
+                Assert.That(entMan.System<Content.Shared._VG.Combat.VgCombatSystem>().TryUnarmed(helper, sleeper), "shook them");
+                Assert.That(status.IsAsleep(sleeper), Is.False, "and woke them");
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

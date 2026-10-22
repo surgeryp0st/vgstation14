@@ -198,9 +198,12 @@ public sealed class VgBreathingSystem : EntitySystem
         var sleepPressure = PartialPressure(comp.SleepGas);
         if (sleepPressure > comp.ParalysePressure)
             _status.Paralyse(ent, 3);
-        // TODO VG: vg13 sleeping builds up by 2 a breath to 10; until sleep is ported, a longer paralysis.
+        // vg13: sleeping = max(sleeping + 2, 10).
         if (sleepPressure > comp.SleepPressure)
-            _status.Paralyse(ent, 5);
+        {
+            _status.AddSleeping(ent, 2);
+            _status.Sleep(ent, 10);
+        }
         if (sleepPressure > comp.GigglePressure && _random.Prob(0.2f))
             Emote(ent, "Laugh");
         breath.SetMoles(comp.SleepGas, 0);
