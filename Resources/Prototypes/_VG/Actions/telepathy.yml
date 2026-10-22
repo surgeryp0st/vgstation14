@@ -1,0 +1,11 @@
+# vg13 /spell/targeted/telepathy
+- type: entity
+  id: VgActionTelepathy
+  name: vg-action-telepathy-name
+  description: vg-action-telepathy-description
+  components:
+  - type: InstantAction
+    icon: { sprite: _VG/mob/screen_spells.rsi, state: gen_project }
+    event: !type:OpenUiActionEvent
+      key: enum.VgTelepathyUiKey.Key
+    checkCanInteract: false

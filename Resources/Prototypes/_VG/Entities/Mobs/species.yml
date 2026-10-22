@@ -130,6 +130,12 @@
   # VG: vg13 species numbers.
   - type: VgSpecies
     species: Grey
+  # VG: vg13 Grey telepathy (/spell/targeted/telepathy).
+  - type: VgTelepathy
+  - type: UserInterface
+    interfaces:
+      enum.VgTelepathyUiKey.Key:
+        type: VgTelepathyBoundUserInterface
   # VG: water splashed on a Grey burns (vg13 ACID4WATER). The first reaction is SS14's, repeated because a child's
   # reactions replace its parent's.
   - type: Reactive
