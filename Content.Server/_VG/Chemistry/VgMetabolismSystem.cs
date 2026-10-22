@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Body.Components;
 using Content.Server.Temperature.Components;
+using Content.Server.Temperature.Systems;
 using Content.Shared._VG.Body;
 using Content.Shared._VG.Nutrition;
 using Content.Shared._VG.Species;
@@ -27,6 +28,7 @@ public sealed class VgMetabolismSystem : EntitySystem
     [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private readonly VgNutritionSystem _nutrition = default!;
     [Dependency] private readonly VgSpeciesSystem _species = default!;
+    [Dependency] private readonly TemperatureSystem _temperature = default!;
     [Dependency] private readonly VgStatusSystem _status = default!;
 
     private readonly List<string> _present = new();
@@ -37,6 +39,7 @@ public sealed class VgMetabolismSystem : EntitySystem
 
         SubscribeLocalEvent<VgMetabolismComponent, VgLifeTickEvent>(OnLifeTick);
         SubscribeLocalEvent<TemperatureComponent, VgGetBodyTemperatureEvent>(OnGetTemperature);
+        SubscribeLocalEvent<TemperatureComponent, VgMoveBodyTemperatureEvent>(OnMoveTemperature);
     }
 
     private bool SpeciesAllows(EntityUid mob, VgReagentEffect effect)
@@ -56,6 +59,14 @@ public sealed class VgMetabolismSystem : EntitySystem
         args.Temperature = ent.Comp.CurrentTemperature;
     }
 
+    private void OnMoveTemperature(Entity<TemperatureComponent> ent, ref VgMoveBodyTemperatureEvent args)
+    {
+        var current = ent.Comp.CurrentTemperature;
+        var target = args.Target;
+        var next = current > target ? Math.Max(target, current - args.Rate) : Math.Min(target, current + args.Rate);
+        _temperature.ForceChangeTemperature(ent, next, ent.Comp);
+    }
+
     private void OnLifeTick(Entity<VgMetabolismComponent> ent, ref VgLifeTickEvent args)
     {
         if (!TryComp<BloodstreamComponent>(ent, out var bloodstream) ||
@@ -72,6 +83,7 @@ public sealed class VgMetabolismSystem : EntitySystem
         var painResistance = 0f;
 
         _present.Clear();
+        var contents = chemicals.Contents.Select(q => q.Reagent.Prototype).ToArray();
         foreach (var quantity in chemicals.Contents.ToArray())
         {
             var id = quantity.Reagent.Prototype;
@@ -90,7 +102,7 @@ public sealed class VgMetabolismSystem : EntitySystem
                     _nutrition.AddNutrition(ent, vg.NutrimentFactor);
                 var volume = quantity.Quantity;
                 var args2 = new VgReagentArgs(EntityManager, ent, id, volume, tick, (reagent, amount) =>
-                    _solutions.RemoveReagent(bloodstream.ChemicalSolution!.Value, reagent, FixedPoint2.New(amount)));
+                    _solutions.RemoveReagent(bloodstream.ChemicalSolution!.Value, reagent, FixedPoint2.New(amount)), contents);
 
                 foreach (var effect in vg.Effects)
                 {

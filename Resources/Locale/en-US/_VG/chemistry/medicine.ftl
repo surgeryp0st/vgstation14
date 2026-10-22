@@ -34,3 +34,16 @@ reagent-name-vg-rezadone = rezadone
 reagent-desc-vg-rezadone = A powder derived from fish toxin, this substance can effectively treat genetic damage in humanoids, though excessive consumption has side effects.
 reagent-name-vg-caffeine = caffeine
 reagent-desc-vg-caffeine = Caffeine is a common stimulant. It works by making your metabolism faster so it also increases your appetite.
+
+reagent-name-vg-charcoal = activated charcoal
+reagent-desc-vg-charcoal = Activated charcoal soaks up whatever is in the blood, good and bad, and makes you feel sick doing it.
+reagent-name-vg-lexorin = lexorin
+reagent-desc-vg-lexorin = Lexorin temporarily stops respiration. Causes tissue damage.
+reagent-name-vg-imidazoline = imidazoline
+reagent-desc-vg-imidazoline = Heals eye damage.
+reagent-name-vg-peridaxon = peridaxon
+reagent-desc-vg-peridaxon = Used to encourage recovery of internal organs and nervous systems. Medicate cautiously.
+reagent-name-vg-leporazine = leporazine
+reagent-desc-vg-leporazine = Leporazine can be used to stabilize an individual's body temperature.
+reagent-name-vg-synaptizine = synaptizine
+reagent-desc-vg-synaptizine = Synaptizine is used to treat various diseases.

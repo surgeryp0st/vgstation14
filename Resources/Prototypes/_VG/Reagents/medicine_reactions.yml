@@ -219,3 +219,61 @@
       amount: 1
   products:
     Arithrazine: 2
+
+- type: reaction
+  id: VgLexorin
+  reactants:
+    Plasma:
+      amount: 1
+    Ammonia:
+      amount: 1
+  products:
+    lexorin: 3
+
+- type: reaction
+  id: VgImidazoline
+  reactants:
+    Carbon:
+      amount: 1
+    Hydrogen:
+      amount: 1
+    anti_toxin:
+      amount: 1
+  products:
+    imidazoline: 2
+
+- type: reaction
+  id: VgSynaptizine
+  reactants:
+    Sugar:
+      amount: 1
+    Lithium:
+      amount: 1
+    Water:
+      amount: 1
+  products:
+    synaptizine: 3
+
+- type: reaction
+  id: VgLeporazine
+  reactants:
+    Silicon:
+      amount: 1
+    Copper:
+      amount: 1
+    Plasma:
+      amount: 5
+      catalyst: true
+  products:
+    leporazine: 2
+
+- type: reaction
+  id: VgCharcoal
+  minTemp: 723
+  reactants:
+    Carbon:
+      amount: 1
+    SulfuricAcid:
+      amount: 2
+  products:
+    charcoal: 1

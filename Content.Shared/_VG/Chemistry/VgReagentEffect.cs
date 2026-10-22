@@ -55,7 +55,8 @@ public readonly record struct VgReagentArgs(
     string Reagent,
     FixedPoint2 Volume,
     int Tick,
-    Action<string, float> RemoveReagent)
+    Action<string, float> RemoveReagent,
+    IReadOnlyList<string> Contents)
 {
     public T System<T>() where T : EntitySystem
     {

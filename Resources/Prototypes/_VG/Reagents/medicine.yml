@@ -348,3 +348,114 @@
     amount: 2
     flat: true
     chance: 15
+
+- type: reagent
+  id: charcoal
+  name: reagent-name-vg-charcoal
+  group: Medicine
+  desc: reagent-desc-vg-charcoal
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: medicine
+  color: "#333333"
+
+- type: vgReagent
+  id: charcoal
+  metabolism: 0.06
+  effects:
+  - !type:VgActivatedCharcoal {}
+
+- type: reagent
+  id: lexorin
+  name: reagent-name-vg-lexorin
+  group: Medicine
+  desc: reagent-desc-vg-lexorin
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: lexorin
+  effects:
+  - !type:VgAdjustDamage
+    type: Brute
+    amount: 1
+    chance: 33
+  - !type:VgAdjustDamage
+    type: Oxygen
+    amount: 3
+    flat: true
+
+- type: reagent
+  id: imidazoline
+  name: reagent-name-vg-imidazoline
+  group: Medicine
+  desc: reagent-desc-vg-imidazoline
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: imidazoline
+  effects:
+  - !type:VgHealInternalOrgans
+    organ: eyes
+    amount: 1
+    skipRobotic: true
+
+- type: reagent
+  id: peridaxon
+  name: reagent-name-vg-peridaxon
+  group: Medicine
+  desc: reagent-desc-vg-peridaxon
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: peridaxon
+  overdoseAmount: 10
+  effects:
+  - !type:VgHealInternalOrgans
+    parent: chest
+    amount: 0.2
+
+- type: reagent
+  id: leporazine
+  name: reagent-name-vg-leporazine
+  group: Medicine
+  desc: reagent-desc-vg-leporazine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: leporazine
+  effects:
+  - !type:VgMoveBodyTemperature {}
+
+# Not ported: the stun reduction (the stun is an SS14 status effect with no way to shorten it yet), hallucination
+# and mindbreaker removal (no hallucination system).
+- type: reagent
+  id: synaptizine
+  name: reagent-name-vg-synaptizine
+  group: Medicine
+  desc: reagent-desc-vg-synaptizine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#C8A5DC"
+
+- type: vgReagent
+  id: synaptizine
+  metabolism: 0.01
+  overdoseAmount: 30
+  painResistance: 40
+  effects:
+  - !type:VgStatusEffect
+    kind: Drowsiness
+    ticks: -5
+    add: true
+  - !type:VgAdjustDamage
+    type: Toxin
+    amount: 1
+    flat: true
+    chance: 60

@@ -273,3 +273,115 @@ public sealed partial class VgVomit : VgReagentEffect
         args.EntityManager.EventBus.RaiseLocalEvent(args.Target, ref ev);
     }
 }
+
+/// <summary>
+///     Peridaxon's and imidazoline's <c>organ.damage = max(0, organ.damage - x)</c> over internal organs. Amounts are
+///     flat, as vg13 writes them.
+/// </summary>
+public sealed partial class VgHealInternalOrgans : VgReagentEffect
+{
+    [DataField(required: true)]
+    public float Amount;
+
+    /// <summary>
+    ///     Only organs inside this limb (peridaxon: the chest).
+    /// </summary>
+    [DataField]
+    public string? Parent;
+
+    /// <summary>
+    ///     Only this organ (imidazoline: the eyes).
+    /// </summary>
+    [DataField]
+    public string? Organ;
+
+    /// <summary>
+    ///     vg13 <c>!E.robotic</c>.
+    /// </summary>
+    [DataField]
+    public bool SkipRobotic;
+
+    public override void Apply(VgReagentArgs args)
+    {
+        if (!args.EntityManager.TryGetComponent(args.Target, out VgBodyComponent? body))
+            return;
+
+        var system = args.System<SharedVgBodySystem>();
+        foreach (var organ in body.Organs.Values)
+        {
+            if (Parent != null && organ.Parent != Parent || Organ != null && organ.Id != Organ)
+                continue;
+
+            if (SkipRobotic && organ.Robotic != 0)
+                continue;
+
+            system.HealOrganDamage((args.Target, body), organ, Amount);
+        }
+    }
+}
+
+/// <summary>
+///     Activated charcoal's <c>on_mob_life</c>: a 5% chance to vomit instead of anything else, otherwise every other
+///     reagent in the body (bar charcoal and blood) loses 15 * REM, or the charcoal itself is used up if there was
+///     nothing to remove. Heals 2 * REM toxin damage.
+/// </summary>
+public sealed partial class VgActivatedCharcoal : VgReagentEffect
+{
+    [DataField]
+    public float VomitChance = 5;
+
+    [DataField]
+    public List<string> Keep = new() { "charcoal", "blood" };
+
+    public override void Apply(VgReagentArgs args)
+    {
+        if (System.Random.Shared.NextDouble() * 100 < VomitChance)
+        {
+            var ev = new VgVomitEvent();
+            args.EntityManager.EventBus.RaiseLocalEvent(args.Target, ref ev);
+            return;
+        }
+
+        var found = false;
+        foreach (var reagent in args.Contents)
+        {
+            if (Keep.Contains(reagent))
+                continue;
+
+            args.RemoveReagent(reagent, 15 * VgChemistry.Rem);
+            found = true;
+        }
+
+        if (!found)
+            args.RemoveReagent(args.Reagent, args.Volume.Float());
+
+        var spec = new DamageSpecifier();
+        spec.DamageDict["Toxin"] = -2 * VgChemistry.Rem;
+        args.System<DamageableSystem>().TryChangeDamage(args.Target, spec, true, false);
+    }
+}
+
+/// <summary>
+///     Asks the body to move its temperature towards <see cref="Target"/> by up to <see cref="Rate"/> kelvin.
+///     Answered server-side, where temperature lives.
+/// </summary>
+[ByRefEvent]
+public record struct VgMoveBodyTemperatureEvent(float Target, float Rate);
+
+/// <summary>
+///     Leporazine's pull towards 310 K, in vg13 as <c>40 * TEMPERATURE_DAMAGE_COEFFICIENT</c> per Life() tick.
+/// </summary>
+public sealed partial class VgMoveBodyTemperature : VgReagentEffect
+{
+    [DataField]
+    public float Target = 310;
+
+    [DataField]
+    public float Rate = 60;
+
+    public override void Apply(VgReagentArgs args)
+    {
+        var ev = new VgMoveBodyTemperatureEvent(Target, Rate);
+        args.EntityManager.EventBus.RaiseLocalEvent(args.Target, ref ev);
+    }
+}

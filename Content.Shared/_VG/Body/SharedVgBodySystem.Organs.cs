@@ -34,6 +34,18 @@ public abstract partial class SharedVgBodySystem
     }
 
     /// <summary>
+    ///     vg13 <c>organ.damage = max(0, organ.damage - amount)</c>.
+    /// </summary>
+    public void HealOrganDamage(Entity<VgBodyComponent> ent, VgOrgan organ, float amount)
+    {
+        if (organ.Damage <= 0)
+            return;
+
+        organ.Damage = Math.Max(0, organ.Damage - amount);
+        Dirty(ent);
+    }
+
+    /// <summary>
     ///     vg13 take_damage() on a limb: a heavy or sharp hit can reach an organ inside, which takes half of it.
     ///     Returns the brute left for the limb.
     /// </summary>
