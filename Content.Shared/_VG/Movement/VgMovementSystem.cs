@@ -60,6 +60,11 @@ public sealed class VgMovementSystem : EntitySystem
     /// </summary>
     private const float GrabTally = 7;
 
+    /// <summary>
+    ///     vg13: running while drowsy adds 6.
+    /// </summary>
+    private const float DrowsyRunTally = 6;
+
     private static readonly string[] WornSlots =
         { "head", "mask", "eyes", "ears", "neck", "outerClothing", "jumpsuit", "gloves", "shoes", "belt", "back", "id", "suitstorage" };
 
@@ -107,8 +112,11 @@ public sealed class VgMovementSystem : EntitySystem
         var extra = ExtraTally((ent, body));
         var multiplier = TallyMultiplier((ent, body));
 
+        // vg13 base_movement_tally(): drowsy, you can't run properly.
+        var drowsy = TryComp<VgStatusComponent>(ent, out var status) && status.Drowsiness > 0 ? DrowsyRunTally : 0;
+
         var walk = SpeedOf((WalkTally + extra) * multiplier) / SpeedOf(WalkTally);
-        var run = SpeedOf((RunTally + extra) * multiplier) / SpeedOf(RunTally);
+        var run = SpeedOf((RunTally + drowsy + extra) * multiplier) / SpeedOf(RunTally);
         args.ModifySpeed(walk, run);
     }
 
@@ -131,7 +139,7 @@ public sealed class VgMovementSystem : EntitySystem
         if (hungry >= 70)
             tally += hungry / 50;
 
-        // TODO VG: hypothermia, drowsiness and painkillers come with temperature and chemistry.
+        // TODO VG: hypothermia and painkillers come with temperature and chemistry.
         // vg13 carbon: being badly hurt slows you down.
         if (TryComp<DamageableComponent>(ent, out var damageable))
         {

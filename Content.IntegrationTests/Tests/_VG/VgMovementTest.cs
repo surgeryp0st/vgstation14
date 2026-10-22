@@ -65,4 +65,34 @@ public sealed class VgMovementTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task DrowsyCantRun()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var human = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            var inventory = entMan.System<InventorySystem>();
+            var speed = entMan.System<MovementSpeedModifierSystem>();
+            var move = entMan.GetComponent<MovementSpeedModifierComponent>(human);
+            Assert.That(inventory.TryEquip(human, entMan.SpawnEntity("ClothingShoesColorBlack", map.GridCoords), "shoes", silent: true, force: true));
+
+            entMan.System<Content.Shared._VG.Status.VgStatusSystem>().AdjustDrowsiness(human, 10);
+            speed.RefreshMovementSpeedModifiers(human);
+
+            Assert.Multiple(() =>
+            {
+                // vg13: running while drowsy adds 6 to the delay; walking is untouched.
+                Assert.That(move.CurrentSprintSpeed, Is.EqualTo(VgMovementSystem.SpeedOf(1 + 6)).Within(0.01));
+                Assert.That(move.CurrentWalkSpeed, Is.EqualTo(VgMovementSystem.SpeedOf(4)).Within(0.01));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }
