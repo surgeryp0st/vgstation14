@@ -1,0 +1,52 @@
+# vg13's treadmill generator (code/modules/power/treadmill.dm).
+- type: entity
+  id: VgTreadmill
+  name: treadmill generator
+  description: A low-power device that generates power based on how quickly someone walks.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _VG/obj/power.rsi
+    state: treadmill
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1: # the facing edge, like a directional window
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,-0.36"
+        density: 1500
+        mask:
+        - FullTileMask
+        layer:
+        - GlassLayer
+  - type: Anchorable
+  - type: Rotatable
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: NodeContainer
+    nodes:
+      power:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+  - type: PowerSupplier
+    voltage: Medium
+    supplyRate: 0
+    supplyRampRate: 100000
+    supplyRampTolerance: 100000
+  - type: VgTreadmill

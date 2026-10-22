@@ -171,6 +171,7 @@ atoms:
   /obj/machinery/power/solar/control: {proto: ComputerSolarControl, rot: dir}
   /obj/machinery/computer/powermonitor: {proto: ComputerPowerMonitoring, rot: dir}
   /obj/machinery/power/port_gen/pacman: {proto: PortableGeneratorPacman}
+  /obj/machinery/power/treadmill: {proto: VgTreadmill, rot: dir}
   /obj/machinery/disposal: {proto: DisposalUnit}
   /obj/machinery/newscaster: {drop: true}
   /obj/machinery/status_display: {drop: true}

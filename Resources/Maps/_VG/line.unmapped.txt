@@ -185,7 +185,6 @@
 5	/obj/item/device/rcd/rpd
 5	/obj/structure/boulder
 5	/obj/structure/wc/sink/kitchen
-5	/obj/machinery/power/treadmill
 5	/obj/structure/shuttle/engine/heater
 5	/obj/structure/shuttle/engine/propulsion
 5	/obj/machinery/suit_storage_unit/security

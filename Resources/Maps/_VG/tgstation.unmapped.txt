@@ -381,7 +381,6 @@
 2	/obj/item/stack/ore/silver
 2	/obj/machinery/bot/mulebot
 2	/obj/item/stack/sheet/cardboard
-2	/obj/machinery/power/treadmill
 2	/obj/item/weapon/barricade_kit
 2	/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe
 2	/obj/machinery/igniter
