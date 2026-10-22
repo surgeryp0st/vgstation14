@@ -34,6 +34,10 @@
     spawned:
     - id: MaterialCloth1
       amount: 1
+  - type: VgBurnable # VG: burns like vg13's carpet floor (fabric, thermal_mass 5, goes out spent rather than ashing)
+    material: Fabric
+    thermalMass: 5
+    ashes: false
 
 - type: entity
   id: Carpet

@@ -25,3 +25,19 @@
   components:
   - type: VgBurnable
     material: Wood
+
+# The burning part of a flammable floor tile (vg13 flammable turfs), spawned by VgFireSystem when a fire first looks
+# at the tile. The material and mass come from the tile's vgFlammableTile.
+- type: entity
+  id: VgFloorFuel
+  name: floor
+  save: false
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: VgFloorFuel
+  - type: VgBurnable
+    material: Wood
+    thermalMass: 5
+    ashes: false

@@ -38,8 +38,10 @@ public sealed class VgFireSystem : EntitySystem
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly VgBurnableSystem _burnable = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly ITileDefinitionManager _tileDefs = default!;
 
     private const string FirePrototype = "VgFire";
+    private const string FloorFuelPrototype = "VgFloorFuel";
     private const string AshPrototype = "Ash";
 
     // vg13 ZAS settings (NewSettings.dm).
@@ -68,11 +70,40 @@ public sealed class VgFireSystem : EntitySystem
 
     private readonly HashSet<EntityUid> _tileEntities = new();
 
+    /// <summary>
+    ///     Flammable floors by tile type id, built on first use: tiles are registered after systems start.
+    /// </summary>
+    private Dictionary<int, VgFlammableTilePrototype>? _flammableTilesCache;
+
+    private Dictionary<int, VgFlammableTilePrototype> FlammableTiles => _flammableTilesCache ??= CacheFlammableTiles();
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<VgHotspotExposeEvent>(OnHotspotExpose);
+        SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
+    }
+
+    private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
+    {
+        if (args.WasModified<VgFlammableTilePrototype>())
+            _flammableTilesCache = null;
+    }
+
+    private Dictionary<int, VgFlammableTilePrototype> CacheFlammableTiles()
+    {
+        var tiles = new Dictionary<int, VgFlammableTilePrototype>();
+        foreach (var proto in _proto.EnumeratePrototypes<VgFlammableTilePrototype>())
+        {
+            if (_tileDefs.TryGetDefinition(proto.ID, out var def))
+                tiles[def.TileId] = proto;
+            else
+                Log.Error($"vgFlammableTile {proto.ID} is not a tile");
+        }
+
+        return tiles;
     }
 
     #region Gas rules
@@ -258,6 +289,14 @@ public sealed class VgFireSystem : EntitySystem
         if (!ent.Comp.OnFire)
             return;
 
+        // vg13 turf ashify(): a floor just goes out, spent.
+        if (!ent.Comp.Ashes)
+        {
+            ent.Comp.ThermalMass = 0;
+            _burnable.Extinguish(ent);
+            return;
+        }
+
         if (_proto.HasIndex<EntityPrototype>(AshPrototype))
             Spawn(AshPrototype, Transform(ent).Coordinates);
 
@@ -374,6 +413,7 @@ public sealed class VgFireSystem : EntitySystem
     {
         _tileEntities.Clear();
         _lookup.GetLocalEntitiesIntersecting(grid, tile, _tileEntities, 0f);
+        var hasFloorFuel = false;
         foreach (var uid in _tileEntities)
         {
             if (TryComp<VgBurnableComponent>(uid, out var burnable) && Transform(uid).ParentUid == grid)
@@ -381,6 +421,48 @@ public sealed class VgFireSystem : EntitySystem
 
             if (liquids != null && HasLiquidFuel(uid))
                 liquids.Add(uid);
+
+            hasFloorFuel |= HasComp<VgFloorFuelComponent>(uid);
+        }
+
+        if (!hasFloorFuel && SpawnFloorFuel(grid, tile) is { } fuel)
+            into.Add(fuel);
+    }
+
+    /// <summary>
+    ///     A flammable floor gets its burnable stand-in the first time a fire looks at it.
+    /// </summary>
+    private Entity<VgBurnableComponent>? SpawnFloorFuel(EntityUid grid, Vector2i tile)
+    {
+        if (!TryComp<MapGridComponent>(grid, out var gridComp)
+            || !_map.TryGetTileRef(grid, gridComp, tile, out var tileRef)
+            || !FlammableTiles.TryGetValue(tileRef.Tile.TypeId, out var flammable))
+        {
+            return null;
+        }
+
+        var fuel = Spawn(FloorFuelPrototype, _map.ToCenterCoordinates(grid, tile, gridComp));
+        var burnable = Comp<VgBurnableComponent>(fuel);
+        burnable.Material = flammable.Material;
+        burnable.ThermalMass = flammable.ThermalMass;
+        Dirty(fuel, burnable);
+        return (fuel, burnable);
+    }
+
+    /// <summary>
+    ///     A floor that is pried up or replaced takes its burning state with it.
+    /// </summary>
+    private void OnTileChanged(ref TileChangedEvent args)
+    {
+        if (args.OldTile.TypeId == args.NewTile.Tile.TypeId)
+            return;
+
+        _tileEntities.Clear();
+        _lookup.GetLocalEntitiesIntersecting(args.Entity, args.NewTile.GridIndices, _tileEntities, 0f);
+        foreach (var uid in _tileEntities)
+        {
+            if (HasComp<VgFloorFuelComponent>(uid))
+                QueueDel(uid);
         }
     }
 
@@ -521,6 +603,30 @@ public sealed class VgFireSystem : EntitySystem
     /// </summary>
     private void ScanForAutoignition()
     {
+        // vg13 zones list their flammable turfs among their burnable atoms: hot floors get their stand-ins here.
+        if (FlammableTiles.Count > 0)
+        {
+            var hot = new List<(EntityUid Grid, Vector2i Tile)>();
+            var grids = EntityQueryEnumerator<MapGridComponent>();
+            while (grids.MoveNext(out var gridUid, out var gridComp))
+            {
+                foreach (var tileRef in _map.GetAllTiles(gridUid, gridComp))
+                {
+                    if (!FlammableTiles.ContainsKey(tileRef.Tile.TypeId))
+                        continue;
+
+                    if (Mixture(gridUid, tileRef.GridIndices) is { } tileAir && tileAir.Temperature >= AutoignitionTrigger)
+                        hot.Add((gridUid, tileRef.GridIndices));
+                }
+            }
+
+            var found = new List<Entity<VgBurnableComponent>>();
+            foreach (var (gridUid, tile) in hot)
+            {
+                GetTileBurnables(gridUid, tile, found);
+            }
+        }
+
         var query = EntityQueryEnumerator<VgBurnableComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var burnable, out var xform))
         {
@@ -538,7 +644,9 @@ public sealed class VgFireSystem : EntitySystem
 
             if (burnable.ThermalMass <= 0)
             {
-                QueueDel(uid);
+                // A spent floor stays as it is, so it can't burn again.
+                if (burnable.Ashes)
+                    QueueDel(uid);
                 continue;
             }
 

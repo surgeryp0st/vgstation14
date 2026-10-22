@@ -331,4 +331,90 @@ public sealed class VgFireTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task WoodenFloorsBurn()
+    {
+        var (pair, grid) = await AirRoom();
+        await using var _ = pair;
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var fires = entMan.System<VgFireSystem>();
+        var mapSys = server.System<SharedMapSystem>();
+        var gridComp = entMan.GetComponent<MapGridComponent>(grid);
+        var tileDefs = server.ResolveDependency<Robust.Shared.Map.ITileDefinitionManager>();
+        var wood = new Tile(tileDefs["FloorWood"].TileId);
+        var plating = new Tile(tileDefs["Plating"].TileId);
+        var woodTile = new Vector2i(2, 0);
+        var platingTile = new Vector2i(0, 0);
+
+        EntityUid? FloorFuel(Vector2i tile)
+        {
+            foreach (var uid in entMan.System<EntityLookupSystem>().GetLocalEntitiesIntersecting(grid, tile, 0f))
+            {
+                if (entMan.HasComponent<VgFloorFuelComponent>(uid))
+                    return uid;
+            }
+            return null;
+        }
+
+        void Expose(Vector2i tile)
+        {
+            var ev = new VgHotspotExposeEvent(grid, tile, 700, Atmospherics.CellVolume);
+            entMan.EventBus.RaiseEvent(EventSource.Local, ref ev);
+        }
+
+        await server.WaitAssertion(() =>
+        {
+            mapSys.SetTile(grid, gridComp, woodTile, wood);
+
+            Expose(platingTile);
+            Assert.That(fires.IsBurning(grid, platingTile), Is.False, "plating doesn't burn");
+
+            Expose(woodTile);
+            Assert.That(fires.IsBurning(grid, woodTile), Is.True, "the wooden floor catches");
+            var fuel = FloorFuel(woodTile);
+            Assert.That(fuel, Is.Not.Null);
+            var burnable = entMan.GetComponent<VgBurnableComponent>(fuel!.Value);
+            Assert.That(burnable.OnFire, Is.True);
+            Assert.That(burnable.Material.Id, Is.EqualTo("Wood"));
+            // Most of it gone already, so it burns out quickly.
+            burnable.ThermalMass = 0.3f;
+        });
+
+        await server.WaitRunTicks(30 * 20);
+
+        await server.WaitAssertion(() =>
+        {
+            var fuel = FloorFuel(woodTile);
+            Assert.That(fuel, Is.Not.Null, "a spent floor stays");
+            var burnable = entMan.GetComponent<VgBurnableComponent>(fuel!.Value);
+            Assert.That(burnable.ThermalMass, Is.Zero);
+            Assert.That(burnable.OnFire, Is.False);
+            Assert.That(fires.IsBurning(grid, woodTile), Is.False, "the fire went out with nothing left to burn");
+        });
+
+        // Spent, it can't catch again; a new floor can.
+        await server.WaitRunTicks(30 * 31);
+        await server.WaitAssertion(() =>
+        {
+            Expose(woodTile);
+            Assert.That(fires.IsBurning(grid, woodTile), Is.False, "spent floor doesn't catch again");
+
+            mapSys.SetTile(grid, gridComp, woodTile, plating);
+            mapSys.SetTile(grid, gridComp, woodTile, wood);
+        });
+        await server.WaitRunTicks(1);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(FloorFuel(woodTile), Is.Null, "relaid floor has no old burning state");
+            Expose(woodTile);
+            Assert.That(fires.IsBurning(grid, woodTile), Is.True, "relaid wooden floor catches");
+
+            var carpet = server.ProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>("Carpet");
+            Assert.That(carpet.Components.ContainsKey("VgBurnable"), "SS14 carpets burn like vg13's carpet floors");
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

@@ -43,4 +43,10 @@ public sealed partial class VgBurnableComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan FireProtectionUntil;
+
+    /// <summary>
+    ///     Whether it crumbles to ash once burnt up. vg13's floors don't: they just stop burning (turf ashify()).
+    /// </summary>
+    [DataField]
+    public bool Ashes = true;
 }

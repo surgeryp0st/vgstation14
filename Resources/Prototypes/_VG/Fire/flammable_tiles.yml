@@ -1,0 +1,53 @@
+# vg13's flammable floors (flammable = TRUE turfs in code/game/turfs/simulated/floor_types.dm), all with thermal_mass 5.
+# The tiles are the ones dmm2map turns those turfs into, plus SS14's other wooden, grass and carpet floors.
+
+# /turf/simulated/floor/wood
+- type: vgFlammableTile
+  id: FloorWood
+  material: Wood
+
+- type: vgFlammableTile
+  id: FloorWoodTile
+  material: Wood
+
+- type: vgFlammableTile
+  id: FloorWoodLarge
+  material: Wood
+
+- type: vgFlammableTile
+  id: FloorBrokenWood
+  material: Wood
+
+# /turf/simulated/floor/grass (wood in vg13). Planet grass isn't simulated in vg13, so it doesn't burn.
+- type: vgFlammableTile
+  id: FloorGrass
+  material: Wood
+
+- type: vgFlammableTile
+  id: FloorGrassDark
+  material: Wood
+
+- type: vgFlammableTile
+  id: FloorGrassLight
+  material: Wood
+
+# /turf/simulated/floor/carpet and /turf/simulated/floor/arcade
+- type: vgFlammableTile
+  id: FloorCarpetOffice
+  material: Fabric
+
+- type: vgFlammableTile
+  id: FloorCarpetClown
+  material: Fabric
+
+- type: vgFlammableTile
+  id: FloorArcadeBlue
+  material: Fabric
+
+- type: vgFlammableTile
+  id: FloorArcadeBlue2
+  material: Fabric
+
+- type: vgFlammableTile
+  id: FloorArcadeRed
+  material: Fabric
