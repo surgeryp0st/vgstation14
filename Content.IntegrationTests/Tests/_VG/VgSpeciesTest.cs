@@ -181,4 +181,33 @@ public sealed class VgSpeciesTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task SS14OnlySpeciesAreNotSelectable()
+    {
+        // Decided: SS14's Arachnid, Moth, Dwarf and Gingerbread are disabled; profiles with them fall back to Human.
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var disabled = new[] { "Arachnid", "Moth", "Dwarf", "Gingerbread" };
+            Assert.Multiple(() =>
+            {
+                foreach (var id in disabled)
+                {
+                    var proto = server.ProtoMan.Index<Content.Shared.Humanoid.Prototypes.SpeciesPrototype>(id);
+                    Assert.That(proto.RoundStart, Is.False, $"{id} is selectable");
+                }
+
+                for (var i = 0; i < 200; i++)
+                {
+                    var profile = Content.Shared.Preferences.HumanoidCharacterProfile.Random();
+                    Assert.That(disabled, Does.Not.Contain(profile.Species.Id), "random character");
+                }
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }
