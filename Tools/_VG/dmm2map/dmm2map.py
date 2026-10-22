@@ -78,6 +78,8 @@ class Rules:
         bad = []
         for table in (self.tiles, self.atoms):
             for k, v in table.items():
+                if "pipe" in v and v["pipe"] not in ("simple", "manifold", "manifold4w", "unary"):
+                    bad.append(f"{k}: unknown pipe kind {v['pipe']}")
                 if "proto" in v and v["proto"] not in entities:
                     bad.append(f"{k}: unknown entity {v['proto']}")
                 if "tile" in v and v["tile"] not in tiles:
@@ -90,6 +92,48 @@ def dir_of(atom):
         return int(atom.vars.get("dir", "2"))
     except ValueError:
         return 2
+
+
+# SS14 PipeDirection bits, and the BYOND dir bits (1 north, 2 south, 4 east, 8 west) they come from.
+P_N, P_S, P_W, P_E = 1, 2, 4, 8
+BYOND_TO_PIPE = {1: P_N, 2: P_S, 4: P_E, 8: P_W}
+# One counterclockwise quarter turn (what a positive entity rotation does): south -> east -> north -> west -> south.
+TURN = {P_S: P_E, P_E: P_N, P_N: P_W, P_W: P_S}
+# Open sides of each pipe prototype at rotation 0, which faces south.
+PIPE_SHAPES = {
+    1: ("GasPipeHalf", P_S),
+    "straight": ("GasPipeStraight", P_N | P_S),
+    "bend": ("GasPipeBend", P_S | P_W),
+    3: ("GasPipeTJunction", P_S | P_W | P_E),
+    4: ("GasPipeFourway", P_N | P_S | P_W | P_E),
+}
+
+
+def pipe_mask(kind, byond_dir):
+    """The sides a vg13 pipe is open on. Simple pipes face their dir (or are bent by it), manifolds lack it."""
+    bits = 0
+    for b, p in BYOND_TO_PIPE.items():
+        if byond_dir & b:
+            bits |= p
+    if kind == "simple":
+        return bits if bin(bits).count("1") == 2 else (P_E | P_W if bits & (P_E | P_W) else P_N | P_S)
+    if kind == "manifold":
+        return (P_N | P_S | P_W | P_E) & ~(bits & -bits if bits else 0)
+    if kind == "manifold4w":
+        return P_N | P_S | P_W | P_E
+    return bits & -bits if bits else P_S  # unary (caps): the one side it opens on
+
+
+def pipe_proto(mask):
+    """(prototype, rotation in radians) for a pipe open on `mask`."""
+    n = bin(mask).count("1")
+    key = ("straight" if mask in (P_N | P_S, P_E | P_W) else "bend") if n == 2 else n
+    proto, base = PIPE_SHAPES[key]
+    for k in range(4):
+        if base == mask:
+            return proto, k * math.pi / 2
+        base = sum(TURN[b] for b in (P_N, P_S, P_W, P_E) if base & b)
+    raise ValueError(mask)
 
 
 def atmosphere_lines(tiles, size=4):
@@ -143,11 +187,13 @@ def write_map(dst, tilemap, tiles, placed, station=None):
         if not placed[proto]:
             continue
         out += [f"- proto: {proto}", "  entities:"]
-        for gx, gy, rot in placed[proto]:
+        for gx, gy, rot, *extra in placed[proto]:
             out += [f"  - uid: {uid}", "    components:", "    - type: Transform"]
             if rot:
                 out.append(f"      rot: {rot} rad")
             out += [f"      pos: {gx + 0.5},{gy + 0.5}", f"      parent: {grid_uid}"]
+            if extra:
+                out += extra[0]
             uid += 1
 
     os.makedirs(os.path.dirname(os.path.abspath(dst)), exist_ok=True)
@@ -179,6 +225,12 @@ def convert(src, dst, z, margin, rules):
     placed = collections.defaultdict(list)  # proto -> [(x, y, rot)]
     unmapped = collections.Counter()
     lattice = []
+    areas = {}  # tile -> area path
+    walls = set()
+    apc_tiles = set()
+    cables = set()
+    pipe_tiles = set()
+    pipe_conflicts = 0
 
     def tile_id(name):
         if name not in tilemap:
@@ -197,9 +249,10 @@ def convert(src, dst, z, margin, rules):
                     continue
                 tiles[(gx, gy)] = tile_id(rule["tile"])
                 if "proto" in rule:
+                    walls.add((gx, gy))
                     placed[rule["proto"]].append((gx, gy, 0.0))
             elif a.path.startswith("/area"):
-                continue
+                areas[(gx, gy)] = a.path
             else:
                 rule = rules.atom(a.path)
                 if rule is None:
@@ -211,8 +264,33 @@ def convert(src, dst, z, margin, rules):
                     # Lattice and the like are tiles in SS14; they only apply over bare space.
                     lattice.append((gx, gy, rule["tile"]))
                     continue
+                if rule.get("cable"):
+                    # SS14 cables join their neighbours on their own, so vg13's d1/d2 geometry is not kept; one MV cable
+                    # per tile that has any.
+                    cables.add((gx, gy))
+                    continue
+                if "pipe" in rule:
+                    if (gx, gy) in pipe_tiles and rule["pipe"] != "unary":
+                        # vg13 stacks pipes on a tile in different layers; SS14 has none and would join them.
+                        pipe_conflicts += 1
+                        continue
+                    proto, rot = pipe_proto(pipe_mask(rule["pipe"], dir_of(a)))
+                    if rule["pipe"] != "unary":
+                        pipe_tiles.add((gx, gy))
+                    color = ["    - type: AtmosPipeColor", f"      color: '{rule['color']}'"] if "color" in rule else None
+                    placed[proto].append((gx, gy, rot, color) if color else (gx, gy, rot))
+                    continue
                 rot = DIR_ROT.get(dir_of(a), 0.0) if rule.get("rot") == "dir" else 0.0
+                if rule["proto"] == "APCBasic":
+                    apc_tiles.add((gx, gy))
                 placed[rule["proto"]].append((gx, gy, rot))
+
+    placed["CableMV"] = [(gx, gy, 0.0) for gx, gy in sorted(cables)]
+    # vg13 powers an APC's whole area. SS14's machines only take power from LV cable, so every floor tile of an area
+    # with an APC gets LV, which makes the APC's network its area (the decision in docs/_VG/port-decisions.md).
+    apc_areas = {areas[t] for t in apc_tiles if t in areas}
+    placed["CableApcExtension"] = [(gx, gy, 0.0) for (gx, gy), ap in sorted(areas.items())
+                                   if ap in apc_areas and tiles.get((gx, gy), 0) != 0 and (gx, gy) not in walls]
 
     for gx, gy, name in lattice:
         if tiles.get((gx, gy), 0) == 0:
@@ -225,7 +303,8 @@ def convert(src, dst, z, margin, rules):
         for path, n in unmapped.most_common():
             f.write(f"{n}\t{path}\n")
     print(f"{dst}: {len(tiles)} tiles, {entities} entities, {sum(unmapped.values())} dropped atoms of "
-          f"{len(unmapped)} types (see {report})")
+          f"{len(unmapped)} types (see {report}); {len(cables)} cable tiles, {len(apc_areas)} powered areas, "
+          f"{len(pipe_tiles)} pipe tiles, {pipe_conflicts} stacked pipes dropped")
 
 
 def main():

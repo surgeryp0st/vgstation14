@@ -67,6 +67,33 @@ atoms:
   /obj/machinery/firealarm: {proto: FireAlarm, rot: dir}
   /obj/machinery/power/apc: {proto: APCBasic, rot: dir}
   /obj/machinery/power/solar/panel: {proto: SolarPanel}
+  /obj/structure/cable: {cable: true}
+
+  # Pipes: the shape and rotation come from the vg13 dir; colours are vg13's pipe colours.
+  /obj/machinery/atmospherics/pipe/simple: {pipe: simple, color: "#B4B4B4"}
+  /obj/machinery/atmospherics/pipe/simple/supply: {pipe: simple, color: "#0000B7"}
+  /obj/machinery/atmospherics/pipe/simple/scrubbers: {pipe: simple, color: "#B70000"}
+  /obj/machinery/atmospherics/pipe/simple/cyan: {pipe: simple, color: "#00B8B8"}
+  /obj/machinery/atmospherics/pipe/simple/filtering: {pipe: simple, color: "#00B900"}
+  /obj/machinery/atmospherics/pipe/simple/yellow: {pipe: simple, color: "#B77900"}
+  /obj/machinery/atmospherics/pipe/simple/insulated: {pipe: simple, color: "#B4B4B4"}
+  /obj/machinery/atmospherics/pipe/simple/heat_exchanging: {pipe: simple, color: "#B77900"}
+  /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered: {drop: true}
+  /obj/machinery/atmospherics/pipe/simple/supply/visible/layered: {drop: true}
+  /obj/machinery/atmospherics/pipe/simple/scrubbers/visible/layered: {drop: true}
+  /obj/machinery/atmospherics/pipe/simple/general/visible/layered: {drop: true}
+  /obj/machinery/atmospherics/pipe/manifold: {pipe: manifold, color: "#B4B4B4"}
+  /obj/machinery/atmospherics/pipe/manifold/supply: {pipe: manifold, color: "#0000B7"}
+  /obj/machinery/atmospherics/pipe/manifold/scrubbers: {pipe: manifold, color: "#B70000"}
+  /obj/machinery/atmospherics/pipe/manifold/cyan: {pipe: manifold, color: "#00B8B8"}
+  /obj/machinery/atmospherics/pipe/manifold/insulated: {pipe: manifold, color: "#B4B4B4"}
+  /obj/machinery/atmospherics/pipe/manifold4w: {pipe: manifold4w, color: "#B4B4B4"}
+  /obj/machinery/atmospherics/pipe/manifold4w/supply: {pipe: manifold4w, color: "#0000B7"}
+  /obj/machinery/atmospherics/pipe/manifold4w/scrubbers: {pipe: manifold4w, color: "#B70000"}
+  /obj/machinery/atmospherics/pipe/cap: {pipe: unary, color: "#B4B4B4"}
+  /obj/machinery/atmospherics/unary/vent_pump: {proto: GasVentPump, rot: dir}
+  /obj/machinery/atmospherics/unary/vent_scrubber: {proto: GasVentScrubber, rot: dir}
+  /obj/machinery/atmospherics/unary/portables_connector: {proto: GasPort, rot: dir}
   /obj/machinery/disposal: {proto: DisposalUnit}
   /obj/machinery/newscaster: {drop: true}
   /obj/machinery/status_display: {drop: true}
