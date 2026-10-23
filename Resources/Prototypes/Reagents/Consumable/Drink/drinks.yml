@@ -439,6 +439,11 @@
   tileReactions: # VG: vg13 water puts out fires and what burns on the tile, cooling the air only a little
   - !type:VgDouseTileReaction { }
   - !type:SpillIfPuddlePresentTileReaction { }
+  reactiveEffects: # VG: and burning people it touches
+    Extinguish:
+      methods: [ Touch ]
+      effects:
+      - !type:ExtinguishReaction
   physicalDesc: reagent-physical-desc-translucent
   flavor: water
   color: "#75b1f0"

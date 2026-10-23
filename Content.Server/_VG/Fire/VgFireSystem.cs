@@ -870,6 +870,18 @@ public sealed class VgFireSystem : EntitySystem
         air.Temperature = MathF.Max(air.Temperature - 0.1f * _random.Next(1, 6), Atmospherics.T20C);
     }
 
+    /// <summary>
+    ///     vg13 corn oil reaction_turf(): a fire on the tile goes, and the air on it drops to half its temperature or
+    ///     2000 K lower, whichever is colder (so below 4000 K, 2000 K lower), but not below the cosmic background.
+    /// </summary>
+    public void QuenchWithOil(EntityUid grid, Vector2i tile)
+    {
+        if (!RemoveFire(grid, tile) || Mixture(grid, tile, true) is not { } air)
+            return;
+
+        air.Temperature = MathF.Max(MathF.Min(air.Temperature - 2000, air.Temperature / 2), Atmospherics.TCMB);
+    }
+
     #endregion
 }
 

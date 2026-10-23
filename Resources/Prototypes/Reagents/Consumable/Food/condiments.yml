@@ -27,6 +27,8 @@
   flavor: oily
   color: yellow
   recognizable: true
+  tileReactions: # VG: vg13 corn oil smothers a fire, taking the heat out of the air
+  - !type:VgOilQuenchTileReaction { }
 
 - type: reagent
   id: Frostoil

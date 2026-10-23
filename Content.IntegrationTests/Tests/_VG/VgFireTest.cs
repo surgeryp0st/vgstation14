@@ -516,4 +516,44 @@ public sealed class VgFireTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task OnlyWaterAndCornOilPutOutFires()
+    {
+        var (pair, grid) = await AirRoom();
+        await using var _ = pair;
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var fires = entMan.System<VgFireSystem>();
+        var atmos = entMan.System<AtmosphereSystem>();
+        var tile = new Vector2i(2, 0);
+
+        await server.WaitAssertion(() =>
+        {
+            FuelFire(entMan, grid, tile);
+            Assert.That(fires.IsBurning(grid, tile));
+            var tileRef = server.System<SharedMapSystem>().GetTileRef(grid, entMan.GetComponent<MapGridComponent>(grid), tile);
+            Content.Shared.Chemistry.Reagent.ReagentPrototype Reagent(string id) => server.ProtoMan.Index<Content.Shared.Chemistry.Reagent.ReagentPrototype>(id);
+
+            // vg13: drinks don't put fires out.
+            Reagent("Cola").ReactionTile(tileRef, 10, entMan, null);
+            Assert.That(atmos.IsHotspotActive(grid, tile), "cola doesn't");
+
+            // Corn oil smothers it and takes the heat out of the air.
+            var air = atmos.GetTileMixture(grid, null, tile, true)!;
+            air.Temperature = 1000;
+            Reagent("Cornoil").ReactionTile(tileRef, 10, entMan, null);
+            // min(T - 2000, T / 2): 2000 K colder, floored at the cosmic background.
+            Assert.That(air.Temperature, Is.EqualTo(Atmospherics.TCMB).Within(0.01), "the heat taken out");
+
+            // Water still puts out a burning person it touches.
+            Assert.That(Reagent("Water").ReactiveEffects?.ContainsKey("Extinguish"), Is.True);
+            Assert.That(Reagent("Cola").ReactiveEffects?.ContainsKey("Extinguish") ?? false, Is.False);
+        });
+
+        await server.WaitRunTicks(1);
+        await server.WaitAssertion(() => Assert.That(fires.IsBurning(grid, tile), Is.False, "corn oil put it out"));
+
+        await pair.CleanReturnAsync();
+    }
 }
