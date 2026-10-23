@@ -11,8 +11,10 @@ vgstation14: a remake of vgstation13 (BYOND/DM) on Space Station 14's Robust Too
 The .NET 8 SDK is installed in `~/.dotnet` and is not on PATH by default:
 
 ```
-export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
+export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet MSBUILDDISABLENODEREUSE=1
 ```
+
+`MSBUILDDISABLENODEREUSE=1` stops idle MSBuild worker nodes from piling up between builds and eating RAM; run `dotnet build-server shutdown` after a batch of builds.
 
 `RobustToolbox/` is the engine (git submodule). After a fresh clone, run `python3 RUN_THIS.py` to init submodules.
 
@@ -78,4 +80,4 @@ export PATH=$HOME/.dotnet:$PATH DOTNET_ROOT=$HOME/.dotnet
 
 Keep working through the plan without stopping between steps (implement, test, commit, push to the fork, next step); only stop when a decision is needed or you are blocked. The user wants to be asked before any big design decision or large gameplay change. That includes every system that exists in both vg13 and SS14, and whether to keep SS14-only content. Decisions so far, and what's done versus planned, are in `docs/_VG/port-decisions.md`. Update it whenever a new decision is made.
 
-Push to the user's fork (`fork` remote, https://github.com/surgeryp0st/vgstation14). `origin` (vgstation-coders) is read-only for this account.
+Push to the user's fork: in this clone that is the `origin` remote (https://github.com/surgeryp0st/vgstation14). vgstation-coders is the `upstream` remote and is read-only for this account.

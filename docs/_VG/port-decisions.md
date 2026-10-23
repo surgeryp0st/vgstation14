@@ -21,6 +21,15 @@ Decisions made so far for porting vgstation13 into vgstation14. When vg13 and SS
 5. **Maps:** convert vg13 stations.
 6. **Long tail:** spacepods, fission reactor, telescience, traders, and so on.
 
+## Decisions of 2026-10-23
+
+- **Slipping:** vg13's rules replace SS14's. Water doesn't slip people walking; lube slips walkers too, slides them 4 tiles and does 2 brute; ice is a 15% slip that slides you until you're off the ice; stun and knockdown as vg13. Cryotheum ice (below 0 C with visible cryotheum) comes with it.
+- **Fire smoke:** vg13's bad smoke from burning things (its spawn chance and density), on SS14's smoke entity; on mobs it does vg13's effects (drop what you hold, 1 oxygen damage, cough).
+- **What burns:** sweep SS14's clothing and items by vg13's categories (flammable clothing is fabric; glasses, helmets, armor, space and fire suits don't burn; other items by vg13's recycling types), with mass from item size as vg13 does.
+- **Drinks and fire:** only water and corn oil put fires out, as in vg13 (corn oil with vg13's rule). Firefighting foam keeps working.
+- **Air movement:** vg13's ZAS airflow replaces SS14 space wind's push on mobs and items, with vg13's numbers.
+- **Hallucinations:** all of vg13's, client-side for the hallucinating player.
+
 ## Health, damage and combat
 
 Decided: the **full vg13 model**.
