@@ -130,7 +130,19 @@ public sealed partial class VgSpeciesPrototype : IPrototype
     [DataField]
     public bool RadAbsorb;
 
-    // vg13 body temperature levels, kept here for the temperature port.
+    /// <summary>
+    ///     vg13 HAS_SWEAT_GLANDS: sweats to cool down when too warm.
+    /// </summary>
+    [DataField]
+    public bool Sweats;
+
+    /// <summary>
+    ///     vg13 HYPOTHERMIA_IMMUNE.
+    /// </summary>
+    [DataField]
+    public bool HypothermiaImmune;
+
+    // vg13 body temperature levels: cold and heat damage get worse past each.
     [DataField]
     public float BodyTemperature = 310.15f;
 

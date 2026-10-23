@@ -269,6 +269,8 @@ public sealed class VgMetabolismTest
             var status = entMan.System<Content.Shared._VG.Status.VgStatusSystem>();
             var sleeper = entMan.SpawnEntity("MobHuman", map.GridCoords);
             entMan.RemoveComponent<Content.Shared._VG.Breathing.VgBreathingComponent>(sleeper);
+            // 240 Life() ticks in the test map's vacuum would freeze them to death first.
+            entMan.RemoveComponent<Content.Shared._VG.Temperature.VgBodyTemperatureComponent>(sleeper);
             Inject(entMan, sleeper, "stoxin", 29);
 
             // Life ticks as vg13 counts them: the first is tick 0.

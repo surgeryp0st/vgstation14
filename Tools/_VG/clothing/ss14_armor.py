@@ -1,4 +1,5 @@
-"""Lists SS14 entity prototypes with Armor or ClothingSpeedModifier (resolving parents) and their original values."""
+"""Lists SS14 entity prototypes with Armor, ClothingSpeedModifier or TemperatureProtection (resolving parents) and their
+original values."""
 import yaml, glob, json, sys
 
 class L(yaml.SafeLoader): pass
@@ -51,7 +52,8 @@ for id_, e in protos.items():
         continue
     a = comp(e, 'Armor') or {}
     sp = comp(e, 'ClothingSpeedModifier')
-    if not a and not sp:
+    tp = comp(e, 'TemperatureProtection')
+    if not a and not sp and not tp:
         continue
     c = comp(e, 'Clothing') or {}
     er = comp(e, 'ExplosionResistance') or {}
@@ -60,6 +62,8 @@ for id_, e in protos.items():
                 'flat': (a.get('modifiers') or {}).get('flatReductions', {}),
                 'explosion': er.get('damageCoefficient'),
                 'speed': (sp or {}).get('sprintModifier', 1.0) if sp else None,
+                'heating': (tp or {}).get('heatingCoefficient', 1.0) if tp else None,
+                'cooling': (tp or {}).get('coolingCoefficient', 1.0) if tp else None,
                 'parents': parents(e)})
 json.dump(out, open(sys.argv[1], 'w'), indent=1)
 print(len(out))

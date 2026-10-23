@@ -6,6 +6,7 @@ using Content.Shared._VG.Breathing;
 using Content.Shared._VG.Life;
 using Content.Shared._VG.Popups;
 using Content.Shared._VG.Status;
+using Content.Shared._VG.Temperature;
 using Content.Shared.Atmos;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
@@ -70,6 +71,10 @@ public sealed class VgBreathingSystem : EntitySystem
     private void OnLifeTick(Entity<VgBreathingComponent> ent, ref VgLifeTickEvent args)
     {
         if (_mobState.IsDead(ent))
+            return;
+
+        // vg13: profound hypothermia stops the breathing.
+        if (CompOrNull<VgBodyTemperatureComponent>(ent)?.Hypothermia == VgHypothermia.Profound)
             return;
 
         TryComp<VgBodyComponent>(ent, out var body);

@@ -445,7 +445,8 @@ namespace Content.Server.Atmos.EntitySystems
                     var source = EnsureComp<IgnitionSourceComponent>(uid);
                     _ignitionSourceSystem.SetIgnited((uid, source));
 
-                    if (TryComp(uid, out TemperatureComponent? temp))
+                    // VG: vg13 bodies heat up on fire in VgBodyTemperatureSystem.
+                    if (TryComp(uid, out TemperatureComponent? temp) && !HasComp<Content.Shared._VG.Temperature.VgBodyTemperatureComponent>(uid))
                         _temperatureSystem.ChangeHeat(uid, 12500 * flammable.FireStacks, false, temp);
 
                     var ev = new GetFireProtectionEvent();

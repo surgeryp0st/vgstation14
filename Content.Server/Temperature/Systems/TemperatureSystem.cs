@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Administration.Logs;
+using Content.Shared._VG.Temperature; // VG
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Components;
 using Content.Server.Temperature.Components;
@@ -155,6 +156,10 @@ public sealed class TemperatureSystem : EntitySystem
         if (transform.MapUid == null)
             return;
 
+        // VG: vg13 bodies trade heat with the air in VgBodyTemperatureSystem.
+        if (HasComp<VgBodyTemperatureComponent>(uid))
+            return;
+
         var temperatureDelta = args.GasMixture.Temperature - temperature.CurrentTemperature;
         var airHeatCapacity = _atmosphere.GetHeatCapacity(args.GasMixture, false);
         var heatCapacity = GetHeatCapacity(uid, temperature);
@@ -188,6 +193,10 @@ public sealed class TemperatureSystem : EntitySystem
 
     private void ServerAlert(EntityUid uid, AlertsComponent status, OnTemperatureChangeEvent args)
     {
+        // VG: vg13 bodies get vg13's temperature alert from VgBodyTemperatureSystem.
+        if (HasComp<VgBodyTemperatureComponent>(uid))
+            return;
+
         ProtoId<AlertPrototype> type;
         float threshold;
         float idealTemp;
@@ -245,6 +254,10 @@ public sealed class TemperatureSystem : EntitySystem
 
     private void EnqueueDamage(Entity<TemperatureComponent> temperature, ref OnTemperatureChangeEvent args)
     {
+        // VG: vg13 bodies take vg13's temperature damage in VgBodyTemperatureSystem.
+        if (HasComp<VgBodyTemperatureComponent>(temperature))
+            return;
+
         ShouldUpdateDamage.Add(temperature);
     }
 

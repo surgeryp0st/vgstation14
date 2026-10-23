@@ -2,6 +2,7 @@
 
 - type: vgSpecies
   id: Human
+  sweats: true
 
 - type: vgSpecies
   id: Unathi
@@ -17,6 +18,7 @@
 
 - type: vgSpecies
   id: Vox
+  sweats: true
   coldLevel1: 80
   coldLevel2: 50
   coldLevel3: 0
@@ -32,6 +34,8 @@
 
 - type: vgSpecies
   id: Diona
+  sweats: true
+  hypothermiaImmune: true
   attackVerb: vg-attack-verb-slashes
   punchDamage: 5
   noBreathe: true
@@ -65,6 +69,7 @@
 
 - type: vgSpecies
   id: Tajaran
+  sweats: true
   attackVerb: vg-attack-verb-scratches
   punchDamage: 2
   claws: true
@@ -77,13 +82,16 @@
 
 - type: vgSpecies
   id: Skrell
+  sweats: true
 
 - type: vgSpecies
   id: Grey
+  sweats: true
   maxHurtDamage: 3
 
 - type: vgSpecies
   id: Insectoid
+  sweats: true
   burnMod: 1.1
   toxMod: 0.5
   radMod: 0.5

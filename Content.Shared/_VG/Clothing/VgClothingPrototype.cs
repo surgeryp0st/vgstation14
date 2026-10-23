@@ -40,6 +40,19 @@ public sealed partial class VgClothingPrototype : IPrototype
     [DataField]
     public float Slowdown = 1;
 
+    /// <summary>
+    ///     vg13 heat_conductivity: how much heat the covered skin still loses through it (0 insulates fully). Null means
+    ///     the slot's default.
+    /// </summary>
+    [DataField]
+    public float? HeatConductivity;
+
+    /// <summary>
+    ///     vg13 max_heat_protection_temperature: the covered parts are kept from heating up in air up to this hot, K.
+    /// </summary>
+    [DataField]
+    public float? MaxHeatProtection;
+
     public VgBodyParts CoverageFlags
     {
         get

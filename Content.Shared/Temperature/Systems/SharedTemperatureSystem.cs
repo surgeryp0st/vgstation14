@@ -56,6 +56,10 @@ public sealed class SharedTemperatureSystem : EntitySystem
         if (ent.Comp.NextSlowdownUpdate != null || ent.Comp.CurrentSpeedModifier == null)
             return;
 
+        // VG: vg13 bodies are slowed by hypothermia instead (VgMovementSystem).
+        if (HasComp<Content.Shared._VG.Temperature.VgBodyTemperatureComponent>(ent))
+            return;
+
         args.ModifySpeed(ent.Comp.CurrentSpeedModifier.Value, ent.Comp.CurrentSpeedModifier.Value);
     }
 

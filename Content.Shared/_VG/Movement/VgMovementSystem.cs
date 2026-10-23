@@ -6,6 +6,7 @@ using Content.Shared._VG.Life;
 using Content.Shared._VG.Nutrition;
 using Content.Shared._VG.Species;
 using Content.Shared._VG.Status;
+using Content.Shared._VG.Temperature;
 using Content.Shared.Damage;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
@@ -139,7 +140,11 @@ public sealed class VgMovementSystem : EntitySystem
         if (hungry >= 70)
             tally += hungry / 50;
 
-        // TODO VG: hypothermia and painkillers come with temperature and chemistry.
+        // vg13 hypothermia, worked out with the body temperature on the server.
+        if (TryComp<VgBodyTemperatureComponent>(ent, out var temperature))
+            tally += temperature.Tally;
+
+        // TODO VG: painkillers come with chemistry.
         // vg13 carbon: being badly hurt slows you down.
         if (TryComp<DamageableComponent>(ent, out var damageable))
         {
