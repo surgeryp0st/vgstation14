@@ -18,6 +18,9 @@ namespace Content.Server.Atmos.EntitySystems
 
         private int _spaceWindSoundCooldown = 0;
 
+        // VG
+        private static readonly bool VgReplacesSpaceWind = true;
+
         [ViewVariables(VVAccess.ReadWrite)]
         public string? SpaceWindSound { get; private set; } = "/Audio/Effects/space_wind.ogg";
 
@@ -199,6 +202,16 @@ namespace Content.Server.Atmos.EntitySystems
 
             if (!Resolve(uid, ref xform))
                 return;
+
+            // VG: vg13 airflow (VgAirflowSystem) replaces space wind's push.
+            if (VgReplacesSpaceWind)
+            {
+                component.LastHighPressureMovementAirCycle = cycle;
+                EntityManager.System<Content.Server._VG.Atmos.VgAirflowSystem>().Experience(uid, pressureDifference,
+                    direction == AtmosDirection.Invalid ? Vector2i.Zero : direction.ToDirection().ToIntVec(),
+                    (direction.ToAngle() + gridWorldRotation).ToWorldVec(), throwTarget, physics);
+                return;
+            }
 
             // TODO ATMOS stuns?
 

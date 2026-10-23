@@ -93,6 +93,22 @@ public sealed class VgSlipSystem : EntitySystem
     }
 
     /// <summary>
+    ///     vg13 CheckSlip() with its defaults (a wet floor): on your feet, running, not strapped in, no grippy shoes.
+    /// </summary>
+    public bool CouldSlip(EntityUid victim)
+    {
+        if (_standing.IsDown(victim) || _buckle.IsBuckled(victim))
+            return false;
+
+        if (TryComp<InputMoverComponent>(victim, out var mover) && !mover.Sprinting)
+            return false;
+
+        var attempt = new SlipAttemptEvent();
+        RaiseLocalEvent(victim, attempt);
+        return !attempt.NoSlip;
+    }
+
+    /// <summary>
     ///     What kind of slip a slippery thing is, with vg13's stun and knockdown and what you slipped on.
     /// </summary>
     private (VgSlipKind Kind, float Stun, float Knockdown, string What) Describe(EntityUid source)

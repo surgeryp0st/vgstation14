@@ -200,6 +200,11 @@ public sealed class VgBodyTest
         EntityUid human = default;
         await server.WaitPost(() =>
         {
+            // Air, so barotrauma doesn't keep adding brute while the client catches up.
+            var air = new Content.Shared.Atmos.GasMixture(Content.Shared.Atmos.Atmospherics.CellVolume) { Temperature = Content.Shared.Atmos.Atmospherics.T20C };
+            air.AdjustMoles(Content.Shared.Atmos.Gas.Oxygen, 21.824779f);
+            air.AdjustMoles(Content.Shared.Atmos.Gas.Nitrogen, 82.10312f);
+            sEntMan.System<Content.Server.Atmos.EntitySystems.AtmosphereSystem>().SetMapAtmosphere(map.MapUid, false, air);
             human = sEntMan.SpawnEntity("MobHuman", map.GridCoords);
             damageable.TryChangeDamage(human, Blunt(protoMan, 12).WithVgZone(VgLimbs.LeftLeg), true);
         });
@@ -219,7 +224,6 @@ public sealed class VgBodyTest
             {
                 // The client got the server's limbs, and didn't route the damage again while applying the state.
                 Assert.That(clientLeg.BruteDamage, Is.EqualTo(serverLeg.BruteDamage).Within(0.01));
-                // Not just 12: the test map is a vacuum, so barotrauma adds a little on top.
                 Assert.That(LimbTotal(clientBody, l => l.BruteDamage),
                     Is.EqualTo(LimbTotal(serverBody, l => l.BruteDamage)).Within(0.01));
                 Assert.That(clientLeg.Wounds, Has.Count.EqualTo(serverLeg.Wounds.Count));
