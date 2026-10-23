@@ -558,3 +558,16 @@
         reagents:
         - ReagentId: HeartbreakerToxin
           Quantity: 20
+
+- type: entity
+  parent: Pill
+  id: VgTestPillChloralhydrate
+  name: test pill (ChloralHydrate)
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: ChloralHydrate
+          Quantity: 20
