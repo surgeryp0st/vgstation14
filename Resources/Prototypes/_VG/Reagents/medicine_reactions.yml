@@ -142,6 +142,7 @@
 
 - type: reaction
   id: VgTramadol
+  priority: 1 # before SS14's vinegar takes the ethanol and oxygen
   reactants:
     inaprovaline:
       amount: 1

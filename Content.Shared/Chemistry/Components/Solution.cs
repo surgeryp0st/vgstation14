@@ -212,6 +212,8 @@ namespace Content.Shared.Chemistry.Components
 
         void ISerializationHooks.AfterDeserialization()
         {
+            Content.Shared._VG.Chemistry.VgReagentTranslation.Translate(Contents); // VG: vg13 reagents replace SS14's
+
             Volume = FixedPoint2.Zero;
             foreach (var reagent in Contents)
             {
