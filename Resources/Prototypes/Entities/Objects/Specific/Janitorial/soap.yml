@@ -4,6 +4,9 @@
   parent: BaseItem
   description: A cheap bar of soap. Doesn't smell.
   components:
+  - type: VgSlip # VG: vg13 soap slips harder than a banana peel
+    stun: 3
+    knockdown: 2
   - type: Tag
     tags:
     - Soap

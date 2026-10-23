@@ -93,6 +93,10 @@ public sealed class SlipperySystem : EntitySystem
 
     public void TrySlip(EntityUid uid, SlipperyComponent component, EntityUid other, bool requiresContact = true)
     {
+        // VG: vg mobs slip by vg13's rules.
+        if (EntityManager.System<Content.Shared._VG.Slip.VgSlipSystem>().TrySlip(uid, component, other))
+            return;
+
         if (HasComp<KnockedDownComponent>(other) && !component.SuperSlippery)
             return;
 

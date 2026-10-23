@@ -1,0 +1,33 @@
+# vg13 ice (/obj/effect/overlay/puddle/ice): cryotheum in freezing air ices the floor over; VgIceSystem forms and
+# melts it. vg mobs slip on it by vg13's rules (VgSlip); others by SS14's.
+- type: entity
+  id: VgIce
+  name: ice
+  description: A slick sheet of ice.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _VG/effects/water.rsi
+    state: icy_floor
+    drawdepth: FloorObjects
+  - type: Clickable
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      slips:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        hard: false
+        layer:
+        - SlipLayer
+  - type: Slippery
+  - type: StepTrigger
+    intersectRatio: 0.2
+  - type: VgSlip
+    kind: Ice
+  - type: VgIce
