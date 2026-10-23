@@ -19,7 +19,7 @@ public sealed class VgSpeciesSystem : EntitySystem
 
     private void OnMapInit(Entity<VgSpeciesComponent> ent, ref MapInitEvent args)
     {
-        if (!_proto.TryIndex(ent.Comp.Species, out var species))
+        if (Get(ent) is not { } species)
             return;
 
         // vg13 species flags: what the mob doesn't do at all is taken off it.
@@ -67,7 +67,7 @@ public sealed class VgSpeciesSystem : EntitySystem
     /// </summary>
     public VgSpeciesPrototype? Get(EntityUid uid)
     {
-        return TryComp<VgSpeciesComponent>(uid, out var comp) && _proto.TryIndex(comp.Species, out var species)
+        return TryComp<VgSpeciesComponent>(uid, out var comp) && !string.IsNullOrEmpty(comp.Species.Id) && _proto.TryIndex(comp.Species, out var species)
             ? species
             : null;
     }

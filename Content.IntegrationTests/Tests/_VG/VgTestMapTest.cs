@@ -59,20 +59,27 @@ public sealed class VgTestMapTest
                     unpowered.Add(xform.Coordinates.Position.Floored().ToString());
             }
 
-            // Nothing solid right inside or outside a door.
+            // Nothing solid right inside or outside a door: one side to the other, along whichever way it opens.
             var blocked = new List<string>();
             var doors = entMan.EntityQueryEnumerator<DoorComponent, TransformComponent>();
             while (doors.MoveNext(out _, out _, out var doorXform))
             {
                 var tile = mapSys.TileIndicesFor(grid, gridComp, doorXform.Coordinates);
-                foreach (var side in new[] { new Vector2i(0, 1), new Vector2i(0, -1) })
+                List<string> Solid(Vector2i at)
                 {
-                    foreach (var ent in mapSys.GetAnchoredEntities(grid, gridComp, tile + side))
+                    var found = new List<string>();
+                    foreach (var ent in mapSys.GetAnchoredEntities(grid, gridComp, at))
                     {
                         if (entMan.TryGetComponent<PhysicsComponent>(ent, out var physics) && physics.Hard && physics.CanCollide)
-                            blocked.Add($"{entMan.GetComponent<MetaDataComponent>(ent).EntityPrototype?.ID} at {tile + side}");
+                            found.Add($"{entMan.GetComponent<MetaDataComponent>(ent).EntityPrototype?.ID} at {at}");
                     }
+                    return found;
                 }
+
+                var northSouth = Solid(tile + new Vector2i(0, 1)).Concat(Solid(tile + new Vector2i(0, -1))).ToList();
+                var eastWest = Solid(tile + new Vector2i(1, 0)).Concat(Solid(tile + new Vector2i(-1, 0))).ToList();
+                if (northSouth.Count > 0 && eastWest.Count > 0)
+                    blocked.AddRange(northSouth.Count <= eastWest.Count ? northSouth : eastWest);
             }
             Assert.Multiple(() =>
             {

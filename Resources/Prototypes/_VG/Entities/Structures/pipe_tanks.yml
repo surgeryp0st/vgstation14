@@ -49,7 +49,6 @@
   - type: AtmosUnsafeUnanchor
   - type: PipeAppearance
   - type: Appearance
-  - type: PipeColorVisuals
   - type: AtmosPipeColor
   - type: NodeContainer
     nodes:

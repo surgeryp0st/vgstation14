@@ -45,6 +45,7 @@ namespace Content.IntegrationTests.Tests
 
         private static readonly string[] GameMaps =
         {
+            "VgTest", // VG
             "Dev",
             "TestTeg",
             "Fland",

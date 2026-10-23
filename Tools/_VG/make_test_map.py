@@ -138,8 +138,13 @@ def main():
     for x in range(4, length, 8):
         b.put("PoweredlightLED", x, 3, SOUTH)
 
+    # --- the emergency shuttle docks at the west end of the corridor.
+    b.door(-8, 1, "AirlockExternalGlassShuttleEmergencyLocked")
+    b.placed["AirlockExternalGlassShuttleEmergencyLocked"][-1] = (-8, 1, WEST)
+
     # --- start: latejoin and observer spawns in the west of the corridor, a locker with gear.
     b.put("SpawnPointLatejoin", -5, 1)
+    b.put("SpawnPointPassenger", -4, 1)
     b.put("SpawnPointObserver", -5, 3)
 
     # --- room N0: species. One of each mob.
