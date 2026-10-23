@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using Content.Server._VG.Fire;
 using Content.Server.Atmos.EntitySystems;
@@ -102,7 +103,7 @@ public sealed class VgFireTest
         {
             mapSys.CreateMap(out var mapId);
             Assert.That(mapLoader.TryLoad(mapId, "Maps/Test/Breathing/3by3-20oxy-80nit.yml", out var roots));
-            grid = roots.First(x => entMan.HasComponent<MapGridComponent>(x));
+            grid = roots!.First(x => entMan.HasComponent<MapGridComponent>(x));
             paper = entMan.SpawnEntity("Paper", new EntityCoordinates(grid, new Vector2(0.5f, 0.5f)));
         });
 
@@ -150,7 +151,7 @@ public sealed class VgFireTest
         {
             mapSys.CreateMap(out var mapId);
             Assert.That(mapLoader.TryLoad(mapId, "Maps/Test/Breathing/3by3-20oxy-80nit.yml", out var roots));
-            grid = roots.First(x => entMan.HasComponent<MapGridComponent>(x));
+            grid = roots!.First(x => entMan.HasComponent<MapGridComponent>(x));
             beaker = entMan.SpawnEntity("Beaker", new EntityCoordinates(grid, new Vector2(0.5f, 0.5f)));
 
             var solutions = entMan.System<Content.Shared.Chemistry.EntitySystems.SharedSolutionContainerSystem>();
