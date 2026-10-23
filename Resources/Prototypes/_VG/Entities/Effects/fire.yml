@@ -41,3 +41,17 @@
     material: Wood
     thermalMass: 5
     ashes: false
+
+# vg13 bad smoke (genSmoke() from burning things), on SS14's smoke: blocks sight and halves beams.
+- type: entity
+  parent: Smoke
+  id: VgFireSmoke
+  name: smoke
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _VG/effects/96x96.rsi
+    state: smoke
+    drawdepth: Effects
+    noRot: true
+  - type: VgBadSmoke

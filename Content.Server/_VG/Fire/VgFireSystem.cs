@@ -40,6 +40,7 @@ public sealed class VgFireSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefs = default!;
     [Dependency] private readonly Content.Shared._VG.Status.VgStatusSystem _status = default!;
+    [Dependency] private readonly VgFireSmokeSystem _smoke = default!;
 
     private const string FirePrototype = "VgFire";
     private const string FloorFuelPrototype = "VgFloorFuel";
@@ -260,6 +261,7 @@ public sealed class VgFireSystem : EntitySystem
 
         var deltaMass = 0.20f * burnRate * MassConsumption;
         ent.Comp.ThermalMass -= deltaMass;
+        _smoke.TrySmoke(_map.ToCenterCoordinates(grid, tile), oxygenRatio, air.Temperature);
 
         var heatOut = material.HeatingValue * deltaMass;
         var oxygenUsed = deltaMass / material.MolecularWeight / material.FuelOxRatio;

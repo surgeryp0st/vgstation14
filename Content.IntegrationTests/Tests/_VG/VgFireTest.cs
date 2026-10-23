@@ -556,4 +556,50 @@ public sealed class VgFireTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task BurningThingsSmoke()
+    {
+        var (pair, grid) = await AirRoom();
+        await using var _ = pair;
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var smoke = entMan.System<Content.Server._VG.Fire.VgFireSmokeSystem>();
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                // vg13: 4% a burn at room temperature, none at 1000 C.
+                var cool = Enumerable.Range(0, 4000).Count(_ => smoke.RollSmoke(Atmospherics.T20C));
+                Assert.That(cool, Is.InRange(100, 230), "about 4%");
+                Assert.That(Enumerable.Range(0, 1000).Count(_ => smoke.RollSmoke(Atmospherics.T0C + 1000)), Is.Zero);
+            });
+
+            var puff = smoke.Smoke(new EntityCoordinates(grid, 1.5f, 0.5f), 0.21f);
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<Robust.Shared.GameObjects.OccluderComponent>(puff), "it blocks sight");
+                // ceil(5 * (0.14 / 0.21)^2) = 3 puffs' worth of spreading.
+                Assert.That(entMan.GetComponent<Content.Shared.Chemistry.Components.SmokeComponent>(puff).SpreadAmount, Is.EqualTo(3));
+            });
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            // A beam through two puffs keeps a quarter of its damage.
+            foreach (var smokeEnt in entMan.EntityQuery<VgBadSmokeComponent>().Select(c => c.Owner).ToList())
+                entMan.DeleteEntity(smokeEnt);
+            entMan.SpawnEntity("VgFireSmoke", new EntityCoordinates(grid, 1.5f, 0.5f));
+            entMan.SpawnEntity("VgFireSmoke", new EntityCoordinates(grid, 2.5f, 0.5f));
+            var target = entMan.SpawnEntity("MobHuman", new EntityCoordinates(grid, 3.5f, 0.5f));
+            var from = entMan.System<SharedTransformSystem>().ToMapCoordinates(new EntityCoordinates(grid, 0.5f, 0.5f));
+            var damage = new Content.Shared.Damage.DamageSpecifier();
+            damage.DamageDict["Burn"] = 20;
+            var through = smoke.ThroughSmoke(from, target, damage);
+            Assert.That(through.DamageDict["Burn"].Float(), Is.EqualTo(5).Within(0.01));
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

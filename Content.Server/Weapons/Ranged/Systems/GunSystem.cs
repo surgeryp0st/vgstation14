@@ -215,6 +215,9 @@ public sealed partial class GunSystem : SharedGunSystem
                         // VG: vg13 shots hit the shooter's selected zone, can narrowly miss, and check laser armor.
                         if (dmg != null)
                             dmg = _vgArmor.AimShot(gunUid, hitEntity, user, dmg);
+                        // VG: vg13 bad smoke halves a beam for each puff it passes through.
+                        if (dmg != null)
+                            dmg = EntityManager.System<Content.Server._VG.Fire.VgFireSmokeSystem>().ThroughSmoke(from, hitEntity, dmg);
 
                         if (dmg != null)
                             dmg = Damageable.TryChangeDamage(hitEntity, dmg, origin: user);
