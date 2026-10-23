@@ -1,0 +1,10 @@
+# What a hallucinating player's client draws (VgHallucinationSystem on the client): spawned client-side only.
+- type: entity
+  id: VgHallucinationImage
+  name: ""
+  save: false
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: true

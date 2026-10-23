@@ -74,6 +74,12 @@ public sealed partial class VgStatusComponent : Component
     public TimeSpan SleepingUntil;
 
     /// <summary>
+    ///     vg13 hallucination: from 20 up you see, hear and feel things. Wears off two a Life() tick.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float Hallucination;
+
+    /// <summary>
     ///     vg13 paralysis: out cold until then. Shaking takes three Life() ticks off it. Sleep and paralysis are kept
     ///     apart because both show as SS14's forced sleep, which lasts as long as the longer of the two.
     /// </summary>

@@ -227,6 +227,27 @@ public enum VgStatusKind
     Confused,
     Slur,
     Sleep,
+    Hallucination,
+}
+
+/// <summary>
+///     vg13 dylovene's and synaptizine's lucidity: <c>hallucination = max(0, hallucination - x * lucidmod)</c>, three
+///     times as strong asleep and twice lying down. Amounts are multiples of REM unless flat.
+/// </summary>
+public sealed partial class VgLucidity : VgReagentEffect
+{
+    [DataField(required: true)]
+    public float Amount;
+
+    [DataField]
+    public bool Flat;
+
+    public override void Apply(VgReagentArgs args)
+    {
+        var status = args.System<VgStatusSystem>();
+        var lucid = status.IsAsleep(args.Target) ? 3 : args.System<Content.Shared.Standing.StandingStateSystem>().IsDown(args.Target) ? 2 : 1;
+        status.AddHallucination(args.Target, -(Flat ? Amount : Amount * VgChemistry.Rem) * lucid);
+    }
 }
 
 /// <summary>
@@ -302,6 +323,9 @@ public sealed partial class VgStatusEffect : VgReagentEffect
                     status.AddConfused(args.Target, Ticks);
                 else
                     status.Confuse(args.Target, Ticks);
+                break;
+            case VgStatusKind.Hallucination:
+                status.AddHallucination(args.Target, Ticks);
                 break;
             case VgStatusKind.Sleep:
                 if (Add)

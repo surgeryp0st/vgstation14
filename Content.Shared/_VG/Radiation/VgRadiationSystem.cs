@@ -188,7 +188,7 @@ public sealed class VgRadiationSystem : EntitySystem
 
     /// <summary>
     ///     The symptoms of a long exposure, which get likelier the more irradiated you are (vg13
-    ///     handle_mutations_and_radiation()). Not yet: hallucinations, and necrosis turning a limb to bone (vg13 swaps the
+    ///     handle_mutations_and_radiation()). Not yet: necrosis turning a limb to bone (vg13 swaps the
     ///     limb's species to Skellington, which limbs here don't have).
     /// </summary>
     private void LongTermEffects(Entity<VgRadiationComponent> ent, System.Random random)
@@ -222,7 +222,8 @@ public sealed class VgRadiationSystem : EntitySystem
                 RaiseLocalEvent(ent, ref nosebleed);
             }
 
-            // TODO VG: hallucination += rand(1, 5) * major, once hallucinations are in.
+            if (random.Prob(5 * major))
+                _status.AddHallucination(ent, random.Next(1, 6) * major);
         }
 
         if (radTick > DoseMinor && body != null && random.Prob(2 * major))

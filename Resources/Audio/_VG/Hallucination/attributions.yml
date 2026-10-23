@@ -1,0 +1,34 @@
+- files: ["aimalf.ogg", "shuttledock.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from vgstation13"
+  source: "https://github.com/vgstation-coders/vgstation13/tree/23f25f386f7a6c75b1a604029848d798e8b7ec06/sound/AI"
+
+- files: ["Explosion1.ogg", "Explosion2.ogg", "Glassbr1.ogg", "Glassbr2.ogg", "Glassbr3.ogg", "clownstep1.ogg", "clownstep2.ogg", "ear_ring_single.ogg", "explosionfar.ogg", "ghost.ogg", "ghost2.ogg", "heart_beat_single.ogg", "screech.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from vgstation13"
+  source: "https://github.com/vgstation-coders/vgstation13/tree/23f25f386f7a6c75b1a604029848d798e8b7ec06/sound/effects"
+
+- files: ["behind_you1.ogg", "behind_you2.ogg", "far_noise.ogg", "growl1.ogg", "growl2.ogg", "growl3.ogg", "i_see_you1.ogg", "i_see_you2.ogg", "im_here1.ogg", "im_here2.ogg", "look_up1.ogg", "look_up2.ogg", "over_here1.ogg", "over_here2.ogg", "over_here3.ogg", "turn_around1.ogg", "turn_around2.ogg", "veryfar_noise.ogg", "wail.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from vgstation13"
+  source: "https://github.com/vgstation-coders/vgstation13/tree/23f25f386f7a6c75b1a604029848d798e8b7ec06/sound/hallucinations"
+
+- files: ["Screwdriver.ogg", "Screwdriver2.ogg", "Welder.ogg", "Welder2.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from vgstation13"
+  source: "https://github.com/vgstation-coders/vgstation13/tree/23f25f386f7a6c75b1a604029848d798e8b7ec06/sound/items"
+
+- files: ["airlock.ogg", "twobeep.ogg", "windowdoor.ogg", "ya_dun_clucked.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from vgstation13"
+  source: "https://github.com/vgstation-coders/vgstation13/tree/23f25f386f7a6c75b1a604029848d798e8b7ec06/sound/machines"
+
+- files: ["hiss1.ogg", "hiss2.ogg", "hiss3.ogg", "hiss4.ogg", "hiss5.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from vgstation13"
+  source: "https://github.com/vgstation-coders/vgstation13/tree/23f25f386f7a6c75b1a604029848d798e8b7ec06/sound/voice"
+
+- files: ["Gunshot.ogg", "Taser.ogg", "flash.ogg", "genhit1.ogg", "genhit2.ogg", "genhit3.ogg", "punch1.ogg", "punch2.ogg", "punch3.ogg", "punch4.ogg", "smash.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from vgstation13"
+  source: "https://github.com/vgstation-coders/vgstation13/tree/23f25f386f7a6c75b1a604029848d798e8b7ec06/sound/weapons"

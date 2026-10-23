@@ -165,13 +165,25 @@
     amount: 6
     flat: true
 
-# vg13 heartbreaker toxin: suffocates. Its hallucinations wait for vg13 hallucinations.
+# vg13 heartbreaker toxin: a powerful hallucinogen and suffocant.
 - type: vgReagent
   id: HeartbreakerToxin
   effects:
+  - !type:VgStatusEffect
+    kind: Hallucination
+    ticks: 5
   - !type:VgAdjustDamage
     type: Oxygen
     amount: 4
+
+# vg13 mindbreaker toxin: a powerful hallucinogen.
+- type: vgReagent
+  id: MindbreakerToxin
+  metabolism: 0.05
+  effects:
+  - !type:VgStatusEffect
+    kind: Hallucination
+    ticks: 10
 
 # vg13 chloral hydrate: a jolt of confusion and drowsiness, then asleep for as long as it lasts; past 80 ticks it
 # poisons harder and harder.

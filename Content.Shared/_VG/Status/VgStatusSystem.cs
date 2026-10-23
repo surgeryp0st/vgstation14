@@ -88,6 +88,7 @@ public sealed class VgStatusSystem : EntitySystem
         ent.Comp.Confused = 0;
         ent.Comp.SleepingUntil = TimeSpan.Zero;
         ent.Comp.ParalysedUntil = TimeSpan.Zero;
+        ent.Comp.Hallucination = 0;
         Dirty(ent);
         _blurry.UpdateBlurMagnitude(ent.Owner);
     }
@@ -175,6 +176,19 @@ public sealed class VgStatusSystem : EntitySystem
         var current = comp.SleepingUntil > now ? comp.SleepingUntil - now : TimeSpan.Zero;
         var ticksNow = (float) (current / LifeTick);
         comp.SleepingUntil = now + MathF.Max(ticksNow, MathF.Min(ticksNow + ticks, max)) * LifeTick;
+        Dirty(uid, comp);
+        RefreshSleep((uid, comp));
+    }
+
+    /// <summary>
+    ///     Asleep for exactly this long from now (vg13 fake death: sleeping = 20, then 0 again 5-10 s later).
+    /// </summary>
+    public void SleepFor(EntityUid uid, TimeSpan time)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return;
+
+        comp.SleepingUntil = _timing.CurTime + time;
         Dirty(uid, comp);
         RefreshSleep((uid, comp));
     }
@@ -466,6 +480,7 @@ public sealed class VgStatusSystem : EntitySystem
                 AddSleeping(ent, 1);
         }
 
+        HandleHallucination(ent);
         HandleHalloss(ent);
         HandleShock(ent, args.LifeTick, random);
         HandlePain(ent, random);
@@ -611,6 +626,52 @@ public sealed class VgStatusSystem : EntitySystem
     public float GetBlur(EntityUid uid)
     {
         return CompOrNull<VgStatusComponent>(uid)?.EyeBlurry ?? 0;
+    }
+
+    /// <summary>
+    ///     vg13 handle_regular_status_updates(): hallucination wears off two a tick, and when it's gone it takes the
+    ///     imagined pain (halloss) with it.
+    /// </summary>
+    private void HandleHallucination(Entity<VgStatusComponent> ent)
+    {
+        if (ent.Comp.Hallucination <= 0)
+            return;
+
+        if (ent.Comp.Hallucination <= 2)
+        {
+            ent.Comp.Hallucination = 0;
+            ent.Comp.Halloss = 0;
+        }
+        else
+        {
+            ent.Comp.Hallucination -= 2;
+        }
+    }
+
+    /// <summary>
+    ///     vg13 <c>hallucination += amount</c> (or less, never below 0).
+    /// </summary>
+    public void AddHallucination(EntityUid uid, float amount)
+    {
+        if (!TryComp<VgStatusComponent>(uid, out var comp))
+            return;
+
+        comp.Hallucination = MathF.Max(0, comp.Hallucination + amount);
+        Dirty(uid, comp);
+    }
+
+    public float GetHallucination(EntityUid uid)
+    {
+        return CompOrNull<VgStatusComponent>(uid)?.Hallucination ?? 0;
+    }
+
+    /// <summary>
+    ///     vg13 halloss for the fake attackers of a hallucination.
+    /// </summary>
+    public void AddHalloss(EntityUid uid, float amount)
+    {
+        if (TryComp<VgStatusComponent>(uid, out var comp))
+            AdjustHalloss(uid, amount, comp);
     }
 
     /// <summary>
