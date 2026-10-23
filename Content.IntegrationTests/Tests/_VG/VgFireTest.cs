@@ -602,4 +602,49 @@ public sealed class VgFireTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task SS14ThingsBurnAsVg13s()
+    {
+        var (pair, grid) = await AirRoom();
+        await using var _ = pair;
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var fires = entMan.System<VgFireSystem>();
+        var tile = new Vector2i(2, 0);
+
+        await server.WaitAssertion(() =>
+        {
+            EntityUid Spawn(string id) => entMan.SpawnEntity(id, new EntityCoordinates(grid, tile + new Vector2(0.5f, 0.5f)));
+            VgBurnableComponent? Burnable(EntityUid uid) => entMan.GetComponentOrNull<VgBurnableComponent>(uid);
+
+            var jumpsuit = Spawn("ClothingUniformJumpsuitColorGrey");
+            Assert.Multiple(() =>
+            {
+                Assert.That(Burnable(jumpsuit)?.Material.Id, Is.EqualTo("Fabric"), "a jumpsuit is cloth");
+                Assert.That(Burnable(jumpsuit)?.ThermalMass, Is.EqualTo(1), "of a normal size");
+                Assert.That(Burnable(Spawn("FoodApple"))?.Material.Id, Is.EqualTo("Biological"));
+                Assert.That(Burnable(Spawn("BookRandom"))?.Material.Id, Is.EqualTo("Wood"));
+                Assert.That(Burnable(Spawn("TableWood"))?.ThermalMass, Is.EqualTo(5), "a wooden table, vg13's large");
+                Assert.That(Burnable(Spawn("ClothingHeadHelmetBasic")), Is.Null, "helmets don't burn");
+                Assert.That(Burnable(Spawn("ClothingEyesGlassesSunglasses")), Is.Null, "nor glasses");
+                Assert.That(Burnable(Spawn("MobHuman")), Is.Null, "mobs burn their own way");
+            });
+
+            // On the floor of a burning tile, it catches.
+            FuelFire(entMan, grid, tile);
+            Assert.That(fires.IsBurning(grid, tile));
+        });
+
+        await server.WaitRunTicks(90);
+        await server.WaitAssertion(() =>
+        {
+            var burning = entMan.EntityQuery<VgBurnableComponent>().Any(b => b.OnFire
+                && entMan.GetComponent<MetaDataComponent>(b.Owner).EntityPrototype?.ID == "ClothingUniformJumpsuitColorGrey");
+            var ashed = entMan.EntityQuery<MetaDataComponent>().Any(m => m.EntityPrototype?.ID == "Ash");
+            Assert.That(burning || ashed, "the jumpsuit caught fire");
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }
