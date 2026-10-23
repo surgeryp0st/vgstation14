@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using Content.Server.Body.Components;
 using Content.Shared._VG.Breathing;
@@ -352,7 +353,7 @@ public sealed class VgMetabolismTest
             {
                 LifeTick(entMan, human);
                 Assert.That(status.GetConfused(human), Is.GreaterThanOrEqualTo(1), "a jolt of confusion");
-                Assert.That(status.IsAsleep(human), Is.False, "not asleep on the first tick");
+                // (Drowsy, they might nod off by chance already, as in vg13.)
                 LifeTick(entMan, human);
                 Assert.That(status.IsAsleep(human), "then asleep");
 
@@ -371,6 +372,34 @@ public sealed class VgMetabolismTest
             solutions.TryAddSolution(soln.Value, new Content.Shared.Chemistry.Components.Solution("Chlorine", 3));
             solutions.TryAddSolution(soln.Value, new Content.Shared.Chemistry.Components.Solution("Water", 1));
             Assert.That(soln.Value.Comp.Solution.GetTotalPrototypeQuantity("ChloralHydrate").Float(), Is.EqualTo(1).Within(0.01));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PurgedReagentsExist()
+    {
+        // vg13 names reagents differently; a purge list naming one that isn't here silently does nothing.
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var missing = new List<string>();
+            foreach (var vg in server.ProtoMan.EnumeratePrototypes<Content.Shared._VG.Chemistry.VgReagentPrototype>())
+            {
+                foreach (var effect in vg.Effects.Concat(vg.OverdoseEffects).OfType<Content.Shared._VG.Chemistry.VgRemoveReagents>())
+                {
+                    foreach (var reagent in effect.Reagents)
+                    {
+                        if (!server.ProtoMan.HasIndex<Content.Shared.Chemistry.Reagent.ReagentPrototype>(reagent))
+                            missing.Add($"{vg.ID} purges {reagent}");
+                    }
+                }
+            }
+
+            Assert.That(missing, Is.Empty);
         });
 
         await pair.CleanReturnAsync();

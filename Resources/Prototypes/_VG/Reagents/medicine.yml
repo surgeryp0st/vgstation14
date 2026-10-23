@@ -17,20 +17,20 @@
   overdoseAmount: 60
   effects:
   - !type:VgRemoveReagents
-    reagents: [toxin, plantbgone, insecticide, solanine, stoxin, cyanide, amatoxin, potassium_hydroxide]
+    reagents: [Toxin, PlantBGone, stoxin, cyanide, Amatoxin, potassium_hydroxide]  # not ported yet: insecticide, solanine
     amount: 2
   - !type:VgRemoveReagents
-    reagents: [plasma, sacid, sux, carpotoxin]
+    reagents: [Plasma, SulfuricAcid, suxameth, CarpoToxin]
     amount: 1
   - !type:VgRemoveReagents
-    reagents: [chloralhydrate]
+    reagents: [ChloralHydrate]
     amount: 5
   - !type:VgRemoveReagents
-    reagents: [mindbreaker]
+    reagents: [MindbreakerToxin]
     amount: 2
-  - !type:VgRemoveReagents
-    reagents: [zombiepowder]
-    amount: 0.5
+  - !type:VgLucidity
+    amount: 5
+  # Zombie powder (removed 0.5) comes back when it is ported.
   - !type:VgAdjustDamage
     type: Toxin
     amount: -2
@@ -454,6 +454,12 @@
     kind: Drowsiness
     ticks: -5
     add: true
+  - !type:VgRemoveReagents
+    reagents: [MindbreakerToxin]
+    amount: 10 # 5 units
+  - !type:VgLucidity
+    amount: 10
+    flat: true
   - !type:VgAdjustDamage
     type: Toxin
     amount: 1
