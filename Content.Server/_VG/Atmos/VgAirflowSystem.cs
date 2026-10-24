@@ -154,14 +154,19 @@ public sealed class VgAirflowSystem : EntitySystem
             return tileDifference;
 
         var tile = _map.TileIndicesFor(grid, gridComp, xform.Coordinates);
-        if (_atmos.GetTileMixture(grid, null, tile) is not { } here)
+        if (_atmos.GetTileMixture(grid, xform.MapUid, tile) is not { } here)
             return tileDifference;
 
         var lowest = here.Pressure;
         for (var i = 0; i < 8; i++)
         {
             tile += step;
-            var pressure = _atmos.GetTileMixture(grid, null, tile)?.Pressure ?? 0;
+
+            // A wall ends the zone; off the grid is the map's air (or space).
+            if (_atmos.GetTileMixture(grid, xform.MapUid, tile) is not { } air)
+                break;
+
+            var pressure = air.Pressure;
             lowest = MathF.Min(lowest, pressure);
             if (pressure <= 0)
                 break;

@@ -484,7 +484,8 @@ public sealed class PullingSystem : EntitySystem
         pullableComp.PrevFixedRotation = pullablePhysics.FixedRotation;
 
         // joint state handling will manage its own state
-        if (!_timing.ApplyingState)
+        // VG: vg mobs pull the vg13 way (VgPullController), with no joint.
+        if (!_timing.ApplyingState && !HasComp<Content.Shared._VG.Movement.VgMovementComponent>(pullerUid))
         {
             var joint = _joints.CreateDistanceJoint(pullableUid, pullerUid,
                     pullablePhysics.LocalCenter, pullerPhysics.LocalCenter,
